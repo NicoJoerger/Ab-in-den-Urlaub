@@ -35,21 +35,35 @@ class _TestAPIState extends State<TestAPI> {
 
   void postUser() async {
     try {
-      response = await http.post(Uri.parse(url),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8'
-          },
-          body: jsonEncode((<String, String>{
-            'username': "BastianDerKappen",
-            "nachname": "Huber",
-            "vorname": "Bastian",
-            "password": "mylittlepony123",
+      response = await http.post(Uri.parse(url), headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      }, body: """ {
+    "username": "niggotesterino",
+    "nachname": "dsauhdiuashidushaiud",
+    "vorname": "asdoiuhasiudshaiudhiuhciuewhbc",
+    "password": "siauvbiushvruivbdiubvdiuvb",
+    "email": "ascuiadshvieruvh349uhv9835hv9r",
+    "tokenstand": 0,
+    "vermieter": false,
+    "admin": true
+  }""");
+
+      /**
+           * (<String, String>{
+            'username': "BastianDerlappen!1",
+            "nachname": "dhfbdsuhzbu",
+            "vorname": "asdhiabsdhua",
+            "password": "asdhasbdhuasbdu",
             "email": "emailtest",
             "tokenstand": 0.toString(),
             "vermieter": false.toString(),
-            "admin": true.toString(),
-            "user": "1Penis"
-          })));
+            "bewertungs": "[]",
+            "ferienwohnungs": "[]",
+            "gebots": "[]",
+            "kreditkartendatens": "[]",
+            "rechnungshistorieeintrags": "[]"
+          })
+           */
       //final jsonData = jsonDecode(response.body) as List;
       //setState(() {
       //  jsons = jsonData;

@@ -22,6 +22,18 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Kreditkartendatens.ToListAsync());
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Kreditkartendaten>>> GetByUserID(int id)
+        {
+            var Kreditkartendaten = await context.Kreditkartendatens.FindAsync(id);
+            if(Kreditkartendaten == null)
+            {
+                return BadRequest("Creditcard not found");
+            }
+
+            return Ok(Kreditkartendaten);
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Kreditkartendaten>>> AddKreditKarte(Kreditkartendaten kreditkarte)
         {

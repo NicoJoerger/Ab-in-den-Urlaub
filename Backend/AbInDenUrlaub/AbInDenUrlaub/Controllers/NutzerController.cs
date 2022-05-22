@@ -64,20 +64,6 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<List<Nutzer>>> DeleteNutzer (int id)
-        {
-            var toDelete = await context.Nutzers.FindAsync(id);
-            if(toDelete == null)
-            {
-                return BadRequest("User not found");
-            }
-
-            context.Nutzers.Remove(toDelete);
-
-            await context.SaveChangesAsync();
-
-            return Ok(await context.Nutzers.ToListAsync());
-        }
+       
     }
 }

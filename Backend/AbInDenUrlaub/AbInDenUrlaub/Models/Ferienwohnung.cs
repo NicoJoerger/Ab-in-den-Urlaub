@@ -15,7 +15,7 @@ namespace AbInDenUrlaub
         public int FwId { get; set; }
         public int? UserId { get; set; }
         public string Strasse { get; set; } = null!;
-        public int Hausnummer { get; set; } 
+        public int hausnummer { get; set; } 
         public string Ort { get; set; } = null!;
         public int Plz { get; set; }
         public int Wohnflaeche { get; set; }

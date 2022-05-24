@@ -134,7 +134,7 @@ namespace AbInDenUrlaub.Models
 
                 entity.Property(e => e.Garten).HasColumnName("garten");
 
-                entity.Property(e => e.Hausnummer).HasColumnName("hausnummer");
+                entity.Property(e => e.hausnummer).HasColumnName("hausnummer");
 
                 entity.Property(e => e.Ort)
                     .HasMaxLength(70)

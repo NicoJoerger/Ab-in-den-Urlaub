@@ -52,7 +52,7 @@ namespace AbInDenUrlaub.Controllers
             }
 
             dbWohnung.Strasse = updatedWohnung.Strasse;
-            dbWohnung.Hausnummer = updatedWohnung.Hausnummer;
+            dbWohnung.hausnummer = updatedWohnung.hausnummer;
             dbWohnung.Ort = updatedWohnung.Ort;
             dbWohnung.Plz = updatedWohnung.Plz;
             dbWohnung.Wohnflaeche = updatedWohnung.Wohnflaeche;

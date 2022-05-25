@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Core.EntityClient;
 
 namespace AbInDenUrlaub.Controllers
 {
@@ -24,7 +22,7 @@ namespace AbInDenUrlaub.Controllers
 
             List<Rechnungshistorieeintrag> list = new();
 
-            foreach(Rechnungshistorieeintrag item  in historie)
+            foreach (Rechnungshistorieeintrag item in historie)
             {
                 if (item.UserId == id)
                 {
@@ -47,6 +45,8 @@ namespace AbInDenUrlaub.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Rechnungshistorieeintrag>>> AddEintrag(Rechnungshistorieeintrag eintrag)
         {
+            var user = await context.Nutzers.FindAsync(eintrag.UserId);
+            user.lastBuy = DateTime.Now;
             context.Rechnungshistorieeintrags.Add(eintrag);
             await context.SaveChangesAsync();
 
@@ -57,7 +57,7 @@ namespace AbInDenUrlaub.Controllers
         public async Task<ActionResult<List<Rechnungshistorieeintrag>>> UpdateEintrag(Rechnungshistorieeintrag updatedEintrag)
         {
             var dbEintrag = await context.Rechnungshistorieeintrags.FindAsync(updatedEintrag.RhId);
-            if(dbEintrag == null)
+            if (dbEintrag == null)
             {
                 return BadRequest("Entry not found");
             }

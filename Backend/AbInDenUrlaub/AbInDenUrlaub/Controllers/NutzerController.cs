@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AbInDenUrlaub.Controllers
@@ -21,11 +20,35 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
+        [HttpGet("/login")]
+        public async Task<ActionResult<List<Nutzer>>> Login(String email, String password)
+        {
+            List<Nutzer> users = await context.Nutzers.ToListAsync();
+            List<Nutzer> retList = new();
+
+            foreach (Nutzer user in users)
+            {
+                if (user.Email == email && user.Password == password)
+                {
+                    retList.Add(user);
+                    TimeSpan ts = DateTime.Now - user.lastBuy;
+                    if (ts.Days > 365)
+                    {
+                        user.Tokenstand = user.Tokenstand + 100;
+                    }
+                    break;
+                }
+                return BadRequest("Invalid credentials");
+            }
+            await context.SaveChangesAsync();
+            return Ok(retList);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Nutzer>>> GetbyID(int id)
         {
             var nutzer = await context.Nutzers.FindAsync(id);
-            if(nutzer == null)
+            if (nutzer == null)
             {
                 return BadRequest("User not found");
             }
@@ -35,6 +58,19 @@ namespace AbInDenUrlaub.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Nutzer>>> AddNutzer(Nutzer nutzer)
         {
+            List<Nutzer> list = await context.Nutzers.ToListAsync();
+            foreach (Nutzer n in list)
+            {
+                if (n.Username == nutzer.Username)
+                {
+                    return BadRequest("Duplicate Username");
+                }
+
+                if (n.Email == nutzer.Email)
+                {
+                    return BadRequest("Duplicate E-Mail");
+                }
+            }
             context.Nutzers.Add(nutzer);
             await context.SaveChangesAsync();
 
@@ -45,7 +81,7 @@ namespace AbInDenUrlaub.Controllers
         public async Task<ActionResult<List<Nutzer>>> UpdateNutzer(Nutzer updatedNutzer)
         {
             var dbNutzer = await context.Nutzers.FindAsync(updatedNutzer.UserId);
-            if(dbNutzer == null)
+            if (dbNutzer == null)
             {
                 return BadRequest("User not found");
             }
@@ -64,6 +100,6 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
-       
+
     }
 }

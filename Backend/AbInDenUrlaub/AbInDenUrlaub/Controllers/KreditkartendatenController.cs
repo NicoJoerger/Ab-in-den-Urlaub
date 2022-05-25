@@ -42,5 +42,23 @@ namespace AbInDenUrlaub.Controllers
 
             return Ok(await context.Kreditkartendatens.ToListAsync());
         }
+
+        [HttpPut]
+        public async Task<ActionResult<List<Kreditkartendaten>>> UpdateKreditKarte(Kreditkartendaten updatedKreditKarte)
+        {
+            var dbKreditkarte = await context.Kreditkartendatens.FindAsync(updatedKreditKarte.KddId);
+            if(dbKreditkarte == null)
+            {
+                return BadRequest("Karte not found");
+            }
+
+            dbKreditkarte.Kartennummer = updatedKreditKarte.Kartennummer;
+            dbKreditkarte.UserId = updatedKreditKarte.UserId;
+            dbKreditkarte.Cvv = updatedKreditKarte.Cvv;
+
+            await context.SaveChangesAsync();
+
+            return Ok(await context.Kreditkartendatens.ToListAsync());
+        }
     }
 }

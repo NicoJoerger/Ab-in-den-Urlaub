@@ -21,6 +21,24 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Angebotes.ToListAsync());
         }
 
+        [HttpGet("/filtered")]
+        public async Task<ActionResult<List<Angebote>>> GetFiltered(DateTime MietzeitraumStart, DateTime MietzeitraumEnde, int Mietpreis, int Tokenpreis)
+        {
+            List<Angebote> list = await context.Angebotes.ToListAsync();
+
+            List<Angebote> retList = new();
+
+                foreach (Angebote angebote in list)
+                {
+                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis)
+                    {
+                        retList.Add(angebote);
+                    }
+                }
+
+            return Ok(retList);
+        }
+
 
         [HttpGet("{id}/a")]
         public async Task<ActionResult<List<Angebote>>> GetByAngID(int id)

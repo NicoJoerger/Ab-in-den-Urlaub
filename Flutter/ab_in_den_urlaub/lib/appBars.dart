@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'globals.dart';
 
 class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(100);
+  Widget getCoinsWidget() {
+    if (LoginInfo().tokens == 0) {
+      return Text("Buy Coins");
+    } else {
+      return Text(LoginInfo().tokens.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +19,17 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            child: Text("Alle Ferienwohnungen"),
+            child: Container(
+              height: 30,
+              child: Image.asset(
+                "/images/homepage.png",
+                color: Colors.white,
+              ),
+            ),
+            onTap: () => {Navigator.pushNamed(context, "/")},
+          ),
+          GestureDetector(
+            child: Text("Suche Ferienwohnungen"),
             onTap: () {
               Navigator.pushNamed(context, '/projects');
             },
@@ -23,9 +41,15 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
             },
           ),
           GestureDetector(
-            child: Row(children: [Text("1500"),Image.asset("/images/coins.png",height: 30,),]),
+            child: Row(children: [
+              getCoinsWidget(),
+              Image.asset(
+                "/images/coins.png",
+                height: 30,
+              ),
+            ]),
             onTap: () {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushNamed(context, '/Tokens');
             },
           ),
           /*

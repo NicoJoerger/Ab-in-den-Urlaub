@@ -22,7 +22,7 @@ namespace AbInDenUrlaub.Controllers
         }
 
         [HttpGet("/filtered")]
-        public async Task<ActionResult<List<Angebote>>> GetFiltered(DateTime MietzeitraumStart, DateTime MietzeitraumEnde, int Mietpreis, int Tokenpreis)
+        public async Task<ActionResult<List<Angebote>>> GetFiltered(DateTime MietzeitraumStart, DateTime MietzeitraumEnde, int Mietpreis, int Tokenpreis, String Land)
         {
             List<Angebote> list = await context.Angebotes.ToListAsync();
 
@@ -30,11 +30,14 @@ namespace AbInDenUrlaub.Controllers
 
                 foreach (Angebote angebote in list)
                 {
-                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis)
+                var temp = await context.Ferienwohnungs.FindAsync(angebote.FwId);
+                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis &&  temp.land.Equals(Land))
                     {
                         retList.Add(angebote);
+                        context.Entry(angebote).Reference(s => s.Fw).Load();
                     }
                 }
+
 
             return Ok(retList);
         }

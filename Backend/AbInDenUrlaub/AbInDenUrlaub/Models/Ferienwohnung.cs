@@ -27,6 +27,7 @@ namespace AbInDenUrlaub
         public bool Balkon { get; set; }
         public string? Beschreibung { get; set; }
         public string wohnungsname { get; set; }
+        public string land { get; set; }
 
         public virtual Nutzer? User { get; set; }
         public virtual ICollection<Angebote> Angebotes { get; set; }

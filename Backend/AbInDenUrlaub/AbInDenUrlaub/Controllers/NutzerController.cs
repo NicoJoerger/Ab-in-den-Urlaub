@@ -31,7 +31,7 @@ namespace AbInDenUrlaub.Controllers
                 if (user.Email == email && user.Password == password)
                 {
                     retList.Add(user);
-                    TimeSpan ts = DateTime.Now - user.lastBuy;
+                    TimeSpan ts = DateTime.Now - user.lastbuy;
                     if (ts.Days > 365)
                     {
                         user.Tokenstand = user.Tokenstand + 100;

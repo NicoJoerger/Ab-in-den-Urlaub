@@ -28,7 +28,7 @@ namespace AbInDenUrlaub.Controllers
 
             foreach (Nutzer user in users)
             {
-                if (user.Email == email && user.Password == password)
+                if (user.Email.Equals(email) && user.Password.Equals(password))
                 {
                     retList.Add(user);
                     TimeSpan ts = DateTime.Now - user.lastbuy;
@@ -36,13 +36,14 @@ namespace AbInDenUrlaub.Controllers
                     {
                         user.Tokenstand = user.Tokenstand + 100;
                     }
-                    break;
+                    await context.SaveChangesAsync();
+                    return Ok(retList);
                 }
-                return BadRequest("Invalid credentials");
             }
             await context.SaveChangesAsync();
-            return Ok(retList);
+            return BadRequest("Invalid credentials");
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Nutzer>>> GetbyID(int id)

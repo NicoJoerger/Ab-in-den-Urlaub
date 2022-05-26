@@ -1,6 +1,8 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'appBars.dart';
 
 class AllApartments extends StatefulWidget {
@@ -10,6 +12,134 @@ class AllApartments extends StatefulWidget {
 }
 
 class _AllApartmentsState extends State<AllApartments> {
+  String url = 'https://localhost:7077/api/Ferienwohnung';
+  var jsons = [];
+  var jsonItalien = [];
+  var jsonSpanien = [];
+  var jsonGriechenland = [];
+  var jsonDeutschland = [];
+  var response;
+  void fetchFerienwohnung() async {
+    try {
+      response = await http.get(Uri.parse(url));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchAngebot() async {
+    try {
+      response =
+          await http.get(Uri.parse('https://localhost:7077/api/Angebote'));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchFerienwohnungByID(var id) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/api/Ferienwohnung/' + id.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchAngebotDeutschland(var land) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+              land.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsonDeutschland = jsonData;
+        print(jsonDeutschland);
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchAngebotSpanien(var land) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+              land.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsonSpanien = jsonData;
+        print(jsonSpanien);
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchAngebotItalien(var land) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+              land.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsonItalien = jsonData;
+        print(jsonItalien);
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchAngebotGriechenland(var land) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+              land.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsonGriechenland = jsonData;
+        print(jsonGriechenland);
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    setState(() {
+      //fetchFerienwohnung();
+      //fetchAngebot();
+
+      fetchAngebotDeutschland("Deutschland");
+      fetchAngebotGriechenland("Griechenland");
+      fetchAngebotItalien("Italien");
+      fetchAngebotSpanien("Spanien");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -68,14 +198,45 @@ class _AllApartmentsState extends State<AllApartments> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width,
-                      child:
-                          ListView(scrollDirection: Axis.horizontal, children: [
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),ApartmentCard(),
-                      ]),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: jsonItalien.length,
+                        itemBuilder: (context, i) {
+                          final json = jsonItalien[i];
+                          //  fetchFerienwohnungByID(json["fwId"].toString());
+                          final wohnung = json["fw"];
+                          return ApartmentCard(
+                            anlagenName: wohnung["wohnungsname"],
+                            bewertung: "",
+                            text: wohnung["beschreibung"],
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 10,
+                    ),
+                    const Text("Deutschland", style: TextStyle(fontSize: 50)),
+                    Container(
+                      height: 10,
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: jsonDeutschland.length,
+                        itemBuilder: (context, i) {
+                          final json = jsonDeutschland[i];
+                          //  fetchFerienwohnungByID(json["fwId"].toString());
+                          final wohnung = json["fw"];
+                          return ApartmentCard(
+                            anlagenName: wohnung["wohnungsname"],
+                            bewertung: "",
+                            text: wohnung["beschreibung"],
+                          );
+                        },
+                      ),
                     ),
                     Container(
                       height: 10,
@@ -87,14 +248,20 @@ class _AllApartmentsState extends State<AllApartments> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width,
-                      child:
-                          ListView(scrollDirection: Axis.horizontal, children: [
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),ApartmentCard(),
-                      ]),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: jsonSpanien.length,
+                        itemBuilder: (context, i) {
+                          final json = jsonSpanien[i];
+                          //  fetchFerienwohnungByID(json["fwId"].toString());
+                          final wohnung = json["fw"];
+                          return ApartmentCard(
+                            anlagenName: wohnung["wohnungsname"],
+                            bewertung: "",
+                            text: wohnung["beschreibung"],
+                          );
+                        },
+                      ),
                     ),
                     Container(
                       height: 10,
@@ -107,14 +274,20 @@ class _AllApartmentsState extends State<AllApartments> {
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width,
-                      child:
-                          ListView(scrollDirection: Axis.horizontal, children: [
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),
-                        //ApartmentCard(),ApartmentCard(),
-                      ]),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: jsonGriechenland.length,
+                        itemBuilder: (context, i) {
+                          final json = jsonGriechenland[i];
+                          //  fetchFerienwohnungByID(json["fwId"].toString());
+                          final wohnung = json["fw"];
+                          return ApartmentCard(
+                            anlagenName: wohnung["wohnungsname"],
+                            bewertung: "",
+                            text: wohnung["beschreibung"],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

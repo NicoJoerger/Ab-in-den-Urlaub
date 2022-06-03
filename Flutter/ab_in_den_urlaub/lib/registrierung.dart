@@ -1,7 +1,10 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'appBars.dart';
+import 'globals.dart';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);
@@ -12,6 +15,49 @@ class Registrierung extends StatefulWidget {
 class _RegistrierungState extends State<Registrierung> {
   var Containerh = 40.0;
   var Containerw = 400.0;
+  final passwortLoginController = TextEditingController();
+  final usernameLoginController = TextEditingController();
+  var response;
+  var jsons = [];
+
+  void fetchUser() async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/login?email=' +
+              usernameLoginController.text +
+              '&password=' +
+              passwortLoginController.text));
+
+      if (response.statusCode != 200) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Login Fehlgeschlagen'),
+            content: const Text('Username oder Passwort falsch'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        final jsonData = jsonDecode(response.body) as List;
+        print(jsonData);
+        setState(() {
+          jsons = jsonData;
+          var length = jsons.length;
+
+          LoginInfo().userid = jsons[0]['userId'];
+          LoginInfo().tokens = jsons[0]['tokenstand'];
+        });
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -38,6 +84,7 @@ class _RegistrierungState extends State<Registrierung> {
                   width: Containerw,
                   height: Containerh,
                   child: TextField(
+                    controller: usernameLoginController,
                     decoration: InputDecoration(
                       labelText: 'E-Mail',
                     ),
@@ -47,6 +94,7 @@ class _RegistrierungState extends State<Registrierung> {
                   width: Containerw,
                   height: Containerh,
                   child: TextField(
+                    controller: passwortLoginController,
                     decoration: InputDecoration(
                       labelText: 'Passwort',
                     ),
@@ -62,7 +110,7 @@ class _RegistrierungState extends State<Registrierung> {
                       Container(
                         height: Containerh,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: fetchUser,
                           child: Text("Login"),
                         ),
                       )

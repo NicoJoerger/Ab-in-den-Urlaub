@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AbInDenUrlaub
+﻿namespace AbInDenUrlaub
 {
     public partial class Ferienwohnung
     {
@@ -15,7 +12,7 @@ namespace AbInDenUrlaub
         public int FwId { get; set; }
         public int? UserId { get; set; }
         public string Strasse { get; set; } = null!;
-        public int hausnummer { get; set; } 
+        public int hausnummer { get; set; }
         public string Ort { get; set; } = null!;
         public int Plz { get; set; }
         public int Wohnflaeche { get; set; }
@@ -28,6 +25,7 @@ namespace AbInDenUrlaub
         public string? Beschreibung { get; set; }
         public string wohnungsname { get; set; }
         public string land { get; set; }
+        public bool deaktiviert { get; set; }
 
         public virtual Nutzer? User { get; set; }
         public virtual ICollection<Angebote> Angebotes { get; set; }

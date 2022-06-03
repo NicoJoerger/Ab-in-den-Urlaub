@@ -101,6 +101,51 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
+        [HttpPut]
+        public async Task<ActionResult<List<Nutzer>>> deactivateNutzer(int UserID)
+        {
+            var toDeactivate = await context.Nutzers.FindAsync(UserID);
+            if (toDeactivate == null)
+            {
+                return BadRequest("Nutzer not found");
+            }
+
+            List<Ferienwohnung> wohnungs = await context.Ferienwohnungs.ToListAsync();
+            List<Angebote> angebote = await context.Angebotes.ToListAsync();
+
+
+            List<Ferienwohnung> list = new();
+
+            foreach (var wohnung in wohnungs)
+            {
+                if (wohnung.UserId == UserID)
+                {
+                    list.Add(wohnung);
+                }
+            }
+
+            foreach (Ferienwohnung fw in list)
+            {
+                foreach (Angebote ag in angebote)
+                {
+                    if (ag.FwId == fw.FwId)
+                    {
+                        if (ag.MietzeitraumEnde > DateTime.Now)
+                        {
+                            return BadRequest("User hat aktive Angebote");
+                        }
+                    }
+                }
+            }
+
+            toDeactivate.deaktiviert = true;
+
+            await context.SaveChangesAsync();
+
+            return Ok(toDeactivate);
+
+        }
+
 
     }
 }

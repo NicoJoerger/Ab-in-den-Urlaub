@@ -21,6 +21,7 @@
         public bool? Vermieter { get; set; }
         public bool? Admin { get; set; }
         public DateTime lastbuy { get; set; }
+        public bool deaktiviert { get; set; }
 
         public virtual ICollection<Bewertung> Bewertungs { get; set; }
         public virtual ICollection<Ferienwohnung> Ferienwohnungs { get; set; }

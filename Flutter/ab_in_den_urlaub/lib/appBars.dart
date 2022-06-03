@@ -31,13 +31,17 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             child: Text("Suche Ferienwohnungen"),
             onTap: () {
-              Navigator.pushNamed(context, '/projects');
+              Navigator.pushNamed(context, '/Suche');
             },
           ),
           GestureDetector(
             child: Text("Mein Profil"),
             onTap: () {
-              Navigator.pushNamed(context, '/aboutme');
+              if (LoginInfo().userid != -1) {
+                Navigator.pushNamed(context, '/Profile');
+              } else {
+                Navigator.pushNamed(context, '/registrierung');
+              }
             },
           ),
           GestureDetector(

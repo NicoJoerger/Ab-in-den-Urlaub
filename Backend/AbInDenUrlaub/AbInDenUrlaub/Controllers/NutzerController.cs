@@ -101,7 +101,7 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
-        [HttpPut]
+        /*[HttpPut]
         public async Task<ActionResult<List<Nutzer>>> deactivateNutzer(int UserID)
         {
             var toDeactivate = await context.Nutzers.FindAsync(UserID);
@@ -144,7 +144,7 @@ namespace AbInDenUrlaub.Controllers
 
             return Ok(toDeactivate);
 
-        }
+        }*/
 
 
     }

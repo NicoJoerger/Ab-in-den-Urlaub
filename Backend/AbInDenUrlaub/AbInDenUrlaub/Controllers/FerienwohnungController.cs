@@ -87,7 +87,7 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Ferienwohnungs.ToListAsync());
         }
 
-        [HttpPut]
+        /*[HttpPut]
         public async Task<ActionResult<List<Ferienwohnung>>> deactivateWohnung(int WohnungID)
         {
             var toDeactivate = await context.Ferienwohnungs.FindAsync(WohnungID);
@@ -119,6 +119,6 @@ namespace AbInDenUrlaub.Controllers
             await context.SaveChangesAsync();
 
             return Ok(toDeactivate);
-        }
+    }*/
     }
 }

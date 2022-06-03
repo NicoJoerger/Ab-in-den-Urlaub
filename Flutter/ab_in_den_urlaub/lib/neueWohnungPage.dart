@@ -70,6 +70,18 @@ class _nWohnungState extends State<nWohnung> {
                     ),
                   ),
                 ),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(""),
+                      ],
+                    ),
+                    //Column(
+                    //children: [Checkbox(value: false, onChanged: () => {})],
+                    //),
+                  ],
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   alignment: Alignment.centerRight,

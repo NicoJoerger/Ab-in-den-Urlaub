@@ -8,6 +8,7 @@ import 'profile.dart';
 import 'allApartments.dart';
 import 'apartment.dart';
 import 'package:ab_in_den_urlaub/neuesAngebotPage.dart';
+import 'sApartment.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
       '/Wohnungssuche': (context) => nWohnung(),
       '/Rechnungshistorie': (context) => nWohnung(),
       '/Tokens': (context) => Token(),
+      '/Suche': (context) => sApartments(),
+      '/Profile': (context) => Profile(),
     });
   }
 }

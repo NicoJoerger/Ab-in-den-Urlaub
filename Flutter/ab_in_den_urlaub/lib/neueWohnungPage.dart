@@ -82,10 +82,15 @@ class _nWohnungState extends State<nWohnung> {
                     //),
                   ],
                 ),
-                Row(
+                Column(
                   children: [
-                    Checkbox(value: false, onChanged: (bool? val) {}),
-                    Text("Ich möchte Wohnungen vermieten.")
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Checkbox(value: false, onChanged: (bool? val) {}),
+                        Text("Ich möchte Wohnungen vermieten.")
+                      ],
+                    ),
                   ],
                 ),
                 Container(

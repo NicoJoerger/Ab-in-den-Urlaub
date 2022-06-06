@@ -8,33 +8,33 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AbInDenUrlaub
 build_property.RootNamespace = AbInDenUrlaub
-build_property.ProjectDir = E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\
+build_property.ProjectDir = C:\Users\scher\Desktop\ab-in-den-urlaub\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub
+build_property.MSBuildProjectDirectory = C:\Users\scher\Desktop\ab-in-den-urlaub\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub
 build_property._RazorSourceGeneratorDebug = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Create.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnV0emVyc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Delete.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnV0emVyc1xEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Details.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnV0emVyc1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Edit.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnV0emVyc1xFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Index.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Nutzers/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTnV0emVyc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Studium/4. Semester/Projekt 1/Code/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/scher/Desktop/ab-in-den-urlaub/Ab-in-den-Urlaub/Backend/AbInDenUrlaub/AbInDenUrlaub/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

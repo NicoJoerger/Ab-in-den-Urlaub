@@ -82,6 +82,12 @@ class _nWohnungState extends State<nWohnung> {
                     //),
                   ],
                 ),
+                Row(
+                  children: [
+                    Checkbox(value: false, onChanged: (bool? val) {}),
+                    Text("Ich möchte Wohnungen vermieten.")
+                  ],
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   alignment: Alignment.centerRight,

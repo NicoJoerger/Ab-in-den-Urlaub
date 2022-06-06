@@ -52,6 +52,7 @@ class _RegistrierungState extends State<Registrierung> {
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
         });
+        Navigator.pushNamed(context, '/Profile');
       }
     } catch (err) {
       print(err.toString());

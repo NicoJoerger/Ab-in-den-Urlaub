@@ -226,6 +226,13 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox(value: false, onChanged: (bool? val) {}),
+                  Text("Ich möchte Wohnungen vermieten.")
+                ],
+              ),
             ],
           ),
         ),

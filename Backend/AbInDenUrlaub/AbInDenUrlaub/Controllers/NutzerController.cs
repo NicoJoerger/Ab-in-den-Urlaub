@@ -74,6 +74,7 @@ namespace AbInDenUrlaub.Controllers
                 }
             }
             context.Nutzers.Add(nutzer);
+            nutzer.lastbuy = DateTime.UtcNow;
             await context.SaveChangesAsync();
 
             return Ok(await context.Nutzers.ToListAsync());

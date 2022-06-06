@@ -102,27 +102,6 @@ class _RegistrierungState extends State<Registrierung> {
             ),
           );
         }
-
-        /**
-           * (<String, String>{
-            'username': "BastianDerlappen!1",
-            "nachname": "dhfbdsuhzbu",
-            "vorname": "asdhiabsdhua",
-            "password": "asdhasbdhuasbdu",
-            "email": "emailtest",
-            "tokenstand": 0.toString(),
-            "vermieter": false.toString(),
-            "bewertungs": "[]",
-            "ferienwohnungs": "[]",
-            "gebots": "[]",
-            "kreditkartendatens": "[]",
-            "rechnungshistorieeintrags": "[]"
-          })
-           */
-        //final jsonData = jsonDecode(response.body) as List;
-        //setState(() {
-        //  jsons = jsonData;
-        //});
         print(response.body);
       } catch (err) {
         print(err.toString());

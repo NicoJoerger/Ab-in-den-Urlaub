@@ -11,6 +11,7 @@ class sApartments extends StatefulWidget {
 }
 
 class _sApartmentsState extends State<sApartments> {
+  var jsons = [];
   TextStyle barstyle = TextStyle(color: Colors.white, fontSize: 17);
   String dropdownValue = 'Ohne';
   DateTime selectedRBeginn = DateTime.now();
@@ -139,6 +140,20 @@ class _sApartmentsState extends State<sApartments> {
                     ),
                   ],
                 ),
+              ),
+              ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: json.length,
+                itemBuilder: (context, i) {
+                  final json = json[i];
+                  //  fetchFerienwohnungByID(json["fwId"].toString());
+                  final wohnung = json["fw"];
+                  return ApartmentCard(
+                    anlagenName: wohnung["wohnungsname"],
+                    bewertung: "",
+                    text: wohnung["beschreibung"],
+                  );
+                },
               ),
             ]),
           ),

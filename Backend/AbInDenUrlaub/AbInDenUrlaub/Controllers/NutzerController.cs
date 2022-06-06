@@ -35,6 +35,7 @@ namespace AbInDenUrlaub.Controllers
                     if (ts.Days > 365)
                     {
                         user.Tokenstand = user.Tokenstand + 100;
+                        user.lastbuy = DateTime.Now;
                     }
                     await context.SaveChangesAsync();
                     return Ok(retList);

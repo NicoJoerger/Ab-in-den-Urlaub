@@ -10866,19 +10866,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\scher\\.nuget\\packages\\": {}
+    "C:\\Users\\Basti\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "projectUniqueName": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "projectName": "AbInDenUrlaub",
-      "projectPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
+      "projectPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "packagesPath": "C:\\Users\\Basti\\.nuget\\packages\\",
+      "outputPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\scher\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Basti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

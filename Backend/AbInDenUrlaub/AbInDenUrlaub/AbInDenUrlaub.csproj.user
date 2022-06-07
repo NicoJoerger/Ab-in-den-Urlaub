@@ -11,5 +11,6 @@
     <WebStackScaffolding_DbContextTypeFullName>AbInDenUrlaub.Projekt1Context</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
+    <NameOfLastUsedPublishProfile>E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

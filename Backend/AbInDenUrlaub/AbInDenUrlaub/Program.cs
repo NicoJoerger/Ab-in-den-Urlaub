@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +20,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+//app.Urls.Add("http://127.0.0.1:5000");
+//app.Urls.Add("http://81.169.152.56:5000");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

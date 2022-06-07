@@ -32,7 +32,7 @@ class _TestAPIState extends State<TestAPI> {
   }
 
   Image test = Image(image: AssetImage("images/hallstatt.jpg"));
-  String url = 'https://localhost:7077/api/Nutzer';
+  String url = 'http://81.169.152.56:5000/api/Nutzer';
   var jsons = [];
   var response;
   void fetchUser() async {
@@ -48,7 +48,7 @@ class _TestAPIState extends State<TestAPI> {
   }
 
   void fetchImage() async {
-    String urlImg = 'https://localhost:7077/api/Bilder';
+    String urlImg = 'http://81.169.152.56:5000/api/Bilder';
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;

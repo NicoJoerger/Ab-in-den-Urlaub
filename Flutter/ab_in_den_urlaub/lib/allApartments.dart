@@ -20,6 +20,7 @@ class _AllApartmentsState extends State<AllApartments> {
   var jsonGriechenland = [];
   var jsonDeutschland = [];
   var response;
+
   void fetchFerienwohnung() async {
     try {
       response = await http.get(Uri.parse(url));

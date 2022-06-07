@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
+  "dgSpecHash": "1Y0OZ2/Rfj0YOPTPkNQ+c4cZl+Jhb1vpsl1vVjrGeR5EYXtjOIJpMdjF6oJvx1nBiUV0XBipsn70WurkE07nDA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+=======
   "dgSpecHash": "AXAD1YJ6r3Or+sCntsNxWRqwu/YmoAbM3hSkK6Vrl+KrfqBZbAFqY9D+1bWwzDaveFPqdrTBSbYr+xZP/cuD/g==",
   "success": true,
   "projectFilePath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+>>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
   "expectedPackageFiles": [
     "C:\\Users\\scher\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\scher\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",

@@ -15,6 +15,25 @@ class Registrierung extends StatefulWidget {
 class _RegistrierungState extends State<Registrierung> {
   var Containerh = 40.0;
   var Containerw = 400.0;
+<<<<<<< HEAD
+  final passwortLoginController = TextEditingController();
+  final usernameLoginController = TextEditingController();
+  var response;
+  var jsons = [];
+
+  void fetchUser(var email, var password) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/login?email=' +
+              email +
+              '&password=' +
+              password));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsons = jsonData;
+      });
+=======
   var startToken = 420;
   final passwortLoginController = TextEditingController();
   final usernameLoginController = TextEditingController();
@@ -157,6 +176,7 @@ class _RegistrierungState extends State<Registrierung> {
         });
         Navigator.pushNamed(context, '/Profile');
       }
+>>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
     } catch (err) {
       print(err.toString());
     }
@@ -214,7 +234,14 @@ class _RegistrierungState extends State<Registrierung> {
                       Container(
                         height: Containerh,
                         child: TextButton(
+<<<<<<< HEAD
+                          onPressed: () => {
+                            fetchUser(usernameLoginController.text,
+                                passwortLoginController.text)
+                          },
+=======
                           onPressed: fetchUser,
+>>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
                           child: Text("Login"),
                         ),
                       )

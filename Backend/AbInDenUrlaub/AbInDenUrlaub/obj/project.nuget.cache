@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
+  "dgSpecHash": "J2QnQk7kDD3jNVYqrRAeIhxpjXPnjf6Gxpl+9DO5AvzqG7aihxNmMlY02do5RIhUYUvka/LpkL+pzf2JVzRdbQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+=======
   "dgSpecHash": "4X63Bi+csLmO2y0bDOGfD2g2wgnhakFEkQP0cyL7t/Mfmq5OX5hAVM/xwoGh5XKQEB6z1Opv/b8Ba3mP+nHL4Q==",
   "success": true,
   "projectFilePath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+>>>>>>> 1b7afaf9b195b553ef18a3582b3ec0732bf237a9
   "expectedPackageFiles": [
     "C:\\Users\\Basti\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\Basti\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
@@ -203,5 +209,12 @@
     "C:\\Users\\Basti\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\Basti\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem beim Lesen der Cachedatei \"C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\project.nuget.cache\": Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

@@ -33,7 +33,7 @@ class _RegistrierungState extends State<Registrierung> {
     if (passRegCon.text == passRegCon2.text) {
       try {
         response = await http.post(
-            Uri.parse("https://localhost:7077/api/Nutzer"),
+            Uri.parse(LoginInfo().serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
@@ -125,11 +125,11 @@ class _RegistrierungState extends State<Registrierung> {
 
   void fetchUser() async {
     try {
-      response = await http.get(Uri.parse(
-          'https://localhost:7077/login?email=' +
-              usernameLoginController.text +
-              '&password=' +
-              passwortLoginController.text));
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          '/login?email=' +
+          usernameLoginController.text +
+          '&password=' +
+          passwortLoginController.text));
 
       if (response.statusCode != 200) {
         showDialog<String>(

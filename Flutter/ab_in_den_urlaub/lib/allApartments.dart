@@ -12,7 +12,7 @@ class AllApartments extends StatefulWidget {
 }
 
 class _AllApartmentsState extends State<AllApartments> {
-  String url = 'https://localhost:7077/api/Ferienwohnung';
+  String url = 'https://localhost:5000/api/Ferienwohnung';
   var jsons = [];
   var jsonItalien = [];
   var jsonSpanien = [];
@@ -35,7 +35,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebot() async {
     try {
       response =
-          await http.get(Uri.parse('https://localhost:7077/api/Angebote'));
+          await http.get(Uri.parse('https://localhost:5000/api/Angebote'));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);
       setState(() {
@@ -49,7 +49,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchFerienwohnungByID(var id) async {
     try {
       response = await http.get(Uri.parse(
-          'https://localhost:7077/api/Ferienwohnung/' + id.toString()));
+          'https://localhost:5000/api/Ferienwohnung/' + id.toString()));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);
       setState(() {
@@ -63,7 +63,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebotDeutschland(var land) async {
     try {
       response = await http.get(Uri.parse(
-          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+          'https://localhost:5000/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
               land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);
@@ -79,7 +79,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebotSpanien(var land) async {
     try {
       response = await http.get(Uri.parse(
-          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+          'https://localhost:5000/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
               land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);
@@ -95,7 +95,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebotItalien(var land) async {
     try {
       response = await http.get(Uri.parse(
-          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+          'https://localhost:5000/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
               land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);
@@ -111,7 +111,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebotGriechenland(var land) async {
     try {
       response = await http.get(Uri.parse(
-          'https://localhost:7077/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
+          'https://localhost:5000/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
               land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       print(jsonData);

@@ -4,7 +4,7 @@ class LoginInfo {
   static final LoginInfo _singleton = LoginInfo._internal();
   var userid = -1;
   var tokens = 0;
-
+  bool vermieter = false;
   factory LoginInfo() {
     return _singleton;
   }

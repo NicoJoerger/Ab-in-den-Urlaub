@@ -143,9 +143,9 @@ class _sApartmentsState extends State<sApartments> {
               ),
               ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: json.length,
+                itemCount: jsons.length,
                 itemBuilder: (context, i) {
-                  final json = json[i];
+                  final json = jsons[i];
                   //  fetchFerienwohnungByID(json["fwId"].toString());
                   final wohnung = json["fw"];
                   return ApartmentCard(

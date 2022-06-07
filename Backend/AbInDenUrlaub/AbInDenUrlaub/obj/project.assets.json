@@ -10871,19 +10871,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "projectUniqueName": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "projectName": "AbInDenUrlaub",
-      "projectPath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "projectPath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "projectName": "AbInDenUrlaub",
-      "projectPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
->>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
+      "outputPath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\scher\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -10982,5 +10974,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem beim Lesen der Cachedatei \"C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\project.nuget.cache\": Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

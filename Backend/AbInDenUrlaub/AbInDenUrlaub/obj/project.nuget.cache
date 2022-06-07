@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "1Y0OZ2/Rfj0YOPTPkNQ+c4cZl+Jhb1vpsl1vVjrGeR5EYXtjOIJpMdjF6oJvx1nBiUV0XBipsn70WurkE07nDA==",
+  "dgSpecHash": "J2QnQk7kDD3jNVYqrRAeIhxpjXPnjf6Gxpl+9DO5AvzqG7aihxNmMlY02do5RIhUYUvka/LpkL+pzf2JVzRdbQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-=======
-  "dgSpecHash": "AXAD1YJ6r3Or+sCntsNxWRqwu/YmoAbM3hSkK6Vrl+KrfqBZbAFqY9D+1bWwzDaveFPqdrTBSbYr+xZP/cuD/g==",
-  "success": true,
-  "projectFilePath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
->>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
+  "projectFilePath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\scher\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\scher\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
@@ -209,5 +203,12 @@
     "C:\\Users\\scher\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\scher\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem beim Lesen der Cachedatei \"C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\project.nuget.cache\": Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

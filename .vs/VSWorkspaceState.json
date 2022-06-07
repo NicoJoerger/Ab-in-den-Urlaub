@@ -5,7 +5,10 @@
     "\\Backend\\AbInDenUrlaub",
     "\\Backend\\AbInDenUrlaub\\AbInDenUrlaub",
     "\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\Controllers",
-    "\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\Models"
+    "\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\Models",
+    "\\Flutter",
+    "\\Flutter\\ab_in_den_urlaub",
+    "\\Flutter\\ab_in_den_urlaub\\lib"
   ],
   "SelectedNode": "\\Backend\\AbInDenUrlaub\\AbInDenUrlaub.sln",
   "PreviewInSolutionExplorer": false

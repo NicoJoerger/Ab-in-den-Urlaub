@@ -1,6 +1,8 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'appBars.dart';
 
 class Registrierung extends StatefulWidget {
@@ -12,6 +14,28 @@ class Registrierung extends StatefulWidget {
 class _RegistrierungState extends State<Registrierung> {
   var Containerh = 40.0;
   var Containerw = 400.0;
+  final passwortLoginController = TextEditingController();
+  final usernameLoginController = TextEditingController();
+  var response;
+  var jsons = [];
+
+  void fetchUser(var email, var password) async {
+    try {
+      response = await http.get(Uri.parse(
+          'https://localhost:7077/login?email=' +
+              email +
+              '&password=' +
+              password));
+      final jsonData = jsonDecode(response.body) as List;
+      print(jsonData);
+      setState(() {
+        jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -38,6 +62,7 @@ class _RegistrierungState extends State<Registrierung> {
                   width: Containerw,
                   height: Containerh,
                   child: TextField(
+                    controller: usernameLoginController,
                     decoration: InputDecoration(
                       labelText: 'E-Mail',
                     ),
@@ -47,6 +72,7 @@ class _RegistrierungState extends State<Registrierung> {
                   width: Containerw,
                   height: Containerh,
                   child: TextField(
+                    controller: passwortLoginController,
                     decoration: InputDecoration(
                       labelText: 'Passwort',
                     ),
@@ -62,7 +88,10 @@ class _RegistrierungState extends State<Registrierung> {
                       Container(
                         height: Containerh,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () => {
+                            fetchUser(usernameLoginController.text,
+                                passwortLoginController.text)
+                          },
                           child: Text("Login"),
                         ),
                       )

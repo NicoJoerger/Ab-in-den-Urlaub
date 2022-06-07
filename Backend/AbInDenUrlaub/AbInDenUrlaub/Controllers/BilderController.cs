@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace AbInDenUrlaub.Controllers
 {
@@ -18,20 +15,12 @@ namespace AbInDenUrlaub.Controllers
             this.context = context;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Bilder>>> AddBild(System.Drawing.Image bild)
+
+        [HttpGet]
+        public async Task<ActionResult<List<Bilder>>> GetBilder()
         {
-
-            MemoryStream memoryStream = new MemoryStream();
-            bild.Save(memoryStream, bild.RawFormat);
-            byte[] buffer = memoryStream.ToArray();
-            Bilder  newBild = new Bilder(); 
-            newBild.Bild = buffer;
-            context.Bilders.Add(newBild);
-            await context.SaveChangesAsync();
-           
-
             return Ok(await context.Bilders.ToListAsync());
         }
+
     }
 }

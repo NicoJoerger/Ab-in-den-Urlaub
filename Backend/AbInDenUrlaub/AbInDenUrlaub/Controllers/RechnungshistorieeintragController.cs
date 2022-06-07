@@ -46,7 +46,7 @@ namespace AbInDenUrlaub.Controllers
         public async Task<ActionResult<List<Rechnungshistorieeintrag>>> AddEintrag(Rechnungshistorieeintrag eintrag)
         {
             var user = await context.Nutzers.FindAsync(eintrag.UserId);
-            user.lastBuy = DateTime.Now;
+            user.lastbuy = DateTime.Now;
             context.Rechnungshistorieeintrags.Add(eintrag);
             await context.SaveChangesAsync();
 

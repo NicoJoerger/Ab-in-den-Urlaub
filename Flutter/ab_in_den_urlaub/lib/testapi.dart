@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:typed_data';
 
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,19 @@ class TestAPI extends StatefulWidget {
 }
 
 class _TestAPIState extends State<TestAPI> {
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
+  }
+
+  Uint8List dataFromBase64String(String base64String) {
+    return base64Decode(base64String);
+  }
+
+  String base64String(Uint8List data) {
+    return base64Encode(data);
+  }
+
+  Image test = Image(image: AssetImage("images/hallstatt.jpg"));
   String url = 'https://localhost:7077/api/Nutzer';
   var jsons = [];
   var response;
@@ -27,6 +41,21 @@ class _TestAPIState extends State<TestAPI> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchImage() async {
+    String urlImg = 'https://localhost:7077/api/Bilder';
+    try {
+      response = await http.get(Uri.parse(urlImg));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        jsons = jsonData;
+        print("imageresponse: " + jsonData.toString());
+        test = imageFromBase64String(jsons[1]['bild']);
       });
     } catch (err) {
       print(err.toString());
@@ -110,29 +139,34 @@ class _TestAPIState extends State<TestAPI> {
           preferredSize: AppBar().preferredSize,
           child: AppBarBrowser(),
         ),
-        body: Column(
-          children: [
-            ElevatedButton(
-              child: Text("TestGet"),
-              onPressed: fetchUser,
-            ),
-            ElevatedButton(
-              child: Text("TestPost"),
-              onPressed: postUser,
-            ),
-            TextField(),
-            Container(
-              height: 500,
-              child: ListView.builder(
-                itemCount: jsons.length,
-                itemBuilder: (context, i) {
-                  final json = jsons[i];
-                  return Text(
-                      "userid = ${json["userId"]}, username = ${json["username"]}, nachname = ${json["nachname"]}, vorname = ${json["vorname"]},  email = ${json["email"]}, tokens = ${json["tokenstand"]},");
-                },
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ElevatedButton(
+                child: Text("TestGet"),
+                onPressed: fetchUser,
               ),
-            ),
-          ],
+              ElevatedButton(
+                child: Text("TestPost"),
+                onPressed: postUser,
+              ),
+              TextField(),
+              Container(
+                height: 500,
+                child: ListView.builder(
+                  itemCount: jsons.length,
+                  itemBuilder: (context, i) {
+                    final json = jsons[i];
+                    return Text(
+                        "userid = ${json["userId"]}, username = ${json["username"]}, nachname = ${json["nachname"]}, vorname = ${json["vorname"]},  email = ${json["email"]}, tokens = ${json["tokenstand"]},");
+                  },
+                ),
+              ),
+              ElevatedButton(
+                  child: Text("LoadImage"), onPressed: () => {fetchImage()}),
+              test,
+            ],
+          ),
         ),
       ),
     );

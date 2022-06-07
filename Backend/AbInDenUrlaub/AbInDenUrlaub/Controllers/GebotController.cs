@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Core.EntityClient;
 
 namespace AbInDenUrlaub.Controllers
 {
@@ -32,7 +30,7 @@ namespace AbInDenUrlaub.Controllers
 
             foreach (Gebot gebot in gebotes)
             {
-                if(gebot.UserId == id)
+                if (gebot.UserId == id)
                 {
                     list.Add(gebot);
                 }
@@ -60,12 +58,52 @@ namespace AbInDenUrlaub.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Gebot>>> AddGebot (Gebot newGebot)
+        public async Task<ActionResult<List<Gebot>>> AddGebot(Gebot newGebot)
         {
-            context.Gebots.Add(newGebot);
+            var dbAngebot = await context.Angebotes.FindAsync(newGebot.AngebotId);
+            if (dbAngebot == null)
+            {
+                return BadRequest("Angebot not found");
+            }
+            if (newGebot.Preis > dbAngebot.AktuellerTokenpreis)
+            {
+                context.Gebots.Add(newGebot);
+            }
             await context.SaveChangesAsync();
 
-            return Ok(await context.Gebots.ToListAsync());
+            return Ok(newGebot);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<List<Gebot>>> UpdateGebot(Gebot updatedGebot)
+        {
+            var dbGebot = await context.Gebots.FindAsync(updatedGebot.GebotId);
+            if (dbGebot == null)
+            {
+                return BadRequest("Gebot not found");
+            }
+
+            if (updatedGebot.Preis > dbGebot.Preis)
+            {
+                dbGebot.Angebot = updatedGebot.Angebot;
+                dbGebot.User = updatedGebot.User;
+                dbGebot.Preis = updatedGebot.Preis;
+
+                var dbAngebot = await context.Angebotes.FindAsync(updatedGebot.AngebotId);
+                if (dbAngebot == null)
+                {
+                    return BadRequest("Angebot not found");
+                }
+                dbAngebot.AktuellerTokenpreis = dbGebot.Preis;
+            }
+            else
+            {
+                return BadRequest("Preis muss größer sein als der alte");
+            }
+
+            await context.SaveChangesAsync();
+
+            return Ok(dbGebot);
         }
 
     }

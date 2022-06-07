@@ -28,21 +28,23 @@ namespace AbInDenUrlaub.Controllers
 
             foreach (Nutzer user in users)
             {
-                if (user.Email == email && user.Password == password)
+                if (user.Email.Equals(email) && user.Password.Equals(password))
                 {
                     retList.Add(user);
-                    TimeSpan ts = DateTime.Now - user.lastBuy;
+                    TimeSpan ts = DateTime.Now - user.lastbuy;
                     if (ts.Days > 365)
                     {
                         user.Tokenstand = user.Tokenstand + 100;
+                        user.lastbuy = DateTime.UtcNow;
                     }
-                    break;
+                    await context.SaveChangesAsync();
+                    return Ok(retList);
                 }
-                return BadRequest("Invalid credentials");
             }
             await context.SaveChangesAsync();
-            return Ok(retList);
+            return BadRequest("Invalid credentials");
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<List<Nutzer>>> GetbyID(int id)
@@ -72,6 +74,7 @@ namespace AbInDenUrlaub.Controllers
                 }
             }
             context.Nutzers.Add(nutzer);
+            nutzer.lastbuy = DateTime.UtcNow;
             await context.SaveChangesAsync();
 
             return Ok(await context.Nutzers.ToListAsync());
@@ -100,6 +103,50 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Nutzers.ToListAsync());
         }
 
+        [HttpPut("/deactivate")]
+        public async Task<ActionResult<List<Nutzer>>> deactivateNutzer(int UserID)
+        {
+            var toDeactivate = await context.Nutzers.FindAsync(UserID);
+            if (toDeactivate == null)
+            {
+                return BadRequest("Nutzer not found");
+            }
+
+            List<Ferienwohnung> wohnungs = await context.Ferienwohnungs.ToListAsync();
+            List<Angebote> angebote = await context.Angebotes.ToListAsync();
+
+
+            List<Ferienwohnung> list = new();
+
+            foreach (var wohnung in wohnungs)
+            {
+                if (wohnung.UserId == UserID)
+                {
+                    list.Add(wohnung);
+                }
+            }
+
+            foreach (Ferienwohnung fw in list)
+            {
+                foreach (Angebote ag in angebote)
+                {
+                    if (ag.FwId == fw.FwId)
+                    {
+                        if (ag.MietzeitraumEnde > DateTime.Now)
+                        {
+                            return BadRequest("User hat aktive Angebote");
+                        }
+                    }
+                }
+            }
+
+            toDeactivate.deaktiviert = true;
+
+            await context.SaveChangesAsync();
+
+            return Ok(toDeactivate);
+
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj": {}
   },
   "projects": {
@@ -12,6 +13,19 @@
         "projectPath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
         "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\scher\\Desktop\\Ab in den scheis urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
+=======
+    "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+        "projectName": "AbInDenUrlaub",
+        "projectPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+        "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\scher\\Desktop\\ab-in-den-urlaub\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
+>>>>>>> 6eca220cf5f02e90ac721e791b9c6aef58fcf728
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\scher\\AppData\\Roaming\\NuGet\\NuGet.Config",

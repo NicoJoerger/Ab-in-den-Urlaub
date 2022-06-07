@@ -28,6 +28,7 @@ class _nAngebotState extends State<nAngebot> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedRBeginn) {
       setState(() {
+        print(picked.toString());
         selectedRBeginn = picked;
       });
     }
@@ -223,6 +224,7 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
+                Text("stonierbar")
               ],
             ),
           ),

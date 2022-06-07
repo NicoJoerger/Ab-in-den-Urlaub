@@ -85,77 +85,82 @@ class _sApartmentsState extends State<sApartments> {
         body: Container(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
-            child: Column(children: [
-              Container(
-                height: 50,
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Text(
-                            "Nach Land filtern: ",
-                            style: barstyle,
-                          ),
-                          DropdownButton<String>(
-                            dropdownColor: Colors.blue,
-                            value: dropdownValue,
-                            icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownValue = newValue!;
-                              });
-                            },
-                            items: <String>[
-                              'Ohne',
-                              'Deutschland',
-                              'Frankreich',
-                              'Spanien'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          )
-                        ],
+            child: Container(
+              child: Column(children: [
+                Container(
+                  height: 50,
+                  color: Colors.blue,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            Text(
+                              "Nach Land filtern: ",
+                              style: barstyle,
+                            ),
+                            DropdownButton<String>(
+                              dropdownColor: Colors.blue,
+                              value: dropdownValue,
+                              icon: const Icon(Icons.arrow_downward),
+                              elevation: 16,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 15),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                });
+                              },
+                              items: <String>[
+                                'Ohne',
+                                'Deutschland',
+                                'Frankreich',
+                                'Spanien'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => selectRBeginn(context),
-                      child: const Text('Anreise ab'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => selectREnde(context),
-                      child: const Text('Abreise bis'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => _showTokenInputDialog(),
-                      child: const Text('Tokengrenze'),
-                    ),
-                  ],
+                      ElevatedButton(
+                        onPressed: () => selectRBeginn(context),
+                        child: const Text('Anreise ab'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => selectREnde(context),
+                        child: const Text('Abreise bis'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => _showTokenInputDialog(),
+                        child: const Text('Tokengrenze'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: jsons.length,
-                itemBuilder: (context, i) {
-                  final json = jsons[i];
-                  //  fetchFerienwohnungByID(json["fwId"].toString());
-                  final wohnung = json["fw"];
-                  return ApartmentCard(
-                    anlagenName: wohnung["wohnungsname"],
-                    bewertung: "",
-                    text: wohnung["beschreibung"],
-                  );
-                },
-              ),
-            ]),
+                Container(
+                  height: 500,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: jsons.length,
+                    itemBuilder: (context, i) {
+                      final json = jsons[i];
+                      //  fetchFerienwohnungByID(json["fwId"].toString());
+                      final wohnung = json["fw"];
+                      return ApartmentCard(
+                        anlagenName: wohnung["wohnungsname"],
+                        bewertung: "",
+                        text: wohnung["beschreibung"],
+                      );
+                    },
+                  ),
+                ),
+              ]),
+            ),
           ),
         ),
       ),

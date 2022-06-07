@@ -14,8 +14,10 @@ class _sApartmentsState extends State<sApartments> {
   var jsons = [];
   TextStyle barstyle = TextStyle(color: Colors.white, fontSize: 17);
   String dropdownValue = 'Ohne';
-  DateTime selectedRBeginn = DateTime.now();
-  DateTime selectedREnde = DateTime.now();
+  DateTime selectedRBeginn =
+      DateTime.fromMicrosecondsSinceEpoch(1640901600000000);
+  DateTime selectedREnde =
+      DateTime.fromMicrosecondsSinceEpoch(1940901600000000);
 
   Future<void> selectRBeginn(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -116,7 +118,14 @@ class _sApartmentsState extends State<sApartments> {
                                 'Ohne',
                                 'Deutschland',
                                 'Frankreich',
-                                'Spanien'
+                                'Großbritannien',
+                                'Ungarn',
+                                'Schweden',
+                                'Spanien',
+                                'Kanada',
+                                'Nordkorea',
+                                'Griechenland',
+                                'Japan'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,

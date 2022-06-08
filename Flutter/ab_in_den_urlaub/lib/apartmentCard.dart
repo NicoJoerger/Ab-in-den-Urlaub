@@ -5,10 +5,16 @@ class ApartmentCard extends StatefulWidget {
   String bewertung = "";
   String text = "";
   String images = "";
+  String von = "";
+  String bis = "";
+  int tokenP = 0;
   ApartmentCard(
       {Key? key,
       required this.anlagenName,
       required this.bewertung,
+      required this.von,
+      required this.bis,
+      required this.tokenP,
       required this.text})
       : super(key: key);
 
@@ -53,6 +59,10 @@ class _ApartmentCardState extends State<ApartmentCard> {
                         Text(
                           widget.bewertung,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
+                        ),
+                        Text(
+                          widget.tokenP.toString(),
+                          style: TextStyle(color: Colors.yellow, fontSize: 15),
                         )
                       ],
                     ),
@@ -65,7 +75,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
                     ),
                     Container(
                       width: imageWitdh,
-                      height: 270,
+                      height: 250,
                       child: FittedBox(
                         child: Image(image: AssetImage("images/beach.jpg")),
                         fit: BoxFit.fill,
@@ -80,6 +90,19 @@ class _ApartmentCardState extends State<ApartmentCard> {
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
                     ),
+                    Row(
+                      children: [
+                        Text(
+                          widget.von,
+                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                        Text(
+                          widget.bis,
+                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.end,
+                    )
                   ],
                 ),
               ),

@@ -26,14 +26,26 @@ class _TokenState extends State<Token> {
     var response;
     String urlUsr = LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
     try{
+      print(" test12\n");
       response = await http.get(Uri.parse(urlUsr));
+      print(response.body+"\n");
       final jsonData = jsonDecode(response.body) as List;
+      print(jsonData.toString()+"\n");
       final json = jsonData[0];
-      jsonData["tokenstand"] = (jsonData["tokenstand"].toInt() + sliderval.toInt());
+      print(" tes2t12\n");
+      json["tokenstand"] = (json["tokenstand"].toInt() + sliderval.toInt());
       String urlToken = LoginInfo().serverIP + 'api/Nutzer';
+      print("test123\n");
       response = await http.put(Uri.parse(urlToken), headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       }, body: jsonData.toString());
+      
+      if(response.statusCode() == 200)
+      {
+        setState(() {
+            LoginInfo().tokens += sliderval.toInt();
+      });
+      }
     }
     catch(err){
       print(err.toString());
@@ -96,11 +108,8 @@ class _TokenState extends State<Token> {
                                       });
                                     })),
                             TextButton(
-                              onPressed: () => {
-                                setState(() {
-                                  LoginInfo().tokens += sliderval.toInt();
-                                })
-                              },
+                              onPressed: 
+                              addTokens,
                               child: Text("Für " +
                                   ((sliderval.toInt() * tokenPreis()) / 100.0)
                                       .toString() +

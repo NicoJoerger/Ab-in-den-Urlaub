@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AbInDenUrlaub.Controllers
@@ -28,15 +27,26 @@ namespace AbInDenUrlaub.Controllers
 
             List<Angebote> retList = new();
 
-                foreach (Angebote angebote in list)
-                {
+            foreach (Angebote angebote in list)
+            {
                 var temp = await context.Ferienwohnungs.FindAsync(angebote.FwId);
-                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis &&  temp.land.Equals(Land))
+                if (Land.Equals("Ohne"))
+                {
+                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis)
                     {
                         retList.Add(angebote);
                         context.Entry(angebote).Reference(s => s.Fw).Load();
                     }
                 }
+                else
+                {
+                    if (angebote.MietzeitraumStart >= MietzeitraumStart && angebote.MietzeitraumEnde <= MietzeitraumEnde && angebote.Mietpreis <= Mietpreis && angebote.AktuellerTokenpreis <= Tokenpreis && temp.land.Equals(Land))
+                    {
+                        retList.Add(angebote);
+                        context.Entry(angebote).Reference(s => s.Fw).Load();
+                    }
+                }
+            }
 
 
             return Ok(retList);
@@ -52,7 +62,7 @@ namespace AbInDenUrlaub.Controllers
 
             foreach (Angebote angebot in angebotes)
             {
-                if(angebot.AngebotId == id)
+                if (angebot.AngebotId == id)
                 {
                     list.Add(angebot);
                 }
@@ -94,7 +104,7 @@ namespace AbInDenUrlaub.Controllers
         public async Task<ActionResult<List<Angebote>>> UpdateAngebot(Angebote updatedAngebot)
         {
             var dbAngebot = await context.Angebotes.FindAsync(updatedAngebot.FwId);
-            if(dbAngebot == null)
+            if (dbAngebot == null)
             {
                 return BadRequest("Angebot not found");
             }
@@ -111,6 +121,6 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Angebotes.ToListAsync());
         }
 
-       
+
     }
 }

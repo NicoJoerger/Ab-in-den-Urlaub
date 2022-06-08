@@ -7,15 +7,42 @@ class ApartmentCard extends StatefulWidget {
   String images = "";
   String von = "";
   String bis = "";
+  String eurpP = "";
+  String land = "";
+  String ort = "";
+  String pLZ = "";
+  String strasse = "";
+  String hausNr = "";
+  String wohnflaeche = "";
+  String zimmer = "";
+  String betten = "";
+  String baeder = "";
+  bool wlan = false;
+  bool garten = false;
+  bool balkon = false;
+
   int tokenP = 0;
   ApartmentCard(
       {Key? key,
       required this.anlagenName,
-      required this.bewertung,
-      required this.von,
-      required this.bis,
-      required this.tokenP,
-      required this.text})
+      this.bewertung = "",
+      this.von = "",
+      this.bis = "",
+      this.tokenP = 0,
+      this.text = "0",
+      this.eurpP = "0",
+      this.land = "0",
+      this.ort = "0",
+      this.pLZ = "0",
+      this.strasse = "0",
+      this.hausNr = "0",
+      this.wohnflaeche = "0",
+      this.zimmer = "0",
+      this.betten = "0",
+      this.baeder = "0",
+      this.wlan = false,
+      this.garten = false,
+      this.balkon = false})
       : super(key: key);
 
   @override

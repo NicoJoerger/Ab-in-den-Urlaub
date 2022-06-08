@@ -123,7 +123,15 @@ class _sApartmentsState extends State<sApartments> {
     if (land == 'Ohne') {
       try {
         response = await http.get(Uri.parse(LoginInfo().serverIP +
-            '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999'));
+            '/filtered?MietzeitraumStart=' +
+            start +
+            '&MietzeitraumEnde=' +
+            end +
+            '&Mietpreis=' +
+            mietPreisVal +
+            '&Tokenpreis=' +
+            tokenPreisVal +
+            '&Land=Ohne'));
         print(response.body);
         final jsonData = jsonDecode(response.body) as List;
         print(jsonData);
@@ -136,17 +144,17 @@ class _sApartmentsState extends State<sApartments> {
       }
     } else {
       try {
-        response = await http.get(Uri.parse(
-            LoginInfo().serverIP + '/filtered?MietzeitraumStart=' +
-                start +
-                '&MietzeitraumEnde=' +
-                end +
-                '&Mietpreis=' +
-                mietPreisVal +
-                '&Tokenpreis=' +
-                tokenPreisVal +
-                '&Land=' +
-                land));
+        response = await http.get(Uri.parse(LoginInfo().serverIP +
+            '/filtered?MietzeitraumStart=' +
+            start +
+            '&MietzeitraumEnde=' +
+            end +
+            '&Mietpreis=' +
+            mietPreisVal +
+            '&Tokenpreis=' +
+            tokenPreisVal +
+            '&Land=' +
+            land));
         print(response.body);
         final jsonData = jsonDecode(response.body) as List;
         print(jsonData);

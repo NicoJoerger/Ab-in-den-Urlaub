@@ -19,9 +19,18 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var devCorsPolicy = "devCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(devCorsPolicy, builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
-//app.Urls.Add("http://127.0.0.1:5000");
-//app.Urls.Add("http://81.169.152.56:5000");
+app.Urls.Add("http://127.0.0.1:5000");
+app.Urls.Add("http://81.169.152.56:5000");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,9 +39,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors(devCorsPolicy);
 app.MapControllers();
 app.Run();

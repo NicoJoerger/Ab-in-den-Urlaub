@@ -2,6 +2,10 @@ import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart';
 import 'appBars.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+
 
 class Token extends StatefulWidget {
   Token({Key? key}) : super(key: key);
@@ -15,6 +19,26 @@ class _TokenState extends State<Token> {
   var sliderval = 100.0;
   int tokenPreis() {
     return 25;
+  }
+
+  void addTokens() async
+  {
+    var response;
+    String urlUsr = LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
+    try{
+      response = await http.get(Uri.parse(urlUsr));
+      final jsonData = jsonDecode(response.body) as List;
+      final json = jsonData[0];
+      jsonData["tokenstand"] = (jsonData["tokenstand"].toInt() + sliderval.toInt());
+      String urlToken = LoginInfo().serverIP + 'api/Nutzer';
+      response = await http.put(Uri.parse(urlToken), headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      }, body: jsonData.toString());
+    }
+    catch(err){
+      print(err.toString());
+    }
+    
   }
 
   @override

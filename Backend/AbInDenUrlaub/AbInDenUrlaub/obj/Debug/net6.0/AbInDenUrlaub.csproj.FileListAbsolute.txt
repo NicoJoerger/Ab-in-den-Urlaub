@@ -270,7 +270,6 @@ E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\bin\De
 E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.csproj.AssemblyReference.cache
 E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.csproj.ResolveComReference.cache
 <<<<<<< HEAD
-<<<<<<< HEAD
 C:\Users\scher\Desktop\Ab in den scheis urlaub\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\scher\Desktop\Ab in den scheis urlaub\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\bin\Debug\net6.0\appsettings.json
 C:\Users\scher\Desktop\Ab in den scheis urlaub\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\bin\Debug\net6.0\AbInDenUrlaub.exe
@@ -1137,7 +1136,6 @@ C:\Users\scher\Desktop\abindenurlaubneu\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\A
 C:\Users\scher\Desktop\abindenurlaubneu\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.pdb
 C:\Users\scher\Desktop\abindenurlaubneu\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.genruntimeconfig.cache
 C:\Users\scher\Desktop\abindenurlaubneu\Ab-in-den-Urlaub\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\ref\AbInDenUrlaub.dll
-=======
 E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.GeneratedMSBuildEditorConfig.editorconfig
 E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.AssemblyInfoInputs.cache
 E:\Studium\4. Semester\Projekt 1\Code\Backend\AbInDenUrlaub\AbInDenUrlaub\obj\Debug\net6.0\AbInDenUrlaub.AssemblyInfo.cs

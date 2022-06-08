@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'dart:typed_data';
-
+import 'globals.dart';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +32,7 @@ class _TestAPIState extends State<TestAPI> {
   }
 
   Image test = Image(image: AssetImage("images/hallstatt.jpg"));
-  String url = 'http://81.169.152.56:5000/api/Nutzer';
+  String url = LoginInfo().serverIP + '/api/Nutzer';
   var jsons = [];
   var response;
   void fetchUser() async {
@@ -48,7 +48,7 @@ class _TestAPIState extends State<TestAPI> {
   }
 
   void fetchImage() async {
-    String urlImg = 'http://81.169.152.56:5000/api/Bilder';
+    String urlImg = LoginInfo().serverIP + '/api/Bilder';
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;

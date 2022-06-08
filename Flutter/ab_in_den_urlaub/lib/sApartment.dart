@@ -137,7 +137,7 @@ class _sApartmentsState extends State<sApartments> {
     } else {
       try {
         response = await http.get(Uri.parse(
-            'http://81.169.152.56:5000/filtered?MietzeitraumStart=' +
+            LoginInfo().serverIP + '/filtered?MietzeitraumStart=' +
                 start +
                 '&MietzeitraumEnde=' +
                 end +

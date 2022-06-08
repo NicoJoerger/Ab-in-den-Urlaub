@@ -25,7 +25,7 @@ class _AllApartmentsState extends State<AllApartments> {
     try {
       response = await http.get(Uri.parse(url));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      //print(jsonData);
       setState(() {
         jsons = jsonData;
       });
@@ -39,7 +39,7 @@ class _AllApartmentsState extends State<AllApartments> {
       response =
           await http.get(Uri.parse(LoginInfo().serverIP + '/api/Angebote'));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      //print(jsonData);
       setState(() {
         jsons = jsonData;
       });
@@ -53,7 +53,7 @@ class _AllApartmentsState extends State<AllApartments> {
       response = await http.get(Uri.parse(
           LoginInfo().serverIP + '/api/Ferienwohnung/' + id.toString()));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      // print(jsonData);
       setState(() {
         jsons = jsonData;
       });
@@ -68,10 +68,10 @@ class _AllApartmentsState extends State<AllApartments> {
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      // print(jsonData);
       setState(() {
         jsonDeutschland = jsonData;
-        print(jsonDeutschland);
+        //  print(jsonDeutschland);
       });
     } catch (err) {
       print(err.toString());
@@ -84,10 +84,10 @@ class _AllApartmentsState extends State<AllApartments> {
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      // print(jsonData);
       setState(() {
         jsonSpanien = jsonData;
-        print(jsonSpanien);
+        //  print(jsonSpanien);
       });
     } catch (err) {
       print(err.toString());
@@ -100,10 +100,10 @@ class _AllApartmentsState extends State<AllApartments> {
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      //  print(jsonData);
       setState(() {
         jsonItalien = jsonData;
-        print(jsonItalien);
+        //    print(jsonItalien);
       });
     } catch (err) {
       print(err.toString());
@@ -116,7 +116,7 @@ class _AllApartmentsState extends State<AllApartments> {
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+      //  print(jsonData);
       setState(() {
         jsonGriechenland = jsonData;
         print(jsonGriechenland);
@@ -207,7 +207,11 @@ class _AllApartmentsState extends State<AllApartments> {
                           final json = jsonItalien[i];
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
+
                           return ApartmentCard(
+                            von: wohnung["mietzeitraumStart"],
+                            bis: wohnung["mietzeitraumEnde"],
+                            tokenP: wohnung["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -233,6 +237,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
+                            von: wohnung["mietzeitraumStart"],
+                            bis: wohnung["mietzeitraumEnde"],
+                            tokenP: wohnung["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -258,6 +265,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
+                            von: wohnung["mietzeitraumStart"],
+                            bis: wohnung["mietzeitraumEnde"],
+                            tokenP: wohnung["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -284,6 +294,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
+                            von: wohnung["mietzeitraumStart"],
+                            bis: wohnung["mietzeitraumEnde"],
+                            tokenP: wohnung["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],

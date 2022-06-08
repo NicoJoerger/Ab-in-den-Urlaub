@@ -15,6 +15,7 @@ class sApartments extends StatefulWidget {
 
 class _sApartmentsState extends State<sApartments> {
   var jsons = [];
+  var jsonLand = [];
   var response;
   final mietPreis = TextEditingController();
   final tokenPreis = TextEditingController();
@@ -34,7 +35,7 @@ class _sApartmentsState extends State<sApartments> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedRBeginn) {
       setState(() {
-        print(picked.toString());
+        //    print(picked.toString());
         selectedRBeginn = picked;
       });
     }
@@ -115,56 +116,33 @@ class _sApartmentsState extends State<sApartments> {
 
   void fetchAngebot() async {
     var land = dropdownValue.toString();
-    var jsonLand;
+
     var start = selectedRBeginn.toString();
     var end = selectedREnde.toString();
     var mietPreisVal = mietPreis.text;
     var tokenPreisVal = tokenPreis.text;
-    if (land == 'Ohne') {
-      try {
-        response = await http.get(Uri.parse(LoginInfo().serverIP +
-            '/filtered?MietzeitraumStart=' +
-            start +
-            '&MietzeitraumEnde=' +
-            end +
-            '&Mietpreis=' +
-            mietPreisVal +
-            '&Tokenpreis=' +
-            tokenPreisVal +
-            '&Land=Ohne'));
-        print(response.body);
-        final jsonData = jsonDecode(response.body) as List;
-        print(jsonData);
-        setState(() {
-          jsonLand = jsonData;
-          print(jsonLand);
-        });
-      } catch (err) {
-        print(err.toString());
-      }
-    } else {
-      try {
-        response = await http.get(Uri.parse(LoginInfo().serverIP +
-            '/filtered?MietzeitraumStart=' +
-            start +
-            '&MietzeitraumEnde=' +
-            end +
-            '&Mietpreis=' +
-            mietPreisVal +
-            '&Tokenpreis=' +
-            tokenPreisVal +
-            '&Land=' +
-            land));
-        print(response.body);
-        final jsonData = jsonDecode(response.body) as List;
-        print(jsonData);
-        setState(() {
-          jsonLand = jsonData;
-          print(jsonLand);
-        });
-      } catch (err) {
-        print(err.toString());
-      }
+
+    try {
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          '/filtered?MietzeitraumStart=' +
+          start +
+          '&MietzeitraumEnde=' +
+          end +
+          '&Mietpreis=' +
+          mietPreisVal +
+          '&Tokenpreis=' +
+          tokenPreisVal +
+          '&Land=' +
+          land));
+      //    print(response.body);
+      final jsonData = jsonDecode(response.body);
+      //    print(jsonData);
+      setState(() {
+        jsonLand = jsonData;
+        print("\n jsonland: " + jsonLand.toString() + "\n");
+      });
+    } catch (err) {
+      print(err.toString());
     }
   }
 
@@ -258,16 +236,29 @@ class _sApartmentsState extends State<sApartments> {
                   height: 500,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: jsons.length,
+                    itemCount: jsonLand.length,
                     itemBuilder: (context, i) {
-                      final json = jsons[i];
+                      final json = jsonLand[i];
                       //  fetchFerienwohnungByID(json["fwId"].toString());
                       final wohnung = json["fw"];
-                      return ApartmentCard(
+                      //final angebotes = wohnung["angebotes"];
+                      final angebotes = jsonDecode(wohnung["angebotes"]);
+                      print("\n Wohnung " + wohnung.toString());
+                      print("\n Angebotes " + angebotes.toString());
+                      print(angebotes[0]["mietzeitraumStart"].toString());
+                      // print("\n End: " +
+                      //     angebotes["mietzeitraumEnde"].toString());
+                      //print("\n Start: " + angebotes["aktuellerTokenpreis"]);
+
+                      return Text("");
+                      /* return ApartmentCard(
+                        von: wohnung["mietzeitraumStart"],
+                        bis: wohnung["mietzeitraumEnde"],
+                        tokenP: wohnung["aktuellerTokenpreis"],
                         anlagenName: wohnung["wohnungsname"],
                         bewertung: "",
                         text: wohnung["beschreibung"],
-                      );
+                      );*/
                     },
                   ),
                 ),

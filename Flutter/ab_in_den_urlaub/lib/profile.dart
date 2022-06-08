@@ -14,7 +14,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String url = 'https://localhost:7077/api/Nutzer';
+  String url = LoginInfo().serverIP + '/api/Nutzer';
   var rechnungshistorie = [];
   var response;
   var Texth = 40.0;
@@ -33,7 +33,7 @@ class _ProfileState extends State<Profile> {
   void fetchHistory() async {
     try {
       response = await http.get(Uri.parse(
-          "https://localhost:7077/api/Rechnungshistorieeintrag/" +
+          LoginInfo().serverIP + "/api/Rechnungshistorieeintrag/" +
               LoginInfo().userid.toString()));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
     if (passRegCon.text == passRegCon2.text) {
       try {
         response = await http.post(
-            Uri.parse("https://localhost:7077/api/Nutzer"),
+            Uri.parse(LoginInfo().serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },

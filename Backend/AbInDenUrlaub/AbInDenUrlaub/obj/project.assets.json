@@ -11067,19 +11067,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "projectName": "AbInDenUrlaub",
-      "projectPath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "packagesPath": "C:\\Users\\scher\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
-=======
       "projectUniqueName": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "projectName": "AbInDenUrlaub",
       "projectPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "packagesPath": "C:\\Users\\Basti\\.nuget\\packages\\",
       "outputPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
->>>>>>> 1b7afaf9b195b553ef18a3582b3ec0732bf237a9
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -11192,7 +11184,7 @@
       "code": "Undefined",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Problem beim Lesen der Cachedatei \"C:\\Users\\scher\\Desktop\\abindenurlaubneu\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\project.nuget.cache\": Invalid property identifier character: <. Path 'version', line 3, position 0."
+      "message": "Problem reading the cache file E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
     }
   ]
 }

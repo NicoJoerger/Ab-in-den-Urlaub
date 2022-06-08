@@ -23,24 +23,40 @@ class _TokenState extends State<Token> {
 
   void addTokens() async
   {
+    if(LoginInfo().userid == -1)
+    {
+      showDialog<String> (
+        context: context,
+        builder: (BuildContext context)=> AlertDialog(
+          title:const Text("Kauf Fehlgeschlagen"),
+          content:const Text("Sie müssen angemeldet sein um Tokens zu kaufen"),
+          actions: <Widget>[
+            TextButton(
+              onPressed:() => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+    else{
     var response;
     String urlUsr = LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
     try{
-      print(" test12\n");
       response = await http.get(Uri.parse(urlUsr));
       print(response.body+"\n");
-      final jsonData = jsonDecode(response.body) as List;
+      final jsonData = jsonDecode(response.body);
       print(jsonData.toString()+"\n");
-      final json = jsonData[0];
-      print(" tes2t12\n");
-      json["tokenstand"] = (json["tokenstand"].toInt() + sliderval.toInt());
-      String urlToken = LoginInfo().serverIP + 'api/Nutzer';
-      print("test123\n");
+      jsonData["tokenstand"] = (jsonData["tokenstand"].toInt() + sliderval.toInt());
+      print(jsonData["tokenstand"].toString() + "\n");
+      String urlToken = LoginInfo().serverIP + '/api/Nutzer';
+      final body = jsonEncode(jsonData);
       response = await http.put(Uri.parse(urlToken), headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
-      }, body: jsonData.toString());
-      
-      if(response.statusCode() == 200)
+      }, body: body);
+      String code = response.statusCode.toString();
+      print(code + "\n");
+      if(response.statusCode == 200)
       {
         setState(() {
             LoginInfo().tokens += sliderval.toInt();
@@ -50,7 +66,7 @@ class _TokenState extends State<Token> {
     catch(err){
       print(err.toString());
     }
-    
+    }
   }
 
   @override
@@ -109,6 +125,7 @@ class _TokenState extends State<Token> {
                                     })),
                             TextButton(
                               onPressed: 
+
                               addTokens,
                               child: Text("Für " +
                                   ((sliderval.toInt() * tokenPreis()) / 100.0)

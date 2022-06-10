@@ -93,14 +93,21 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       response = await http.get(Uri.parse(urlOffer));
       var jsonData = jsonDecode(response.body);
-      print("jsonData: " + jsonData.toString() + "\n");
+      print("jsonDataAngebot: " + jsonData.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
   }
 
   void fetchApartment() async {
-    String urlApart = LoginInfo().serverIP + "/api/Ferienwohnung/" + widget.anlagenID;
+    String urlApart = LoginInfo().serverIP + "/api/Ferienwohnung/" + widget.anlagenID.toString();
+    try{
+      response = await http.get(Uri.parse(urlApart));
+      var jsonData = jsonDecode(response.body);
+      print("jsonDataWohnung: " + jsonData.toString() + "\n");
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void fetchImage() async {

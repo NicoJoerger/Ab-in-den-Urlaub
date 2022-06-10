@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/apartmentDetail.dart';
 import 'package:ab_in_den_urlaub/neueWohnungPage.dart';
 import 'package:ab_in_den_urlaub/neuesAngebotPage.dart';
 import 'package:ab_in_den_urlaub/registrierung.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       '/Tokens': (context) => Token(),
       '/Suche': (context) => sApartments(),
       '/Profile': (context) => Profile(),
+      '/apartmentDetail':(context) => apartmentDetail(),
     });
   }
 }

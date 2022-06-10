@@ -1,6 +1,7 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -205,12 +206,27 @@ class _AllApartmentsState extends State<AllApartments> {
                         itemCount: jsonItalien.length,
                         itemBuilder: (context, i) {
                           final json = jsonItalien[i];
+                          var startTime = json["mietzeitraumStart"];
+                          startTime = DateTime.parse(startTime);
+                          var endTime = json["mietzeitraumEnde"];
+                          endTime = DateTime.parse(endTime);
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
 
                           return ApartmentCard(
-                            von: json["mietzeitraumStart"],
-                            bis: json["mietzeitraumEnde"],
+                            von: "" +
+                                startTime.day.toString() +
+                                "-" +
+                                startTime.month.toString() +
+                                "-" +
+                                startTime.year.toString() +
+                                " ",
+                            bis: "" +
+                                endTime.day.toString() +
+                                "-" +
+                                endTime.month.toString() +
+                                "-" +
+                                endTime.year.toString(),
                             tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
@@ -234,11 +250,26 @@ class _AllApartmentsState extends State<AllApartments> {
                         itemCount: jsonDeutschland.length,
                         itemBuilder: (context, i) {
                           final json = jsonDeutschland[i];
+                          var startTime = json["mietzeitraumStart"];
+                          startTime = DateTime.parse(startTime);
+                          var endTime = json["mietzeitraumEnde"];
+                          endTime = DateTime.parse(endTime);
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: json["mietzeitraumStart"],
-                            bis: json["mietzeitraumEnde"],
+                            von: "" +
+                                startTime.day.toString() +
+                                "-" +
+                                startTime.month.toString() +
+                                "-" +
+                                startTime.year.toString() +
+                                " ",
+                            bis: "" +
+                                endTime.day.toString() +
+                                "-" +
+                                endTime.month.toString() +
+                                "-" +
+                                endTime.year.toString(),
                             tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
@@ -262,11 +293,26 @@ class _AllApartmentsState extends State<AllApartments> {
                         itemCount: jsonSpanien.length,
                         itemBuilder: (context, i) {
                           final json = jsonSpanien[i];
+                          var startTime = json["mietzeitraumStart"];
+                          startTime = DateTime.parse(startTime);
+                          var endTime = json["mietzeitraumEnde"];
+                          endTime = DateTime.parse(endTime);
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: json["mietzeitraumStart"],
-                            bis: json["mietzeitraumEnde"],
+                            von: "" +
+                                startTime.day.toString() +
+                                "-" +
+                                startTime.month.toString() +
+                                "-" +
+                                startTime.year.toString() +
+                                " ",
+                            bis: "" +
+                                endTime.day.toString() +
+                                "-" +
+                                endTime.month.toString() +
+                                "-" +
+                                endTime.year.toString(),
                             tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
@@ -291,11 +337,26 @@ class _AllApartmentsState extends State<AllApartments> {
                         itemCount: jsonGriechenland.length,
                         itemBuilder: (context, i) {
                           final json = jsonGriechenland[i];
+                          var startTime = json["mietzeitraumStart"];
+                          startTime = DateTime.parse(startTime);
+                          var endTime = json["mietzeitraumEnde"];
+                          endTime = DateTime.parse(endTime);
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: json["mietzeitraumStart"],
-                            bis: json["mietzeitraumEnde"],
+                            von: "" +
+                                startTime.day.toString() +
+                                "-" +
+                                startTime.month.toString() +
+                                "-" +
+                                startTime.year.toString() +
+                                " ",
+                            bis: "" +
+                                endTime.day.toString() +
+                                "-" +
+                                endTime.month.toString() +
+                                "-" +
+                                endTime.year.toString(),
                             tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ApartmentCard extends StatefulWidget {
   String anlagenName = "";
+  String anlangenID = "";
   String bewertung = "";
   String text = "";
   String images = "";
@@ -25,6 +26,7 @@ class ApartmentCard extends StatefulWidget {
   ApartmentCard(
       {Key? key,
       required this.anlagenName,
+      this.anlangenID = "",
       this.bewertung = "",
       this.von = "",
       this.bis = "",
@@ -60,89 +62,114 @@ class _ApartmentCardState extends State<ApartmentCard> {
     //  imageWitdh = MediaQuery.of(context).size.width * 8 / 20;
     //}
     return GestureDetector(
-        child: Center(
+      child: Center(
+        child: Container(
+          width: cardWitdh,
+          height: cardWitdh,
           child: Container(
-            width: cardWitdh,
-            height: cardWitdh,
+            decoration: const BoxDecoration(boxShadow: [
+              BoxShadow(color: Colors.grey, blurRadius: 8, spreadRadius: -13)
+            ]),
             child: Container(
-              decoration: const BoxDecoration(boxShadow: [
-                BoxShadow(color: Colors.grey, blurRadius: 8, spreadRadius: -13)
-              ]),
-              child: Container(
-                margin: EdgeInsets.all(20),
-                child: Card(
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.anlagenName,
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            Text(
-                              widget.bewertung,
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 15),
-                            ),
-                            Text(
-                              widget.tokenP.toString(),
-                              style:
-                                  TextStyle(color: Colors.yellow, fontSize: 15),
-                            )
-                          ],
-                        ),
-                        const Divider(
-                          height: 5,
-                          thickness: 2,
-                          indent: 0,
-                          endIndent: 0,
-                          color: Colors.grey,
-                        ),
-                        Container(
-                          width: imageWitdh,
-                          height: 250,
-                          child: FittedBox(
-                            child: Image(image: AssetImage("images/beach.jpg")),
-                            fit: BoxFit.fill,
+              margin: EdgeInsets.all(20),
+              child: Card(
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.anlagenName,
+                            style: TextStyle(fontSize: 30),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Flexible(
-                          child: Text(
-                            widget.text,
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+                          Text(
+                            widget.bewertung,
+                            style: TextStyle(color: Colors.grey, fontSize: 15),
                           ),
+                          Text(
+                            widget.tokenP.toString(),
+                            style:
+                                TextStyle(color: Colors.yellow, fontSize: 15),
+                          )
+                        ],
+                      ),
+                      const Divider(
+                        height: 5,
+                        thickness: 2,
+                        indent: 0,
+                        endIndent: 0,
+                        color: Colors.grey,
+                      ),
+                      Container(
+                        width: imageWitdh,
+                        height: 250,
+                        child: FittedBox(
+                          child: Image(image: AssetImage("images/beach.jpg")),
+                          fit: BoxFit.fill,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              widget.von,
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey),
-                            ),
-                            Text(
-                              widget.bis,
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.grey),
-                            ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.end,
-                        )
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Flexible(
+                        child: Text(
+                          widget.text,
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            widget.von,
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                          ),
+                          Text(
+                            widget.bis,
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.end,
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
           ),
         ),
-        onTap: () => {Navigator.pushNamed(context, '/apartmentDetail')});
+      ),
+      onTap: () => {
+        Navigator.pushNamed(
+          context,
+          '/apartmentDetail',
+          arguments: {
+            "anlagenName": widget.anlagenName,
+            "bewertung": widget.bewertung,
+            "von": widget.von,
+            "bis": widget.bis,
+            "tokenP": widget.tokenP,
+            "text": widget.text,
+            "eurpP": widget.eurpP,
+            "land": widget.land,
+            "ort": widget.ort,
+            "pLZ": widget.pLZ,
+            "strasse": widget.strasse,
+            "hausNr": widget.hausNr,
+            "wohnflaeche": widget.wohnflaeche,
+            "zimmer": widget.zimmer,
+            "betten": widget.betten,
+            "baeder": widget.baeder,
+            "wlan": widget.wlan,
+            "garten": widget.garten,
+            "balkon": widget.baeder,
+            "anlangenID": widget.anlangenID
+          },
+        )
+      },
+    );
   }
 }

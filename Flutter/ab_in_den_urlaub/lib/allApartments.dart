@@ -209,9 +209,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           final wohnung = json["fw"];
 
                           return ApartmentCard(
-                            von: wohnung["mietzeitraumStart"],
-                            bis: wohnung["mietzeitraumEnde"],
-                            tokenP: wohnung["aktuellerTokenpreis"],
+                            von: json["mietzeitraumStart"],
+                            bis: json["mietzeitraumEnde"],
+                            tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -237,9 +237,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: wohnung["mietzeitraumStart"],
-                            bis: wohnung["mietzeitraumEnde"],
-                            tokenP: wohnung["aktuellerTokenpreis"],
+                            von: json["mietzeitraumStart"],
+                            bis: json["mietzeitraumEnde"],
+                            tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -265,9 +265,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: wohnung["mietzeitraumStart"],
-                            bis: wohnung["mietzeitraumEnde"],
-                            tokenP: wohnung["aktuellerTokenpreis"],
+                            von: json["mietzeitraumStart"],
+                            bis: json["mietzeitraumEnde"],
+                            tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
@@ -294,9 +294,9 @@ class _AllApartmentsState extends State<AllApartments> {
                           //  fetchFerienwohnungByID(json["fwId"].toString());
                           final wohnung = json["fw"];
                           return ApartmentCard(
-                            von: wohnung["mietzeitraumStart"],
-                            bis: wohnung["mietzeitraumEnde"],
-                            tokenP: wohnung["aktuellerTokenpreis"],
+                            von: json["mietzeitraumStart"],
+                            bis: json["mietzeitraumEnde"],
+                            tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
                             bewertung: "",
                             text: wohnung["beschreibung"],

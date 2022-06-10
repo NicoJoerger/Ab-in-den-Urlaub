@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ApartmentCard extends StatefulWidget {
   String anlagenName = "";
+  String wohnungID = "";
   String bewertung = "";
   String text = "";
   String images = "";
@@ -25,6 +26,7 @@ class ApartmentCard extends StatefulWidget {
   ApartmentCard(
       {Key? key,
       required this.anlagenName,
+      this.wohnungID = "",
       this.bewertung = "",
       this.von = "",
       this.bis = "",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ApartmentCard extends StatefulWidget {
   String anlagenName = "";
   String anlangenID = "";
+  String angebotID = "";
   String bewertung = "";
   String text = "";
   String images = "";
@@ -27,6 +28,7 @@ class ApartmentCard extends StatefulWidget {
       {Key? key,
       required this.anlagenName,
       this.anlangenID = "",
+      this.angebotID = "",
       this.bewertung = "",
       this.von = "",
       this.bis = "",
@@ -166,7 +168,8 @@ class _ApartmentCardState extends State<ApartmentCard> {
             "wlan": widget.wlan,
             "garten": widget.garten,
             "balkon": widget.baeder,
-            "anlangenID": widget.anlangenID
+            "anlangenID": widget.anlangenID,
+            "angebotID": widget.angebotID
           },
         )
       },

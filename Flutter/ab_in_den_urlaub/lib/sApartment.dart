@@ -213,12 +213,26 @@ class _sApartmentsState extends State<sApartments> {
                         onPressed: () => selectRBeginn(context),
                         child: const Text('Anreise ab'),
                       ),
-                      Text(selectedRBeginn.toString()),
+                      Text(
+                          "" +
+                              selectedRBeginn.day.toString() +
+                              "-" +
+                              selectedRBeginn.month.toString() +
+                              "-" +
+                              selectedRBeginn.year.toString(),
+                          style: TextStyle(color: Colors.white)),
                       ElevatedButton(
                         onPressed: () => selectREnde(context),
                         child: const Text('Abreise bis'),
                       ),
-                      Text(selectedRBeginn.toString()),
+                      Text(
+                          "" +
+                              selectedREnde.day.toString() +
+                              "-" +
+                              selectedREnde.month.toString() +
+                              "-" +
+                              selectedREnde.year.toString(),
+                          style: TextStyle(color: Colors.white)),
                       ElevatedButton(
                         onPressed: () => _showTokenInputDialog(),
                         child: const Text('Tokengrenze'),
@@ -233,25 +247,43 @@ class _sApartmentsState extends State<sApartments> {
                   ),
                 ),
                 Container(
-                  height: 500,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: jsonLand.length,
-                    itemBuilder: (context, i) {
-                      final json = jsonLand[i];
-                      //  fetchFerienwohnungByID(json["fwId"].toString());
-                      final wohnung = json["fw"];
-                      //final angebotes = wohnung["angebotes"];
-                      return ApartmentCard(
-                        von: json["mietzeitraumStart"],
-                        bis: json["mietzeitraumEnde"],
-                        tokenP: json["aktuellerTokenpreis"],
-                        anlagenName: wohnung["wohnungsname"],
-                        bewertung: "",
-                        text: wohnung["beschreibung"],
-                      );
-                    },
-                  ),
+                  height: MediaQuery.of(context).size.height,
+                  child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 500,
+                              childAspectRatio: 2 / 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10),
+                      itemCount: jsonLand.length,
+                      itemBuilder: (BuildContext context, i) {
+                        final json = jsonLand[i];
+                        final wohnung = json["fw"];
+                        var startTime = json["mietzeitraumStart"];
+                        startTime = DateTime.parse(startTime);
+
+                        var endTime = json["mietzeitraumEnde"];
+                        endTime = DateTime.parse(endTime);
+                        return ApartmentCard(
+                          von: "" +
+                              startTime.day.toString() +
+                              "-" +
+                              startTime.month.toString() +
+                              "-" +
+                              startTime.year.toString() +
+                              " ",
+                          bis: "" +
+                              endTime.day.toString() +
+                              "-" +
+                              endTime.month.toString() +
+                              "-" +
+                              endTime.year.toString(),
+                          tokenP: json["aktuellerTokenpreis"],
+                          anlagenName: wohnung["wohnungsname"],
+                          bewertung: "",
+                          text: wohnung["beschreibung"],
+                        );
+                      }),
                 ),
               ]),
             ),

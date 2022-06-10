@@ -22,5 +22,7 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Bilders.ToListAsync());
         }
 
+
+
     }
 }

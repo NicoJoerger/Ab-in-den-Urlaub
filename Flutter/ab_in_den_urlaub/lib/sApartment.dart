@@ -258,15 +258,12 @@ class _sApartmentsState extends State<sApartments> {
                       itemCount: jsonLand.length,
                       itemBuilder: (BuildContext context, i) {
                         final json = jsonLand[i];
-                        //  fetchFerienwohnungByID(json["fwId"].toString());
                         final wohnung = json["fw"];
-                        //final angebotes = wohnung["angebotes"];
                         var startTime = json["mietzeitraumStart"];
                         startTime = DateTime.parse(startTime);
-                        //    startTime = DateUtils.dateOnly(startTime);
+
                         var endTime = json["mietzeitraumEnde"];
                         endTime = DateTime.parse(endTime);
-                        //  endTime = DateUtils.dateOnly(endTime);
                         return ApartmentCard(
                           von: "" +
                               startTime.day.toString() +

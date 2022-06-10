@@ -242,23 +242,14 @@ class _sApartmentsState extends State<sApartments> {
                       //  fetchFerienwohnungByID(json["fwId"].toString());
                       final wohnung = json["fw"];
                       //final angebotes = wohnung["angebotes"];
-                      final angebotes = jsonDecode(wohnung["angebotes"]);
-                      print("\n Wohnung " + wohnung.toString());
-                      print("\n Angebotes " + angebotes.toString());
-                      print(angebotes[0]["mietzeitraumStart"].toString());
-                      // print("\n End: " +
-                      //     angebotes["mietzeitraumEnde"].toString());
-                      //print("\n Start: " + angebotes["aktuellerTokenpreis"]);
-
-                      return Text("");
-                      /* return ApartmentCard(
-                        von: wohnung["mietzeitraumStart"],
-                        bis: wohnung["mietzeitraumEnde"],
-                        tokenP: wohnung["aktuellerTokenpreis"],
+                      return ApartmentCard(
+                        von: json["mietzeitraumStart"],
+                        bis: json["mietzeitraumEnde"],
+                        tokenP: json["aktuellerTokenpreis"],
                         anlagenName: wohnung["wohnungsname"],
                         bewertung: "",
                         text: wohnung["beschreibung"],
-                      );*/
+                      );
                     },
                   ),
                 ),

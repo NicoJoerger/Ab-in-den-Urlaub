@@ -33,6 +33,7 @@ class _TestAPIState extends State<TestAPI> {
   String url = LoginInfo().serverIP + '/api/Nutzer';
   var jsons = [];
   var response;
+  var jsonsComment = [];
   void fetchUser() async {
     try {
       response = await http.get(Uri.parse(url));
@@ -54,6 +55,20 @@ class _TestAPIState extends State<TestAPI> {
         jsons = jsonData;
         print("imageresponse: " + jsonData.toString());
         test = imageFromBase64String(jsons[1]['bild']);
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchComment(var id) async {
+    String urlComment =
+        LoginInfo().serverIP + '/api/Bewertung/' + id.toString() + '/fw';
+    try {
+      response = await http.get(Uri.parse(urlComment));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        jsonsComment = jsonData;
       });
     } catch (err) {
       print(err.toString());
@@ -129,6 +144,13 @@ class _TestAPIState extends State<TestAPI> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchComment(1);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
@@ -163,6 +185,28 @@ class _TestAPIState extends State<TestAPI> {
               ElevatedButton(
                   child: Text("LoadImage"), onPressed: () => {fetchImage()}),
               test,
+              Container(
+                height: 500,
+                //width: MediaQuery.of(context).size.width * 0.5,
+                child: ListView.builder(
+                    itemCount: jsonsComment.length,
+                    itemBuilder: (context, i) {
+                      final json = jsonsComment[i];
+                      return Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("userID: " +
+                                " " +
+                                json["userId"].toString() +
+                                "  "),
+                            Text("Comment: " + " " + json["kommentar"])
+                          ],
+                        ),
+                      );
+                    }),
+              )
             ],
           ),
         ),

@@ -55,7 +55,11 @@ class apartmentDetail extends StatefulWidget {
       this.zimmer = "0",
       this.betten = "0",
       this.baeder = "0",
+<<<<<<< HEAD
       this.wlan = true,
+=======
+      this.wlan = false,
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
       this.garten = false,
       this.balkon = false})
       : super(key: key);
@@ -84,10 +88,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var response;
   var jsons = [];
   var bilder = [];
+<<<<<<< HEAD
   var jsonOffer;
   var jsonApart;
   String beschreibung = "";
   TextEditingController _controller = TextEditingController();
+=======
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
 
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
@@ -96,14 +103,20 @@ class _apartmentDetailState extends State<apartmentDetail> {
         "/a";
     try {
       response = await http.get(Uri.parse(urlOffer));
+<<<<<<< HEAD
       jsonOffer = jsonDecode(response.body);
       print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
+=======
+      var jsonData = jsonDecode(response.body);
+      print("jsonDataAngebot: " + jsonData.toString() + "\n");
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
     } catch (err) {
       print(err.toString());
     }
   }
 
   void fetchApartment() async {
+<<<<<<< HEAD
     String urlApart = LoginInfo().serverIP +
         "/api/Ferienwohnung/" +
         widget.anlagenID.toString();
@@ -113,6 +126,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
       beschreibung = jsonApart["beschreibung"].toString();
       _controller = TextEditingController(text: beschreibung);
       print("jsonDataWohnung: " + jsonApart.toString() + "\n");
+=======
+    String urlApart = LoginInfo().serverIP + "/api/Ferienwohnung/" + widget.anlagenID.toString();
+    try{
+      response = await http.get(Uri.parse(urlApart));
+      var jsonData = jsonDecode(response.body);
+      print("jsonDataWohnung: " + jsonData.toString() + "\n");
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
     } catch (err) {
       print(err.toString());
     }
@@ -126,7 +146,11 @@ class _apartmentDetailState extends State<apartmentDetail> {
       setState(() {
         jsons = jsonData;
         print("hallo");
+<<<<<<< HEAD
         test = imageFromBase64String(jsons[2]['bild']);
+=======
+        test = imageFromBase64String(jsons[1]['bild']);
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
       });
     } catch (err) {
       print(err.toString());
@@ -135,7 +159,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
+<<<<<<< HEAD
     print("datum:"+widget.von+"\n");
+=======
+>>>>>>> f4802bfd4fb62da3810b87fb2cc6fe47e04aa1ae
     fetchApartment();
     fetchImage();
     super.initState();

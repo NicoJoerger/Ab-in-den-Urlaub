@@ -55,7 +55,7 @@ class apartmentDetail extends StatefulWidget {
       this.zimmer = "0",
       this.betten = "0",
       this.baeder = "0",
-      this.wlan = false,
+      this.wlan = true,
       this.garten = false,
       this.balkon = false})
       : super(key: key);
@@ -84,6 +84,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var response;
   var jsons = [];
   var bilder = [];
+  var jsonOffer;
+  var jsonApart;
+  String beschreibung = "";
+  TextEditingController _controller = TextEditingController();
 
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
@@ -92,19 +96,23 @@ class _apartmentDetailState extends State<apartmentDetail> {
         "/a";
     try {
       response = await http.get(Uri.parse(urlOffer));
-      var jsonData = jsonDecode(response.body);
-      print("jsonDataAngebot: " + jsonData.toString() + "\n");
+      jsonOffer = jsonDecode(response.body);
+      print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
   }
 
   void fetchApartment() async {
-    String urlApart = LoginInfo().serverIP + "/api/Ferienwohnung/" + widget.anlagenID.toString();
-    try{
+    String urlApart = LoginInfo().serverIP +
+        "/api/Ferienwohnung/" +
+        widget.anlagenID.toString();
+    try {
       response = await http.get(Uri.parse(urlApart));
-      var jsonData = jsonDecode(response.body);
-      print("jsonDataWohnung: " + jsonData.toString() + "\n");
+      jsonApart = jsonDecode(response.body);
+      beschreibung = jsonApart["beschreibung"].toString();
+      _controller = TextEditingController(text: beschreibung);
+      print("jsonDataWohnung: " + jsonApart.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
@@ -117,8 +125,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
-
-        test = imageFromBase64String(jsons[1]['bild']);
+        print("hallo");
+        test = imageFromBase64String(jsons[2]['bild']);
       });
     } catch (err) {
       print(err.toString());
@@ -127,6 +135,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
+    print("datum:"+widget.von+"\n");
     fetchApartment();
     fetchImage();
     super.initState();
@@ -171,21 +180,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       ]),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  alignment: Alignment.centerRight,
-                  margin: EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Neues Bild hochladen"),
-                  ),
-                ),
-                Container(
                   width: MediaQuery.of(context).size.width * ContentWFactor,
                   child: TextField(
                     keyboardType: TextInputType.multiline,
-                    maxLines: null,
+                    readOnly: true,
+                    controller: _controller,
                     decoration: InputDecoration(
-                      labelText: 'Beschreibungstext',
+                      labelText: "Beschreibung:",
                     ),
                   ),
                 ),
@@ -206,8 +207,56 @@ class _apartmentDetailState extends State<apartmentDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Checkbox(value: false, onChanged: (bool? val) {}),
-                        Text("Ich möchte Wohnungen vermieten.")
+                        Text("Adresse: " + widget.strasse + " " + widget.hausNr + " " + widget.pLZ + " " + widget.ort + " " + widget.land),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Mietzeitraum: " + widget.von + " bis: " + widget.bis)
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Aktueller Tokenpreis: " +
+                            widget.tokenP.toString() +
+                            " Tokens")
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text("Mietpreis: " + widget.eurpP + "€")],
+                    ),
+                    SizedBox(height: 20),
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Wohnfläche: " + widget.wohnflaeche + "m²"),
+                        SizedBox(width: 50,),
+                        Text("Anzahl Zimmer: " + widget.zimmer),
+                        SizedBox(width: 50,),
+                        Text("Anzahl Betten: " + widget.betten),
+                        SizedBox(width: 50,),
+                        Text("Anzahl Bäder: " + widget.baeder),
+                        SizedBox(width: 50,)
+                        ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Checkbox(value: widget.wlan, onChanged: null),
+                        Text("Wifi"),
+                        Checkbox(value: widget.garten, onChanged: null),
+                        Text("Garten"),
+                        Checkbox(value: widget.balkon, onChanged: null),
+                        Text("Balkon"),
+                        Checkbox(value: widget.balkon, onChanged: null),
+                        Text("Stornierbar: (TODO)")
                       ],
                     ),
                   ],
@@ -218,7 +267,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   margin: EdgeInsets.all(20),
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text("Speichern"),
+                    child: Text("Bieten"),
                   ),
                 ),
               ],

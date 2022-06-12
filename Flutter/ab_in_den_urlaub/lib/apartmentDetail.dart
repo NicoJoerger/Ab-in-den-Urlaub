@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'appBars.dart';
+import 'dart:html';
 
 class apartmentDetail extends StatefulWidget {
   String anlagenName = "";
@@ -68,8 +69,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
     return Image.memory(base64Decode(base64String));
   }
 
-
-
   Uint8List dataFromBase64String(String base64String) {
     return base64Decode(base64String);
   }
@@ -90,8 +89,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var jsonApart;
   String beschreibung = "";
   TextEditingController _controller = TextEditingController();
-
-  
 
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
@@ -122,11 +119,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
-  void loadCookies() async{
-    
-    List<Cookie> cookies = await LoginInfo().cj.loadForRequest(Uri.parse("http://" + LoginInfo().serverIP)); 
-    print("Cookie: " + cookies.toString());
+  void loadCookies() async {
+    print('New Cookie Message ${window.localStorage['my-key']}');
   }
+
   void fetchImage() async {
     String urlImg = LoginInfo().serverIP + '/api/Bilder';
     try {
@@ -164,7 +160,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
       widget.strasse = arguments["strasse"];
       widget.pLZ = arguments["pLZ"];
       widget.hausNr = arguments["hausNr"];
-    } 
+    }
     return Material(
       type: MaterialType.transparency,
       child: Scaffold(

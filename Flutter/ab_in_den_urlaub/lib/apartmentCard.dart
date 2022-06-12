@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:html';
 
 class ApartmentCard extends StatefulWidget {
   String anlagenName = "";
@@ -28,7 +29,7 @@ class ApartmentCard extends StatefulWidget {
       {Key? key,
       required this.anlagenName,
       this.anlangenID = "",
-      this.angebotID = "",
+      this.angebotID = "0815",
       this.bewertung = "",
       this.von = "",
       this.bis = "",
@@ -145,32 +146,10 @@ class _ApartmentCardState extends State<ApartmentCard> {
         ),
       ),
       onTap: () => {
+        window.localStorage['angebotID'] = widget.angebotID.toString(),
         Navigator.pushNamed(
           context,
           '/apartmentDetail',
-          arguments: {
-            "anlagenName": widget.anlagenName,
-            "bewertung": widget.bewertung,
-            "von": widget.von,
-            "bis": widget.bis,
-            "tokenP": widget.tokenP,
-            "text": widget.text,
-            "eurpP": widget.eurpP,
-            "land": widget.land,
-            "ort": widget.ort,
-            "pLZ": widget.pLZ,
-            "strasse": widget.strasse,
-            "hausNr": widget.hausNr,
-            "wohnflaeche": widget.wohnflaeche,
-            "zimmer": widget.zimmer,
-            "betten": widget.betten,
-            "baeder": widget.baeder,
-            "wlan": widget.wlan,
-            "garten": widget.garten,
-            "balkon": widget.baeder,
-            "anlangenID": widget.anlangenID,
-            "angebotID": widget.angebotID
-          },
         )
       },
     );

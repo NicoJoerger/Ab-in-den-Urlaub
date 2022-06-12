@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'appBars.dart';
 import 'globals.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'dart:html';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);
@@ -152,17 +153,20 @@ class _RegistrierungState extends State<Registrierung> {
         final jsonData = jsonDecode(response.body) as List;
         print(jsonData);
 
-        setState(()  {
+        setState(() {
           jsons = jsonData;
           var length = jsons.length;
 
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
-          
         });
-        List<Cookie> cookies = [Cookie("userID", LoginInfo().userid.toString()), Cookie("tokenstand", LoginInfo().tokens.toString())];
-          var cj = CookieJar();
-          await cj.saveFromResponse(Uri.parse(LoginInfo().serverIP), cookies);
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo().userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
+        print('New added Message ${window.localStorage['userId']}');
         Navigator.pushNamed(context, '/Profile');
       }
     } catch (err) {

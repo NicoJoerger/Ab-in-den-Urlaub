@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'appBars.dart';
+import 'dart:html';
 
 class apartmentDetail extends StatefulWidget {
   String anlagenName = "";
@@ -116,6 +117,11 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }
+  }
+
+  void loadCookies() async {
+    print('New Cookie Message ${window.localStorage['userId']}');
+    print('AngebotID  ${window.localStorage['angebotID']}');
   }
 
   void fetchImage() async {

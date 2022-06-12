@@ -50,30 +50,11 @@ namespace AbInDenUrlaub.Controllers
             return Ok(list);
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<List<Ferienwohnung>>> AddFerienwohnung(Ferienwohnung wohnung, IList<IFormFile> newImages)
+        public async Task<ActionResult<List<Ferienwohnung>>> AddFerienwohnung(Ferienwohnung wohnung)
         {
             context.Ferienwohnungs.Add(wohnung);
-
-            foreach (var image in newImages)
-            {
-                Wohnungsbilder newBilder = new Wohnungsbilder();
-                newBilder.FwId = wohnung.FwId;
-
-                context.Wohnungsbilders.Add(newBilder);
-                context.SaveChanges();
-                await using var memStream = new MemoryStream();
-
-                await image.CopyToAsync(memStream);
-                await memStream.FlushAsync();
-                Bilder newBild = new Bilder();
-                newBild.Bild = memStream.ToArray();
-                context.Bilders.Add(newBild);
-                context.SaveChanges();
-
-                newBilder.BildId = newBild.BildId;
-
-            }
 
             await context.SaveChangesAsync();
 

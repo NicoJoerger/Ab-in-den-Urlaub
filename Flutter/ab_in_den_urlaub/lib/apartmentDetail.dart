@@ -2,14 +2,15 @@ import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'dart:typed_data';
-
+import 'dart:io';
 import 'globals.dart';
-
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:cookie_jar/cookie_jar.dart';
 import 'appBars.dart';
+import 'dart:html';
 
 class apartmentDetail extends StatefulWidget {
   String anlagenName = "";
@@ -80,10 +81,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
 
-  var test;
+
   var response;
   var jsons = [];
-  var bilder = [];
+  List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
   String beschreibung = "";
@@ -118,15 +119,25 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
+  void loadCookies() async {
+    print('New Cookie Message ${window.localStorage['userId']}');
+    print('AngebotID  ${window.localStorage['angebotID']}');
+  }
+
   void fetchImage() async {
-    String urlImg = LoginInfo().serverIP + '/api/Bilder';
+    print("ID:" + widget.anlagenID);
+    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID;
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
-        print("hallo");
-        test = imageFromBase64String(jsons[2]['bild']);
+        print("bilder:" + jsons.toString());
+        for(int i = 0; i< (jsons.length);i++)
+        {
+          Image image  = imageFromBase64String(jsons[i]);
+          bilder.add(image);
+        }
       });
     } catch (err) {
       print(err.toString());
@@ -135,7 +146,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
-    print("datum:"+widget.von+"\n");
+    //print("datum:" + widget.text + "\n");
     fetchApartment();
     fetchImage();
     super.initState();
@@ -143,6 +154,19 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    if (arguments["text"] != null) {
+      widget.text = arguments["text"];
+      widget.von = arguments["von"];
+      widget.bis = arguments["bis"];
+      widget.land = arguments["land"];
+      widget.ort = arguments["ort"];
+      widget.strasse = arguments["strasse"];
+      widget.pLZ = arguments["pLZ"];
+      widget.hausNr = arguments["hausNr"];
+      widget.anlagenID = arguments["anlangenID"];
+    }
     return Material(
       type: MaterialType.transparency,
       child: Scaffold(
@@ -160,35 +184,19 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   height: 10,
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: test,
+                  child: ImageSlideshow(
+                      width: 1000,
+                      height: 700,
+                      initialPage: 0,
+                      children: bilder),
                 ),
                 Container(
                   height: 10,
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                      ]),
-                ),
+                SizedBox(height: 20),
                 Container(
                   width: MediaQuery.of(context).size.width * ContentWFactor,
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    readOnly: true,
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      labelText: "Beschreibung:",
-                    ),
-                  ),
+                  child: Text(widget.text),
                 ),
                 Row(
                   children: [
@@ -207,14 +215,26 @@ class _apartmentDetailState extends State<apartmentDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Adresse: " + widget.strasse + " " + widget.hausNr + " " + widget.pLZ + " " + widget.ort + " " + widget.land),
+                        Text("Adresse: " +
+                            widget.strasse +
+                            " " +
+                            widget.hausNr +
+                            ", " +
+                            widget.pLZ +
+                            " " +
+                            widget.ort +
+                            " " +
+                            widget.land),
                       ],
                     ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Mietzeitraum: " + widget.von + " bis: " + widget.bis)
+                        Text("Mietzeitraum: " +
+                            widget.von +
+                            " bis: " +
+                            widget.bis)
                       ],
                     ),
                     SizedBox(height: 20),
@@ -232,18 +252,26 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       children: [Text("Mietpreis: " + widget.eurpP + "€")],
                     ),
                     SizedBox(height: 20),
-                     Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Wohnfläche: " + widget.wohnflaeche + "m²"),
-                        SizedBox(width: 50,),
+                        SizedBox(
+                          width: 50,
+                        ),
                         Text("Anzahl Zimmer: " + widget.zimmer),
-                        SizedBox(width: 50,),
+                        SizedBox(
+                          width: 50,
+                        ),
                         Text("Anzahl Betten: " + widget.betten),
-                        SizedBox(width: 50,),
+                        SizedBox(
+                          width: 50,
+                        ),
                         Text("Anzahl Bäder: " + widget.baeder),
-                        SizedBox(width: 50,)
-                        ],
+                        SizedBox(
+                          width: 50,
+                        )
+                      ],
                     ),
                     SizedBox(height: 20),
                     Row(

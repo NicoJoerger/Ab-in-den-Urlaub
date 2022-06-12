@@ -29,18 +29,18 @@ namespace AbInDenUrlaub.Controllers
                 }
             }
 
-            List<Bilder> WbilderList = new();
-            foreach (var item in wbilder)
-            {
-                Bilder temp = await context.Bilders.FindAsync(item.BildId);
-                if (temp != null)
-                {
-                    WbilderList.Add(temp);
-                }
 
-            }
+            return Ok(wbilder);
+        }
 
-            return Ok(WbilderList);
+        [HttpPost]
+        public async Task<ActionResult<List<Wohnungsbilder>>> AddBild(Wohnungsbilder newBild)
+        {
+            context.Wohnungsbilders.Add(newBild);
+
+            await context.SaveChangesAsync();
+
+            return Ok(newBild);
         }
     }
 }

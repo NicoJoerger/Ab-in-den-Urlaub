@@ -20,13 +20,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //var devCorsPolicy = "devCorsPolicy";
-/*builder.Services.AddCors(options =>
-{
-    options.AddPolicy(devCorsPolicy, builder =>
-    {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});*/
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(devCorsPolicy, builder =>
+//    {
+//        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+//    });
+//});
 
 var app = builder.Build();
 //app.Urls.Add("http://127.0.0.1:5000");

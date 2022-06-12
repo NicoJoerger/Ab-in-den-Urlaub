@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
 import 'globals.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'dart:html';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);
@@ -148,6 +152,7 @@ class _RegistrierungState extends State<Registrierung> {
       } else {
         final jsonData = jsonDecode(response.body) as List;
         print(jsonData);
+
         setState(() {
           jsons = jsonData;
           var length = jsons.length;
@@ -155,6 +160,13 @@ class _RegistrierungState extends State<Registrierung> {
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
         });
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo().userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
+        print('New added Message ${window.localStorage['userId']}');
         Navigator.pushNamed(context, '/Profile');
       }
     } catch (err) {

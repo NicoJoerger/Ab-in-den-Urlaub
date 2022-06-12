@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       '/Tokens': (context) => Token(),
       '/Suche': (context) => sApartments(),
       '/Profile': (context) => Profile(),
-      '/apartmentDetail':(context) => apartmentDetail(),
+      '/apartmentDetail' :(context) => apartmentDetail(),
     });
   }
 }

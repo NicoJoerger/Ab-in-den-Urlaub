@@ -282,6 +282,11 @@ class _sApartmentsState extends State<sApartments> {
                           anlagenName: wohnung["wohnungsname"],
                           bewertung: "",
                           text: wohnung["beschreibung"],
+                          land: wohnung["land"],
+                          ort: wohnung["ort"],
+                          pLZ: wohnung["plz"],
+                          strasse: wohnung["strasse"],
+                          hausNr: wohnung["hausnummer"],
                         );
                       }),
                 ),

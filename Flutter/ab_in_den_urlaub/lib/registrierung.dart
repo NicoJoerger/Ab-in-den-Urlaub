@@ -7,8 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
 import 'globals.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'dart:html';
+import 'package:cookie_jar/cookie_jar.dart';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);

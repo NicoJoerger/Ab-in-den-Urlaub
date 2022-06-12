@@ -1,7 +1,8 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'globals.dart';
+import 'dart:html';
 import 'appBars.dart';
 
 class nWohnung extends StatefulWidget {
@@ -18,6 +19,13 @@ class _nWohnungState extends State<nWohnung> {
   var Containerh = 40.0;
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
+
+  void loadCookies() async {
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
+  }
 
   final List<String> _address_countries_list = [
     'Deutschland',

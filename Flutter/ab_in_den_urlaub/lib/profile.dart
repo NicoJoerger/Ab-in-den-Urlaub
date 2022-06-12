@@ -2,7 +2,8 @@ import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
 
 import 'appBars.dart';
-
+import 'globals.dart';
+import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -16,6 +17,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   String url = LoginInfo().serverIP + '/api/Nutzer';
   var rechnungshistorie = [];
+  var angebote = [];
   var response;
   var Texth = 40.0;
   var Textw = 400.0;
@@ -31,13 +33,36 @@ class _ProfileState extends State<Profile> {
   String dropdownValue = 'Wähle Wohnung';
 
   void fetchHistory() async {
+    angebote = [];
     try {
-      response = await http.get(Uri.parse(
-          LoginInfo().serverIP + "/api/Rechnungshistorieeintrag/" +
-              LoginInfo().userid.toString()));
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          "/api/Rechnungshistorieeintrag/" +
+          LoginInfo().userid.toString()));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         rechnungshistorie = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+
+    print("rechnungshistorie.length: " + rechnungshistorie.length.toString());
+    for(int i = 0; i < rechnungshistorie.length; i++){
+      final json = rechnungshistorie[i];
+      await fetchOffer(json);
+    }
+    print("Nach for(): " + angebote.toString());
+  }
+
+  Future<void> fetchOffer(final json) async {
+    print("fetchOffer() entered.\n");
+    try {
+      response = await http.get(Uri.parse(
+          LoginInfo().serverIP + "/api/Angebote/" +
+              json["angebotId"].toString() + "/a"));
+      final jsonData = jsonDecode(response.body);
+      setState(() {
+        angebote.add(jsonData[0]);
       });
     } catch (err) {
       print(err.toString());
@@ -87,6 +112,13 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
+  }
+
+  void loadCookies() async {
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void postUser() async {
@@ -341,6 +373,14 @@ class _ProfileState extends State<Profile> {
                     Text("Ich möchte Wohnungen vermieten.")
                   ],
                 ),
+                TextButton(onPressed: () => {
+                  window.localStorage.containsKey('userId'),
+                  window.localStorage.containsKey('tokenstand'),
+                  window.localStorage.containsKey('angebotID'),
+
+                  window.localStorage['userId'] = "-1",
+                  window.localStorage['tokenstand'] = "0",
+                }, child: Text("Logout")),
                 const SizedBox(height: 10),
                 Text(
                   "Rechnungshistorie:",
@@ -354,66 +394,75 @@ class _ProfileState extends State<Profile> {
                     children: [
                       Container(
                         width: 150,
-                        child: Text("Vermieter"),
-                      ),
-                      Container(
-                        width: 150,
                         child: Text("Auktionsende"),
                       ),
                       Container(
                         width: 150,
-                        child: Text("Angebotsname"),
+                        child: Text("Mietzeitraum Anfang"),
                       ),
                       Container(
                         width: 150,
-                        child: Text(""),
+                        child: Text("Mietzeitraum Ende"),
                       ),
                       Container(
                         width: 150,
-                        child: Text(""),
+                        child: Text("Preis"),
                       ),
                       Container(
                         width: 150,
-                        child: Text(""),
+                        child: Text("Tokenpreis"),
                       ),
                     ],
                   ),
                 ),
                 Container(
+                  height: 10,
+                ),
+                Container(
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ListView.builder(
-                    itemCount: rechnungshistorie.length,
+                    itemCount: angebote.length,
                     itemBuilder: (context, i) {
-                      final json = rechnungshistorie[i];
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                          Container(
-                            width: 150,
-                            child: Text(json[""]),
-                          ),
-                        ],
+                      print("Angebote werden angezeigt.\n");
+                      final json = angebote[i];
+
+                      print("angebote.length: " + json.toString());
+
+                      return GestureDetector(
+                        onTap: () => {
+                          window.localStorage['angebotID'] = json["angebotId"].toString(),
+                            Navigator.pushNamed(
+                              context,
+                              '/apartmentDetail',
+                            )
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 150,
+                              child: Text(json["auktionEnddatum"].toString().substring(0, json["auktionEnddatum"].toString().length - 9)),
+                            ),
+                            Container(
+                              width: 150,
+                              child: Text(json["mietzeitraumStart"].toString().substring(0, json["mietzeitraumStart"].toString().length - 9)),
+                            ),
+                            Container(
+                              width: 150,
+                              child: Text(json["mietzeitraumEnde"].toString().substring(0, json["mietzeitraumEnde"].toString().length - 9)),
+                            ),
+                            Container(
+                              width: 150,
+                              child: Text(json["mietpreis"].toString()),
+                            ),
+                            Container(
+                              width: 150,
+                              child: Text(json["aktuellerTokenpreis"].toString()),
+                            
+                            ),
+                          ]
+                        ),
                       );
                     },
                   ),

@@ -81,7 +81,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
 
-
   var response;
   var jsons = [];
   List<Widget> bilder = [];
@@ -120,8 +119,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void loadCookies() async {
-    print('New Cookie Message ${window.localStorage['userId']}');
-    print('AngebotID  ${window.localStorage['angebotID']}');
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void fetchImage() async {

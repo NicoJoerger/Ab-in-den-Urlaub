@@ -75,7 +75,7 @@ class _RegistrierungState extends State<Registrierung> {
     
   }""");
         if (response.statusCode == 200) {
-          LoginInfo().tokens = startToken.toString();
+          LoginInfo().tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(

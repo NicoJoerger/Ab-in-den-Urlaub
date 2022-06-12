@@ -58,7 +58,7 @@ class _TokenState extends State<Token> {
         print(code + "\n");
         if (response.statusCode == 200) {
           setState(() {
-            LoginInfo().tokens += sliderval.toString();
+            LoginInfo().tokens += sliderval.toInt();
           });
         }
       } catch (err) {

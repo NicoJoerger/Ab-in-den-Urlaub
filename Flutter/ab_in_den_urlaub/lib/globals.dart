@@ -4,8 +4,8 @@ import 'dart:io';
 
 class LoginInfo {
   static final LoginInfo _singleton = LoginInfo._internal();
-  var userid = "-1";
-  var tokens = "0";
+  var userid = -1;
+  var tokens = 0;
   var currentAngebot = "";
   var cj = CookieJar();
   var serverIP = "http://81.169.152.56:5000";

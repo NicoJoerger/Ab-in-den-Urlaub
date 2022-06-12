@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
+import 'dart:html';
 
 class sApartments extends StatefulWidget {
   sApartments({Key? key}) : super(key: key);
@@ -112,6 +113,13 @@ class _sApartmentsState extends State<sApartments> {
         );
       },
     );
+  }
+
+  void loadCookies() async {
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void fetchAngebot() async {

@@ -21,9 +21,10 @@ class _nWohnungState extends State<nWohnung> {
   var ContentWFactor = 0.5;
 
   void loadCookies() async {
-    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
   }
 
   final List<String> _address_countries_list = [

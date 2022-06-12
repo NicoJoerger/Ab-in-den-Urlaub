@@ -22,9 +22,10 @@ class _nAngebotState extends State<nAngebot> {
   DateTime selectedAEnde = DateTime.now();
 
   void loadCookies() async {
-    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
+    LoginInfo().tokens =
+        int.parse(window.localStorage['tokenstand'].toString());
   }
 
   Future<void> selectRBeginn(BuildContext context) async {

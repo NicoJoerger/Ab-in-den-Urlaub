@@ -9,6 +9,7 @@ class LoginInfo {
   var currnetAngebot = "";
   var cj = CookieJar();
   var serverIP = "http://81.169.152.56:5000";
+  //var serverIP = "http://localhost:7199";
   bool vermieter = false;
   factory LoginInfo() {
     return _singleton;

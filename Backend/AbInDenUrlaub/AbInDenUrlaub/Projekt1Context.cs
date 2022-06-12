@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace AbInDenUrlaub
 {
@@ -18,7 +15,6 @@ namespace AbInDenUrlaub
 
         public virtual DbSet<Angebote> Angebotes { get; set; } = null!;
         public virtual DbSet<Bewertung> Bewertungs { get; set; } = null!;
-        public virtual DbSet<Bilder> Bilders { get; set; } = null!;
         public virtual DbSet<Ferienwohnung> Ferienwohnungs { get; set; } = null!;
         public virtual DbSet<Gebot> Gebots { get; set; } = null!;
         public virtual DbSet<Kreditkartendaten> Kreditkartendatens { get; set; } = null!;
@@ -98,17 +94,6 @@ namespace AbInDenUrlaub
                     .HasConstraintName("bewertung_user_id_fkey");
             });
 
-            modelBuilder.Entity<Bilder>(entity =>
-            {
-                entity.HasKey(e => e.BildId)
-                    .HasName("bilder_pkey");
-
-                entity.ToTable("bilder");
-
-                entity.Property(e => e.BildId).HasColumnName("bild_id");
-
-                entity.Property(e => e.Bild).HasColumnName("bild");
-            });
 
             modelBuilder.Entity<Ferienwohnung>(entity =>
             {
@@ -286,14 +271,9 @@ namespace AbInDenUrlaub
 
                 entity.Property(e => e.WgbId).HasColumnName("wgb_id");
 
-                entity.Property(e => e.BildId).HasColumnName("bild_id");
-
                 entity.Property(e => e.FwId).HasColumnName("fw_id");
 
-                entity.HasOne(d => d.Bild)
-                    .WithMany(p => p.Wohnungsbilders)
-                    .HasForeignKey(d => d.BildId)
-                    .HasConstraintName("wohnungsbilder_bild_id_fkey");
+
 
                 entity.HasOne(d => d.Fw)
                     .WithMany(p => p.Wohnungsbilders)

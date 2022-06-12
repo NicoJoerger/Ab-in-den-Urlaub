@@ -4,7 +4,7 @@
     {
         public int WgbId { get; set; }
         public int? FwId { get; set; }
-        public byte[] Bild { get; set; } = null!;
+        public byte[]? bild { get; set; }
 
         public virtual Ferienwohnung? Fw { get; set; }
     }

@@ -126,16 +126,16 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID;
+    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID.toString();
     try {
       response = await http.get(Uri.parse(urlImg));
-      final jsonData = jsonDecode(response.body) as List;
+      jsons = jsonDecode(response.body) as List;
+      print("lange: " + jsons.length.toString());
       setState(() {
-        jsons = jsonData;
-        print("bilder:" + jsons.toString());
         for(int i = 0; i< (jsons.length);i++)
         {
-          Image image  = imageFromBase64String(jsons[i]);
+          Image image  = imageFromBase64String(jsons[i]["bild"]);
+          print("test");
           bilder.add(image);
         }
       });

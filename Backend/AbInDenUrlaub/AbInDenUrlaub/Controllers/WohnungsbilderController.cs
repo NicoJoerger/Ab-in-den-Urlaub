@@ -34,13 +34,27 @@ namespace AbInDenUrlaub.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Wohnungsbilder>>> AddBild(Wohnungsbilder newBild)
+        public async Task<ActionResult<List<Wohnungsbilder>>> AddWB(Wohnungsbilder newBild)
         {
+
             context.Wohnungsbilders.Add(newBild);
 
             await context.SaveChangesAsync();
 
             return Ok(newBild);
+        }
+
+        [HttpPut("{wbID}")]
+        public async Task<ActionResult<List<Wohnungsbilder>>> AddBild(IFormFile newImage, int wbID)
+        {
+            await using var memStream = new MemoryStream();
+            await newImage.CopyToAsync(memStream);
+            await memStream.FlushAsync();
+            Wohnungsbilder wBild = await context.Wohnungsbilders.FindAsync(wbID);
+            wBild.bild = memStream.ToArray();
+
+            await context.SaveChangesAsync();
+            return Ok(wBild);
         }
     }
 }

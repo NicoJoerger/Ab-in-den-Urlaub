@@ -120,7 +120,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void loadCookies() async {
-    print('New Cookie Message ${window.localStorage['my-key']}');
+    print('New Cookie Message ${window.localStorage['userId']}');
+    print('AngebotID  ${window.localStorage['angebotID']}');
   }
 
   void fetchImage() async {

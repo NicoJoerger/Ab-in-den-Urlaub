@@ -160,9 +160,13 @@ class _RegistrierungState extends State<Registrierung> {
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
         });
-        window.localStorage.containsKey('my-key');
-        window.localStorage['my-key'] = "Hello World";
-        print('New added Message ${window.localStorage['my-key']}');
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo().userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
+        print('New added Message ${window.localStorage['userId']}');
         Navigator.pushNamed(context, '/Profile');
       }
     } catch (err) {

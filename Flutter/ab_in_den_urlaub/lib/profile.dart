@@ -2,7 +2,8 @@ import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
 
 import 'appBars.dart';
-
+import 'globals.dart';
+import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -32,9 +33,9 @@ class _ProfileState extends State<Profile> {
 
   void fetchHistory() async {
     try {
-      response = await http.get(Uri.parse(
-          LoginInfo().serverIP + "/api/Rechnungshistorieeintrag/" +
-              LoginInfo().userid.toString()));
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          "/api/Rechnungshistorieeintrag/" +
+          LoginInfo().userid.toString()));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         rechnungshistorie = jsonData;
@@ -87,6 +88,12 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
+  }
+
+  void loadCookies() async {
+    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
   }
 
   void postUser() async {

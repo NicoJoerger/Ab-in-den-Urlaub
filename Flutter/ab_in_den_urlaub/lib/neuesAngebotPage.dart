@@ -1,6 +1,7 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
-
+import 'globals.dart';
+import 'dart:html';
 import 'appBars.dart';
 
 class nAngebot extends StatefulWidget {
@@ -19,6 +20,12 @@ class _nAngebotState extends State<nAngebot> {
   DateTime selectedABeginn = DateTime.now();
   DateTime selectedREnde = DateTime.now();
   DateTime selectedAEnde = DateTime.now();
+
+  void loadCookies() async {
+    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
+  }
 
   Future<void> selectRBeginn(BuildContext context) async {
     final DateTime? picked = await showDatePicker(

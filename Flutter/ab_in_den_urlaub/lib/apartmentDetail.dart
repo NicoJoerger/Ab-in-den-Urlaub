@@ -81,7 +81,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
 
-
   var response;
   var jsons = [];
   List<Widget> bilder = [];
@@ -120,22 +119,23 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void loadCookies() async {
-    print('New Cookie Message ${window.localStorage['userId']}');
-    print('AngebotID  ${window.localStorage['angebotID']}');
+    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID;
+    String urlImg =
+        LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID;
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
         print("bilder:" + jsons.toString());
-        for(int i = 0; i< (jsons.length);i++)
-        {
-          Image image  = imageFromBase64String(jsons[i]);
+        for (int i = 0; i < (jsons.length); i++) {
+          Image image = imageFromBase64String(jsons[i]);
           bilder.add(image);
         }
       });

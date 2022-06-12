@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-
 class Token extends StatefulWidget {
   Token({Key? key}) : super(key: key);
   @override
@@ -21,51 +20,50 @@ class _TokenState extends State<Token> {
     return 25;
   }
 
-  void addTokens() async
-  {
-    if(LoginInfo().userid == -1)
-    {
-      showDialog<String> (
+  void addTokens() async {
+    if (LoginInfo().userid == -1) {
+      showDialog<String>(
         context: context,
-        builder: (BuildContext context)=> AlertDialog(
-          title:const Text("Kauf Fehlgeschlagen"),
-          content:const Text("Sie müssen angemeldet sein um Tokens zu kaufen"),
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Kauf Fehlgeschlagen"),
+          content: const Text("Sie müssen angemeldet sein um Tokens zu kaufen"),
           actions: <Widget>[
             TextButton(
-              onPressed:() => Navigator.pop(context, 'OK'),
+              onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),
             ),
           ],
         ),
       );
-    }
-    else{
-    var response;
-    String urlUsr = LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
-    try{
-      response = await http.get(Uri.parse(urlUsr));
-      print(response.body+"\n");
-      final jsonData = jsonDecode(response.body);
-      print(jsonData.toString()+"\n");
-      jsonData["tokenstand"] = (jsonData["tokenstand"].toInt() + sliderval.toInt());
-      print(jsonData["tokenstand"].toString() + "\n");
-      String urlToken = LoginInfo().serverIP + '/api/Nutzer';
-      final body = jsonEncode(jsonData);
-      response = await http.put(Uri.parse(urlToken), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8'
-      }, body: body);
-      String code = response.statusCode.toString();
-      print(code + "\n");
-      if(response.statusCode == 200)
-      {
-        setState(() {
-            LoginInfo().tokens += sliderval.toInt();
-      });
+    } else {
+      var response;
+      String urlUsr =
+          LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
+      try {
+        response = await http.get(Uri.parse(urlUsr));
+        print(response.body + "\n");
+        final jsonData = jsonDecode(response.body);
+        print(jsonData.toString() + "\n");
+        jsonData["tokenstand"] =
+            (jsonData["tokenstand"].toInt() + sliderval.toInt());
+        print(jsonData["tokenstand"].toString() + "\n");
+        String urlToken = LoginInfo().serverIP + '/api/Nutzer';
+        final body = jsonEncode(jsonData);
+        response = await http.put(Uri.parse(urlToken),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: body);
+        String code = response.statusCode.toString();
+        print(code + "\n");
+        if (response.statusCode == 200) {
+          setState(() {
+            LoginInfo().tokens += sliderval.toString();
+          });
+        }
+      } catch (err) {
+        print(err.toString());
       }
-    }
-    catch(err){
-      print(err.toString());
-    }
     }
   }
 
@@ -124,9 +122,7 @@ class _TokenState extends State<Token> {
                                       });
                                     })),
                             TextButton(
-                              onPressed: 
-
-                              addTokens,
+                              onPressed: addTokens,
                               child: Text("Für " +
                                   ((sliderval.toInt() * tokenPreis()) / 100.0)
                                       .toString() +

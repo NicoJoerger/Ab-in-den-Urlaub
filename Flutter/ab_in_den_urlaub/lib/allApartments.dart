@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
+import 'dart:html';
 
 class AllApartments extends StatefulWidget {
   AllApartments({Key? key}) : super(key: key);
@@ -21,6 +22,12 @@ class _AllApartmentsState extends State<AllApartments> {
   var jsonGriechenland = [];
   var jsonDeutschland = [];
   var response;
+
+  void loadCookies() async {
+    LoginInfo().userid = window.localStorage['userId'].toString();
+    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().tokens = window.localStorage['tokenstand'].toString();
+  }
 
   void fetchFerienwohnung() async {
     try {

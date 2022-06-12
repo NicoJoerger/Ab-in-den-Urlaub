@@ -7,8 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
 import 'globals.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'dart:html';
+import 'package:cookie_jar/cookie_jar.dart';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);
@@ -75,7 +75,7 @@ class _RegistrierungState extends State<Registrierung> {
     
   }""");
         if (response.statusCode == 200) {
-          LoginInfo().tokens = startToken;
+          LoginInfo().tokens = startToken.toString();
           Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(

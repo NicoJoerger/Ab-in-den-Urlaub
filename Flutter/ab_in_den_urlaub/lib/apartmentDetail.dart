@@ -4,7 +4,7 @@ import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:io';
 import 'globals.dart';
-
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -68,8 +68,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
     return Image.memory(base64Decode(base64String));
   }
 
-
-
   Uint8List dataFromBase64String(String base64String) {
     return base64Decode(base64String);
   }
@@ -82,16 +80,14 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
 
-  var test;
+
   var response;
   var jsons = [];
-  var bilder = [];
+  List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
   String beschreibung = "";
   TextEditingController _controller = TextEditingController();
-
-  
 
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
@@ -122,20 +118,20 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
-  void loadCookies() async{
-    
-    List<Cookie> cookies = await LoginInfo().cj.loadForRequest(Uri.parse("http://" + LoginInfo().serverIP)); 
-    print("Cookie: " + cookies.toString());
-  }
   void fetchImage() async {
-    String urlImg = LoginInfo().serverIP + '/api/Bilder';
+    print("ID:" + widget.anlagenID);
+    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID;
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
-        print("hallo");
-        test = imageFromBase64String(jsons[2]['bild']);
+        print("bilder:" + jsons.toString());
+        for(int i = 0; i< (jsons.length);i++)
+        {
+          Image image  = imageFromBase64String(jsons[i]);
+          bilder.add(image);
+        }
       });
     } catch (err) {
       print(err.toString());
@@ -144,7 +140,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
-    loadCookies();
     //print("datum:" + widget.text + "\n");
     fetchApartment();
     fetchImage();
@@ -164,7 +159,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
       widget.strasse = arguments["strasse"];
       widget.pLZ = arguments["pLZ"];
       widget.hausNr = arguments["hausNr"];
-    } 
+      widget.anlagenID = arguments["anlangenID"];
+    }
     return Material(
       type: MaterialType.transparency,
       child: Scaffold(
@@ -182,24 +178,14 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   height: 10,
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: test,
+                  child: ImageSlideshow(
+                      width: 1000,
+                      height: 700,
+                      initialPage: 0,
+                      children: bilder),
                 ),
                 Container(
                   height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                        Image(image: AssetImage("images/beach.jpg")),
-                      ]),
                 ),
                 SizedBox(height: 20),
                 Container(

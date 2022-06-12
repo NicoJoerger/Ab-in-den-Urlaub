@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   cookie_jar: 3.0.1
+  flutter_image_slideshow: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

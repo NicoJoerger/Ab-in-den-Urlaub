@@ -62,6 +62,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_image_slideshow",
+      "rootUri": "file:///E:/Flutter/flutter_windows_3.0.1-stable/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_image_slideshow-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///E:/Flutter/flutter_windows_3.0.1-stable/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4",
       "packageUri": "lib/",
@@ -176,7 +182,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-06-12T14:18:13.646150Z",
+  "generated": "2022-06-12T14:27:19.674794Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }

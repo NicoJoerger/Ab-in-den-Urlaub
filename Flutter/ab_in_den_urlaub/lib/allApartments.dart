@@ -229,6 +229,7 @@ class _AllApartmentsState extends State<AllApartments> {
                                 endTime.year.toString(),
                             tokenP: json["aktuellerTokenpreis"],
                             anlagenName: wohnung["wohnungsname"],
+                            anlangenID: wohnung["fwId"],
                             bewertung: "",
                             text: wohnung["beschreibung"],
                             land: wohnung["land"],

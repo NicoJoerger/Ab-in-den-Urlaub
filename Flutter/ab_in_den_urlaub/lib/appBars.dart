@@ -37,7 +37,7 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             child: Text("Mein Profil"),
             onTap: () {
-              if (LoginInfo().userid != -1) {
+              if (LoginInfo().userid != "-1") {
                 Navigator.pushNamed(context, '/Profile');
               } else {
                 Navigator.pushNamed(context, '/registrierung');

@@ -38,6 +38,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "cookie_jar",
+      "rootUri": "file:///E:/Flutter/flutter_windows_3.0.1-stable/flutter/.pub-cache/hosted/pub.dartlang.org/cookie_jar-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///E:/Flutter/flutter_windows_3.0.1-stable/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.4",
       "packageUri": "lib/",
@@ -170,7 +176,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-06-11T18:34:08.022216Z",
+  "generated": "2022-06-12T13:59:31.473997Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }

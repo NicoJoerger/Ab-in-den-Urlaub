@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'appBars.dart';
 import 'globals.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 
 class Registrierung extends StatefulWidget {
   Registrierung({Key? key}) : super(key: key);
@@ -148,13 +151,18 @@ class _RegistrierungState extends State<Registrierung> {
       } else {
         final jsonData = jsonDecode(response.body) as List;
         print(jsonData);
-        setState(() {
+
+        setState(()  {
           jsons = jsonData;
           var length = jsons.length;
 
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
+          
         });
+        List<Cookie> cookies = [Cookie("userID", LoginInfo().userid.toString()), Cookie("tokenstand", LoginInfo().tokens.toString())];
+          var cj = CookieJar();
+          await cj.saveFromResponse(Uri.parse(LoginInfo().serverIP), cookies);
         Navigator.pushNamed(context, '/Profile');
       }
     } catch (err) {

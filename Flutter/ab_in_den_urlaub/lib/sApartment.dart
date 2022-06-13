@@ -292,9 +292,9 @@ class _sApartmentsState extends State<sApartments> {
                           text: wohnung["beschreibung"],
                           land: wohnung["land"],
                           ort: wohnung["ort"],
-                          pLZ: wohnung["plz"],
-                          strasse: wohnung["strasse"],
-                          hausNr: wohnung["hausnummer"],
+                          pLZ: wohnung["plz"].toString(),
+                          strasse: wohnung["strasse"].toString(),
+                          hausNr: wohnung["hausnummer"].toString(),
                         );
                       }),
                 ),

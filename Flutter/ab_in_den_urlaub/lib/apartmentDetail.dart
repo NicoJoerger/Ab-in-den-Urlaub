@@ -123,12 +123,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void loadCookies() async {
-    //LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    String userIDString = window.localStorage['userId'].toString();
+    String tokenString = window.localStorage['tokenstand'].toString();
+    LoginInfo().userid = int.parse(userIDString);
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
     print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
-    //LoginInfo().tokens =
-    //int.parse(window.localStorage['tokenstand'].toString());
-    fetchOffer();
+    print(tokenString + userIDString);
+    LoginInfo().tokens = int.parse(tokenString);
   }
 
   void fetchImage() async {

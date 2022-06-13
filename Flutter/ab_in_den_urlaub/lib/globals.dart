@@ -4,7 +4,7 @@ import 'dart:io';
 
 class LoginInfo {
   static final LoginInfo _singleton = LoginInfo._internal();
-  var userid = -1;
+  int userid = -1;
   var tokens = 0;
   var currentAngebot = "";
   var cj = CookieJar();

@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
     }
 
     print("rechnungshistorie.length: " + rechnungshistorie.length.toString());
-    for(int i = 0; i < rechnungshistorie.length; i++){
+    for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
       await fetchOffer(json);
     }
@@ -57,9 +57,10 @@ class _ProfileState extends State<Profile> {
   Future<void> fetchOffer(final json) async {
     print("fetchOffer() entered.\n");
     try {
-      response = await http.get(Uri.parse(
-          LoginInfo().serverIP + "/api/Angebote/" +
-              json["angebotId"].toString() + "/a"));
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          "/api/Angebote/" +
+          json["angebotId"].toString() +
+          "/a"));
       final jsonData = jsonDecode(response.body);
       setState(() {
         angebote.add(jsonData[0]);
@@ -373,14 +374,19 @@ class _ProfileState extends State<Profile> {
                     Text("Ich möchte Wohnungen vermieten.")
                   ],
                 ),
-                TextButton(onPressed: () => {
-                  window.localStorage.containsKey('userId'),
-                  window.localStorage.containsKey('tokenstand'),
-                  window.localStorage.containsKey('angebotID'),
-
-                  window.localStorage['userId'] = "-1",
-                  window.localStorage['tokenstand'] = "0",
-                }, child: Text("Logout")),
+                TextButton(
+                    onPressed: () => {
+                          window.localStorage.containsKey('userId'),
+                          window.localStorage.containsKey('tokenstand'),
+                          window.localStorage.containsKey('angebotID'),
+                          window.localStorage['userId'] = "-1",
+                          window.localStorage['tokenstand'] = "0",
+                          LoginInfo().userid = -1,
+                          LoginInfo().currentAngebot = "0",
+                          LoginInfo().tokens = 0,
+                          Navigator.pushNamed(context, '/registrierung')
+                        },
+                    child: Text("Logout")),
                 const SizedBox(height: 10),
                 Text(
                   "Rechnungshistorie:",
@@ -431,38 +437,59 @@ class _ProfileState extends State<Profile> {
 
                       return GestureDetector(
                         onTap: () => {
-                          window.localStorage['angebotID'] = json["angebotId"].toString(),
-                            Navigator.pushNamed(
-                              context,
-                              '/apartmentDetail',
-                            )
+                          window.localStorage['angebotID'] =
+                              json["angebotId"].toString(),
+                          Navigator.pushNamed(
+                            context,
+                            '/apartmentDetail',
+                          )
                         },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: 150,
-                              child: Text(json["auktionEnddatum"].toString().substring(0, json["auktionEnddatum"].toString().length - 9)),
-                            ),
-                            Container(
-                              width: 150,
-                              child: Text(json["mietzeitraumStart"].toString().substring(0, json["mietzeitraumStart"].toString().length - 9)),
-                            ),
-                            Container(
-                              width: 150,
-                              child: Text(json["mietzeitraumEnde"].toString().substring(0, json["mietzeitraumEnde"].toString().length - 9)),
-                            ),
-                            Container(
-                              width: 150,
-                              child: Text(json["mietpreis"].toString()),
-                            ),
-                            Container(
-                              width: 150,
-                              child: Text(json["aktuellerTokenpreis"].toString()),
-                            
-                            ),
-                          ]
-                        ),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 150,
+                                child: Text(json["auktionEnddatum"]
+                                    .toString()
+                                    .substring(
+                                        0,
+                                        json["auktionEnddatum"]
+                                                .toString()
+                                                .length -
+                                            9)),
+                              ),
+                              Container(
+                                width: 150,
+                                child: Text(json["mietzeitraumStart"]
+                                    .toString()
+                                    .substring(
+                                        0,
+                                        json["mietzeitraumStart"]
+                                                .toString()
+                                                .length -
+                                            9)),
+                              ),
+                              Container(
+                                width: 150,
+                                child: Text(json["mietzeitraumEnde"]
+                                    .toString()
+                                    .substring(
+                                        0,
+                                        json["mietzeitraumEnde"]
+                                                .toString()
+                                                .length -
+                                            9)),
+                              ),
+                              Container(
+                                width: 150,
+                                child: Text(json["mietpreis"].toString()),
+                              ),
+                              Container(
+                                width: 150,
+                                child: Text(
+                                    json["aktuellerTokenpreis"].toString()),
+                              ),
+                            ]),
                       );
                     },
                   ),

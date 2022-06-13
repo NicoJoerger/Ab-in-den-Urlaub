@@ -152,6 +152,8 @@ class _ApartmentCardState extends State<ApartmentCard> {
         window.localStorage.containsKey('angebotID'),
         window.localStorage['userId'] = LoginInfo().userid.toString(),
         window.localStorage['tokenstand'] = LoginInfo().tokens.toString(),
+        window.localStorage["angebotID"] = widget.angebotID,
+        LoginInfo().currentAngebot = widget.angebotID,
         print('New added Message ${window.localStorage['userId']}'),
         Navigator.pushNamed(
           context,

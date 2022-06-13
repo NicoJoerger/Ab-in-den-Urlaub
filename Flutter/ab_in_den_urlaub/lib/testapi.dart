@@ -34,6 +34,7 @@ class _TestAPIState extends State<TestAPI> {
   var jsons = [];
   var response;
   var jsonsComment = [];
+  var userByID = [];
   void fetchUser() async {
     try {
       response = await http.get(Uri.parse(url));
@@ -61,14 +62,34 @@ class _TestAPIState extends State<TestAPI> {
     }
   }
 
-  void fetchComment(var id) async {
+  void fetchUserById(String id) async {
+    /*  String urlUsr = LoginInfo().serverIP + "/api/Nutzer/" + id;
+    try {
+      response = await http.get(Uri.parse(urlUsr));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        userByID = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }*/
+  }
+
+  void fetchComment(var fwID) async {
     String urlComment =
-        LoginInfo().serverIP + '/api/Bewertung/' + id.toString() + '/fw';
+        LoginInfo().serverIP + '/api/Bewertung/' + fwID.toString() + '/fw';
     try {
       response = await http.get(Uri.parse(urlComment));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsonsComment = jsonData;
+        // print(jsonsComment);
+        var jsonTemp = [];
+        for (var i = 0; i < jsonsComment.length; i++) {
+          jsonTemp = jsonData.elementAt(i);
+          //fetchUserById(jsonsComment[i]["userId"].toString());
+          //print(jsonTemp);
+        }
       });
     } catch (err) {
       print(err.toString());
@@ -192,6 +213,7 @@ class _TestAPIState extends State<TestAPI> {
                     itemCount: jsonsComment.length,
                     itemBuilder: (context, i) {
                       final json = jsonsComment[i];
+                      //fetchUserById(json["userId"].toString());
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: Row(

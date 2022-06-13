@@ -217,6 +217,16 @@ class _ProfileState extends State<Profile> {
   }
 
   @override
+  void initState() {
+    print("initState() entered.\n");
+    // TODO: implement initState
+    fetchHistory();
+    
+    super.initState();
+    print("initState() exited.\n");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,

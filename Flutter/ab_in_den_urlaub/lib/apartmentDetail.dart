@@ -80,26 +80,71 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var Containerh = 40.0;
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
-
+  String angebotID = "";
   var response;
   var jsons = [];
   List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
   var fwID = "";
+  String mietzeitraumStart = "";
+  String mietzeitraumEnde = "";
   String beschreibung = "";
+  String tokenpreis = "";
+  String mietpreis = "";
+  String strasse = "";
+  String plz = "";
+  String hausnummer = "";
+  String ort = "";
+  String land = "";
+  String anzBetten = "";
+  String anzZimmer = "";
+  String flaeche = "";
+  String anzbaeder = "";
+  String wName = "";
+  bool wifi = false;
+  bool garten = false;
+  bool balkon = false;
+  bool stornierbar = false;
   TextEditingController _controller = TextEditingController();
 
   void fetchOffer() async {
+    print("ID: " + angebotID);
     String urlOffer = LoginInfo().serverIP +
         '/api/Angebote/' +
         LoginInfo().currentAngebot +
         "/a";
     try {
+      print("test5");
       response = await http.get(Uri.parse(urlOffer));
       jsonOffer = jsonDecode(response.body);
-      fwID = jsonOffer["fwId"];
-      print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
+      fwID = jsonOffer[0]["fwId"].toString();
+      print("json Offer: " + jsonOffer[0].toString() + "\n");
+      var von = jsonOffer[0]["mietzeitraumStart"];
+      var bis = jsonOffer[0]["mietzeitraumEnde"];
+      print("nach");
+      von = DateTime.parse(von);
+      bis = DateTime.parse(bis);
+      setState(() {
+        mietzeitraumStart = "" +
+            von.day.toString() +
+            "." +
+            von.month.toString() +
+            "." +
+            von.year.toString() +
+            " ";
+        mietzeitraumEnde = "" +
+            bis.day.toString() +
+            "." +
+            bis.month.toString() +
+            "." +
+            bis.year.toString();
+        tokenpreis = jsonOffer[0]["aktuellerTokenpreis"].toString();
+        mietpreis = jsonOffer[0]["mietpreis"].toString();
+        stornierbar = jsonOffer[0]["stornierbar"];
+      });
+      //print("von: " + mietzeitraumStart + " bis: " + mietzeitraumEnde+ "\n");
+      //print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
@@ -107,15 +152,30 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void fetchApartment() async {
-    String urlApart = LoginInfo().serverIP +
-        "/api/Ferienwohnung/" +
-        fwID.toString();
+    String urlApart =
+        LoginInfo().serverIP + "/api/Ferienwohnung/" + fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
+      print("Wohnung: " + jsonApart.toString());
+      setState(() {
+        strasse = jsonApart["strasse"].toString();
+        plz = jsonApart["plz"].toString();
+        hausnummer = jsonApart["hausnummer"].toString();
+        ort = jsonApart["ort"].toString();
+        land = jsonApart["land"].toString();
+        anzBetten = jsonApart["anzbetten"].toString();
+        anzZimmer = jsonApart["anzzimmer"].toString();
+        flaeche = jsonApart["wohnflaeche"].toString();
+        anzbaeder = jsonApart["anzbaeder"].toString();
+        wifi = jsonApart["wifi"];
+        garten = jsonApart["garten"];
+        balkon = jsonApart["balkon"];
+        beschreibung = jsonApart["beschreibung"].toString();
+        wName = jsonApart["wohnungsname"].toString();
+      });
       beschreibung = jsonApart["beschreibung"].toString();
       _controller = TextEditingController(text: beschreibung);
-      print("jsonDataWohnung: " + jsonApart.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
@@ -127,16 +187,18 @@ class _apartmentDetailState extends State<apartmentDetail> {
     String tokenString = window.localStorage['tokenstand'].toString();
     LoginInfo().userid = int.parse(userIDString);
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    angebotID = window.localStorage['angebotID'].toString();
     print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
     print(tokenString + userIDString);
     LoginInfo().tokens = int.parse(tokenString);
+    fetchOffer();
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
     String urlImg = LoginInfo().serverIP +
         '/api/Wohnungsbilder/' +
-        widget.anlagenID.toString();
+        fwID;
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
@@ -189,24 +251,24 @@ class _apartmentDetailState extends State<apartmentDetail> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text("Bilder", style: TextStyle(fontSize: 50)),
+                Text(wName, style: TextStyle(fontSize: 50)),
                 Container(
                   height: 10,
                 ),
-                //Container(
-                //  child: ImageSlideshow(
-                //      width: 1000,
-                //      height: 700,
-                //      initialPage: 0,
-                //      children: bilder),
-                //),
+                Container(
+                  child: ImageSlideshow(
+                      width: 1000,
+                      height: 500,
+                      initialPage: 0,
+                      children: bilder),
+                ),
                 Container(
                   height: 10,
                 ),
                 SizedBox(height: 20),
                 Container(
                   width: MediaQuery.of(context).size.width * ContentWFactor,
-                  child: Text(widget.text),
+                  child: Text("Beschreibung:\n\n" + beschreibung),
                 ),
                 Row(
                   children: [
@@ -226,15 +288,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Adresse: " +
-                            widget.strasse +
+                            strasse +
                             " " +
-                            widget.hausNr +
+                            hausnummer +
                             ", " +
-                            widget.pLZ +
+                            plz +
                             " " +
-                            widget.ort +
+                            ort +
                             " " +
-                            widget.land),
+                            land),
                       ],
                     ),
                     SizedBox(height: 20),
@@ -242,42 +304,40 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Mietzeitraum: " +
-                            widget.von +
+                            mietzeitraumStart +
                             " bis: " +
-                            widget.bis)
+                            mietzeitraumEnde)
                       ],
                     ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Aktueller Tokenpreis: " +
-                            widget.tokenP.toString() +
-                            " Tokens")
+                        Text("Aktueller Tokenpreis: " + tokenpreis + " Tokens")
                       ],
                     ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text("Mietpreis: " + widget.eurpP + "€")],
+                      children: [Text("Mietpreis: " + mietpreis + "€")],
                     ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Wohnfläche: " + widget.wohnflaeche + "m²"),
+                        Text("Wohnfläche: " + flaeche + "m²"),
                         SizedBox(
                           width: 50,
                         ),
-                        Text("Anzahl Zimmer: " + widget.zimmer),
+                        Text("Anzahl Zimmer: " + anzZimmer),
                         SizedBox(
                           width: 50,
                         ),
-                        Text("Anzahl Betten: " + widget.betten),
+                        Text("Anzahl Betten: " + anzBetten),
                         SizedBox(
                           width: 50,
                         ),
-                        Text("Anzahl Bäder: " + widget.baeder),
+                        Text("Anzahl Bäder: " + anzbaeder),
                         SizedBox(
                           width: 50,
                         )
@@ -287,14 +347,14 @@ class _apartmentDetailState extends State<apartmentDetail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Checkbox(value: widget.wlan, onChanged: null),
+                        Checkbox(value: wifi, onChanged: null),
                         Text("Wifi"),
-                        Checkbox(value: widget.garten, onChanged: null),
+                        Checkbox(value: garten, onChanged: null),
                         Text("Garten"),
-                        Checkbox(value: widget.balkon, onChanged: null),
+                        Checkbox(value: balkon, onChanged: null),
                         Text("Balkon"),
-                        Checkbox(value: widget.balkon, onChanged: null),
-                        Text("Stornierbar: (TODO)")
+                        Checkbox(value: stornierbar, onChanged: null),
+                        Text("Stornierbar")
                       ],
                     ),
                   ],

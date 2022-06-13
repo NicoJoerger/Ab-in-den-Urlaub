@@ -29,7 +29,7 @@ class ApartmentCard extends StatefulWidget {
       {Key? key,
       required this.anlagenName,
       this.anlangenID = "",
-      this.angebotID = "0815",
+      this.angebotID = "",
       this.bewertung = "",
       this.von = "",
       this.bis = "",
@@ -59,7 +59,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
   Widget build(BuildContext context) {
     var cardWitdh = 500.0;
     var cardHeight = 900.0;
-    var imageWitdh = 450.0;
+    var imageWitdh = 600.0;
     //if (MediaQuery.of(context).size.width >
     //    MediaQuery.of(context).size.height) {
     //  imageWitdh = MediaQuery.of(context).size.width * 8 / 20;
@@ -96,7 +96,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
                           Text(
                             widget.tokenP.toString(),
                             style:
-                                TextStyle(color: Colors.yellow, fontSize: 15),
+                                TextStyle(color: Colors.yellow, fontSize: 30),
                           )
                         ],
                       ),

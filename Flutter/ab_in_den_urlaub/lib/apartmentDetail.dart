@@ -86,16 +86,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
   List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
-
-  String strasse = "";
-  String hausnummer = "";
-  String mietzeitraumStart = "";
-  String mietzeitraumEnde = "";
-  String plz = "";
-  String ort = "";
-  String land = "";
+  var fwID = "";
   String beschreibung = "";
-  String fwID = "";
   TextEditingController _controller = TextEditingController();
 
   void fetchOffer() async {
@@ -106,9 +98,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       response = await http.get(Uri.parse(urlOffer));
       jsonOffer = jsonDecode(response.body);
-      mietzeitraumStart = jsonOffer["mietzeitraumStart"].toString();
-      mietzeitraumEnde = jsonOffer["mietzeitraumEnde"].toString();
-      fwID = jsonOffer["fwId"].toString();
+      fwID = jsonOffer["fwId"];
       print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
     } catch (err) {
       print(err.toString());
@@ -117,47 +107,42 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void fetchApartment() async {
-    
     String urlApart = LoginInfo().serverIP +
-        "/api/Ferienwohnung/" + 
-        fwID;
-        print("fetch Apartment");
+        "/api/Ferienwohnung/" +
+        fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
-      strasse = jsonApart["strasse"].toString();
-      hausnummer = jsonApart["hausnummer"].toString();
-      plz = jsonApart["plz"].toString();
       beschreibung = jsonApart["beschreibung"].toString();
-      ort = jsonApart["ort"].toString();
-      land = jsonApart["land"].toString();
       _controller = TextEditingController(text: beschreibung);
       print("jsonDataWohnung: " + jsonApart.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
-    //fetchImage();
+    fetchImage();
   }
 
-  void loadCookies() {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+  void loadCookies() async {
+    //LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
+    //LoginInfo().tokens =
+    //int.parse(window.localStorage['tokenstand'].toString());
     fetchOffer();
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID.toString();
+    String urlImg = LoginInfo().serverIP +
+        '/api/Wohnungsbilder/' +
+        widget.anlagenID.toString();
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
       print("lange: " + jsons.length.toString());
       setState(() {
-        for(int i = 0; i< (jsons.length);i++)
-        {
-          Image image  = imageFromBase64String(jsons[i]["bild"]);
+        for (int i = 0; i < (jsons.length); i++) {
+          Image image = imageFromBase64String(jsons[i]["bild"]);
           print("test");
           bilder.add(image);
         }
@@ -168,15 +153,29 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   @override
-  void initState () {
-     loadCookies();
+  void initState() {
+    loadCookies();
     //print("datum:" + widget.text + "\n");
+    //fetchApartment();
+    //fetchImage();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
- 
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    if (arguments["text"] != null) {
+      widget.text = arguments["text"];
+      widget.von = arguments["von"];
+      widget.bis = arguments["bis"];
+      widget.land = arguments["land"];
+      widget.ort = arguments["ort"];
+      widget.strasse = arguments["strasse"];
+      widget.pLZ = arguments["pLZ"];
+      widget.hausNr = arguments["hausNr"];
+      widget.anlagenID = arguments["anlangenID"];
+    }
     return Material(
       type: MaterialType.transparency,
       child: Scaffold(
@@ -193,13 +192,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
                 Container(
                   height: 10,
                 ),
-                Container(
-                  child: ImageSlideshow(
-                      width: 1000,
-                      height: 700,
-                      initialPage: 0,
-                      children: bilder),
-                ),
+                //Container(
+                //  child: ImageSlideshow(
+                //      width: 1000,
+                //      height: 700,
+                //      initialPage: 0,
+                //      children: bilder),
+                //),
                 Container(
                   height: 10,
                 ),
@@ -226,15 +225,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Adresse: " +
-                            strasse +
+                            widget.strasse +
                             " " +
-                            hausnummer +
+                            widget.hausNr +
                             ", " +
-                            plz +
+                            widget.pLZ +
                             " " +
-                            ort +
+                            widget.ort +
                             " " +
-                            land,)
+                            widget.land),
                       ],
                     ),
                     SizedBox(height: 20),
@@ -242,9 +241,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Mietzeitraum: " +
-                            mietzeitraumStart +
+                            widget.von +
                             " bis: " +
-                            mietzeitraumEnde)
+                            widget.bis)
                       ],
                     ),
                     SizedBox(height: 20),
@@ -252,7 +251,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Aktueller Tokenpreis: " +
-                            //widget.tokenP.toString() +
+                            widget.tokenP.toString() +
                             " Tokens")
                       ],
                     ),

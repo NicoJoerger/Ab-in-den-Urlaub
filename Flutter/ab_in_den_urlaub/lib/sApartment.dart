@@ -269,7 +269,6 @@ class _sApartmentsState extends State<sApartments> {
                         final wohnung = json["fw"];
                         var startTime = json["mietzeitraumStart"];
                         startTime = DateTime.parse(startTime);
-
                         var endTime = json["mietzeitraumEnde"];
                         endTime = DateTime.parse(endTime);
                         return ApartmentCard(
@@ -292,9 +291,10 @@ class _sApartmentsState extends State<sApartments> {
                           text: wohnung["beschreibung"],
                           land: wohnung["land"],
                           ort: wohnung["ort"],
-                          pLZ: wohnung["plz"],
-                          strasse: wohnung["strasse"],
-                          hausNr: wohnung["hausnummer"],
+                          pLZ: wohnung["plz"].toString(),
+                          strasse: wohnung["strasse"].toString(),
+                          hausNr: wohnung["hausnummer"].toString(),
+                          angebotID: json["angebotId"].toString(),
                         );
                       }),
                 ),

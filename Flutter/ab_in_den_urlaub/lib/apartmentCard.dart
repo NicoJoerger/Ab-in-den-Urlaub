@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
 
@@ -29,7 +30,7 @@ class ApartmentCard extends StatefulWidget {
       {Key? key,
       required this.anlagenName,
       this.anlangenID = "",
-      this.angebotID = "0815",
+      this.angebotID = "",
       this.bewertung = "",
       this.von = "",
       this.bis = "",
@@ -59,7 +60,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
   Widget build(BuildContext context) {
     var cardWitdh = 500.0;
     var cardHeight = 900.0;
-    var imageWitdh = 450.0;
+    var imageWitdh = 600.0;
     //if (MediaQuery.of(context).size.width >
     //    MediaQuery.of(context).size.height) {
     //  imageWitdh = MediaQuery.of(context).size.width * 8 / 20;
@@ -96,7 +97,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
                           Text(
                             widget.tokenP.toString(),
                             style:
-                                TextStyle(color: Colors.yellow, fontSize: 15),
+                                TextStyle(color: Colors.yellow, fontSize: 30),
                           )
                         ],
                       ),
@@ -146,7 +147,12 @@ class _ApartmentCardState extends State<ApartmentCard> {
         ),
       ),
       onTap: () => {
-        window.localStorage['angebotID'] = widget.angebotID.toString(),
+        window.localStorage.containsKey('userId'),
+        window.localStorage.containsKey('tokenstand'),
+        window.localStorage.containsKey('angebotID'),
+        window.localStorage['userId'] = LoginInfo().userid.toString(),
+        window.localStorage['tokenstand'] = LoginInfo().tokens.toString(),
+        print('New added Message ${window.localStorage['userId']}'),
         Navigator.pushNamed(
           context,
           '/apartmentDetail',

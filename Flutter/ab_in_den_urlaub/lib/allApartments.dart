@@ -245,6 +245,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             pLZ: wohnung["plz"].toString(),
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
+                            angebotID: json["angebotId"].toString(),
                           );
                         },
                       ),
@@ -293,6 +294,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             pLZ: wohnung["plz"].toString(),
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
+                            angebotID: json["angebotId"].toString(),
                           );
                         },
                       ),
@@ -341,6 +343,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             pLZ: wohnung["plz"].toString(),
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
+                            angebotID: json["angebotId"].toString(),
                           );
                         },
                       ),
@@ -390,6 +393,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             pLZ: wohnung["plz"].toString(),
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
+                            angebotID: json["angebotId"].toString(),
                           );
                         },
                       ),

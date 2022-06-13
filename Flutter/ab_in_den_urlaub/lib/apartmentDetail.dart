@@ -86,27 +86,30 @@ class _apartmentDetailState extends State<apartmentDetail> {
   List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
+  var fwID = "";
   String beschreibung = "";
   TextEditingController _controller = TextEditingController();
 
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
         '/api/Angebote/' +
-        widget.angebotID.toString() +
+        LoginInfo().currentAngebot +
         "/a";
     try {
       response = await http.get(Uri.parse(urlOffer));
       jsonOffer = jsonDecode(response.body);
+      fwID = jsonOffer["fwId"];
       print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
+    fetchApartment();
   }
 
   void fetchApartment() async {
     String urlApart = LoginInfo().serverIP +
         "/api/Ferienwohnung/" +
-        widget.anlagenID.toString();
+        fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
@@ -116,26 +119,31 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }
+    fetchImage();
   }
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    String userIDString = window.localStorage['userId'].toString();
+    String tokenString = window.localStorage['tokenstand'].toString();
+    LoginInfo().userid = int.parse(userIDString);
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
+    print(tokenString + userIDString);
+    LoginInfo().tokens = int.parse(tokenString);
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID.toString();
+    String urlImg = LoginInfo().serverIP +
+        '/api/Wohnungsbilder/' +
+        widget.anlagenID.toString();
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
       print("lange: " + jsons.length.toString());
       setState(() {
-        for(int i = 0; i< (jsons.length);i++)
-        {
-          Image image  = imageFromBase64String(jsons[i]["bild"]);
+        for (int i = 0; i < (jsons.length); i++) {
+          Image image = imageFromBase64String(jsons[i]["bild"]);
           print("test");
           bilder.add(image);
         }
@@ -147,9 +155,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
+    loadCookies();
     //print("datum:" + widget.text + "\n");
-    fetchApartment();
-    fetchImage();
+    //fetchApartment();
+    //fetchImage();
     super.initState();
   }
 
@@ -184,13 +193,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
                 Container(
                   height: 10,
                 ),
-                Container(
-                  child: ImageSlideshow(
-                      width: 1000,
-                      height: 700,
-                      initialPage: 0,
-                      children: bilder),
-                ),
+                //Container(
+                //  child: ImageSlideshow(
+                //      width: 1000,
+                //      height: 700,
+                //      initialPage: 0,
+                //      children: bilder),
+                //),
                 Container(
                   height: 10,
                 ),

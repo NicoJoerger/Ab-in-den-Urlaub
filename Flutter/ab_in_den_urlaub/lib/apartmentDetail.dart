@@ -86,6 +86,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   List<Widget> bilder = [];
   var jsonOffer;
   var jsonApart;
+  var fwID = "";
   String beschreibung = "";
   TextEditingController _controller = TextEditingController();
 
@@ -97,16 +98,18 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       response = await http.get(Uri.parse(urlOffer));
       jsonOffer = jsonDecode(response.body);
+      fwID = jsonOffer["fwId"];
       print("jsonDataAngebot: " + jsonOffer.toString() + "\n");
     } catch (err) {
       print(err.toString());
     }
+    fetchApartment();
   }
 
   void fetchApartment() async {
     String urlApart = LoginInfo().serverIP +
         "/api/Ferienwohnung/" +
-        widget.anlagenID.toString();
+        fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
@@ -116,6 +119,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }
+    fetchImage();
   }
 
   void loadCookies() async {

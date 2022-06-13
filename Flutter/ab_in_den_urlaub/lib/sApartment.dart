@@ -270,7 +270,6 @@ class _sApartmentsState extends State<sApartments> {
                         final wohnung = json["fw"];
                         var startTime = json["mietzeitraumStart"];
                         startTime = DateTime.parse(startTime);
-
                         var endTime = json["mietzeitraumEnde"];
                         endTime = DateTime.parse(endTime);
                         return ApartmentCard(

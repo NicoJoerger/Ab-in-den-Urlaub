@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
 
@@ -146,7 +147,12 @@ class _ApartmentCardState extends State<ApartmentCard> {
         ),
       ),
       onTap: () => {
-        window.localStorage['angebotID'] = widget.angebotID.toString(),
+        window.localStorage.containsKey('userId'),
+        window.localStorage.containsKey('tokenstand'),
+        window.localStorage.containsKey('angebotID'),
+        window.localStorage['userId'] = LoginInfo().userid.toString(),
+        window.localStorage['tokenstand'] = LoginInfo().tokens.toString(),
+        print('New added Message ${window.localStorage['userId']}'),
         Navigator.pushNamed(
           context,
           '/apartmentDetail',

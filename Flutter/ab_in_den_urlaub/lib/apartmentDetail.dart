@@ -92,7 +92,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   void fetchOffer() async {
     String urlOffer = LoginInfo().serverIP +
         '/api/Angebote/' +
-        widget.angebotID.toString() +
+        LoginInfo().currentAngebot +
         "/a";
     try {
       response = await http.get(Uri.parse(urlOffer));
@@ -119,17 +119,19 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
+    String userIDString = window.localStorage['userId'].toString();
+    String tokenString = window.localStorage['tokenstand'].toString();
+    LoginInfo().userid = int.parse(userIDString);
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    print("\n\nAngebotID = " + LoginInfo().currentAngebot);
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
+    print(tokenString + userIDString);
+    LoginInfo().tokens = int.parse(tokenString);
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
     String urlImg = LoginInfo().serverIP +
-        '/api/Wohnungsbil/888der/' +
+        '/api/Wohnungsbilder/' +
         widget.anlagenID.toString();
     try {
       response = await http.get(Uri.parse(urlImg));
@@ -151,8 +153,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
   void initState() {
     loadCookies();
     //print("datum:" + widget.text + "\n");
-    fetchApartment();
-    fetchImage();
+    //fetchApartment();
+    //fetchImage();
     super.initState();
   }
 
@@ -187,13 +189,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
                 Container(
                   height: 10,
                 ),
-                Container(
-                  child: ImageSlideshow(
-                      width: 1000,
-                      height: 700,
-                      initialPage: 0,
-                      children: bilder),
-                ),
+                //Container(
+                //  child: ImageSlideshow(
+                //      width: 1000,
+                //      height: 700,
+                //      initialPage: 0,
+                //      children: bilder),
+                //),
                 Container(
                   height: 10,
                 ),

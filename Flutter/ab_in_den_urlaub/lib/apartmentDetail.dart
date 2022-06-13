@@ -121,21 +121,23 @@ class _apartmentDetailState extends State<apartmentDetail> {
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    print("\n\nAngebotID = " + LoginInfo().currentAngebot);
     LoginInfo().tokens =
         int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + widget.anlagenID.toString();
+    String urlImg = LoginInfo().serverIP +
+        '/api/Wohnungsbil/888der/' +
+        widget.anlagenID.toString();
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
       print("lange: " + jsons.length.toString());
       setState(() {
-        for(int i = 0; i< (jsons.length);i++)
-        {
-          Image image  = imageFromBase64String(jsons[i]["bild"]);
+        for (int i = 0; i < (jsons.length); i++) {
+          Image image = imageFromBase64String(jsons[i]["bild"]);
           print("test");
           bilder.add(image);
         }
@@ -147,6 +149,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   @override
   void initState() {
+    loadCookies();
     //print("datum:" + widget.text + "\n");
     fetchApartment();
     fetchImage();

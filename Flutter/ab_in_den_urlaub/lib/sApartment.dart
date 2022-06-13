@@ -295,6 +295,7 @@ class _sApartmentsState extends State<sApartments> {
                           pLZ: wohnung["plz"].toString(),
                           strasse: wohnung["strasse"].toString(),
                           hausNr: wohnung["hausnummer"].toString(),
+                          angebotID: json["angebotId"].toString(),
                         );
                       }),
                 ),

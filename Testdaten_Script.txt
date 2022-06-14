@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS bewertung;
 DROP TABLE IF EXISTS wohnungsbilder;
-DROP TABLE IF EXISTS bilder;
 DROP TABLE IF EXISTS tokens;
 DROP TABLE IF EXISTS rechnungshistorieeintrag;
 DROP TABLE IF EXISTS gebot;
@@ -98,20 +97,12 @@ CREATE TABLE IF NOT EXISTS tokens (
 	tokenpreis INT NOT NULL
 );
 
-
-CREATE TABLE IF NOT EXISTS bilder (
-	bild_ID serial PRIMARY KEY,
-	bild bytea NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS wohnungsbilder (
 	wgb_ID serial PRIMARY KEY,
 	fw_ID INT NOT NULL,
 	FOREIGN KEY (fw_ID)
 		REFERENCES ferienwohnung (fw_ID),
-	bild_ID INT NOT NULL,
-	FOREIGN KEY (bild_ID)
-		REFERENCES bilder (bild_ID)
+	bild bytea
 );
 
 CREATE TABLE IF NOT EXISTS bewertung (
@@ -193,69 +184,279 @@ VALUES ('10', '56854877465213', '462');
 
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('1', 'wohnungsname1', 'Goldstrasse', '1', 'Deutschland', 'Hamburg', '20095', '60', '3', '1', '1', 'true', 'false', 'false', 'Dies ist eine Beschreibung.', 'false');
+VALUES ('1', 'Goldgrube', 'Goldstrasse', '1', 'Deutschland', 'Hamburg', '20095', '60', '3', '1', '1', 'true', 'false', 'false', 'Dies ist eine Beschreibung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('1', 'wohnungsname2', 'Gunterstrasse', '22', 'Frankreich', 'Paris', '75000', '84', '4', '2', '1', 'true', 'true', 'true', 'Es hat einen tollen Balkon.', 'false');
+VALUES ('1', 'Apartment Eifeltraum', 'Gunterstrasse', '22', 'Frankreich', 'Paris', '75000', '84', '4', '2', '1', 'true', 'true', 'true', 'Es hat einen tollen Balkon.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('3', 'wohnungsname3', 'Hansjosephstrasse', '69', 'Großbritannien', 'London', '74000', '57', '1', '1', '1', 'true', 'false', 'false', 'Die Wohnung ist neu möbeliert.', 'false');
+VALUES ('3', 'Big Ben Palast', 'Hansjosephstrasse', '69', 'Großbritannien', 'London', '74000', '57', '1', '1', '1', 'true', 'false', 'false', 'Die Wohnung ist neu möbeliert.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('4', 'wohnungsname4', 'Klausstrasse', '4', 'Ungarn', 'Budapest', '24687', '87', '4', '1', '1', 'true', 'false', 'true', 'Der Garten ist toll.', 'false');
+VALUES ('4', 'Kettenhaus', 'Klausstrasse', '4', 'Ungarn', 'Budapest', '24687', '87', '4', '1', '1', 'true', 'false', 'true', 'Der Garten ist toll.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('5', 'wohnungsname5', 'Guntherstrasse', '34', 'Schweden', 'Stockholm', '54762', '55', '2', '2', '1', 'false', 'false', 'false', 'Kleine Wohnung.', 'false');
+VALUES ('5', 'Gamla Stan', 'Guntherstrasse', '34', 'Schweden', 'Stockholm', '54762', '55', '2', '2', '1', 'false', 'false', 'false', 'Kleine Wohnung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('5', 'wohnungsname6', 'Techstrasse', '11', 'Spanien', 'Madrid', '35486', '97', '5', '4', '2', 'true', 'true', 'true', 'Wunderschöne Wohnung.', 'false');
+VALUES ('5', 'Gran Via', 'Techstrasse', '11', 'Spanien', 'Madrid', '35486', '97', '5', '4', '2', 'true', 'true', 'true', 'Wunderschöne Wohnung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('7', 'wohnungsname7', 'Pustekuchenstrasse', '42', 'Kanada', 'Ottawa', '54882', '74', '3', '1', '1', 'true', 'false', 'false', 'Super.', 'false');
+VALUES ('7', 'NOTRE-DAME CATHEDRAL BASILICA', 'Pustekuchenstrasse', '42', 'Kanada', 'Ottawa', '54882', '74', '3', '1', '1', 'true', 'false', 'false', 'Super.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('8', 'wohnungsname8', 'Graustrasse', '8', 'Nordkorea', 'Pjöngjang', '12684', '60', '3', '1', '1', 'true', 'false', 'false', 'Nette Bude.', 'false');
+VALUES ('8', 'Monument der Chuch e', 'Graustrasse', '8', 'Nordkorea', 'Pjöngjang', '12684', '60', '3', '1', '1', 'true', 'false', 'false', 'Nette Bude.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('8', 'wohnungsname9', 'Mausstrasse', '54', 'Griechenland', 'Athen', '54862', '70', '2', '2', '1', 'true', 'false', 'false', 'Sehr nah zu der Innenstadt.', 'false');
+VALUES ('8', 'Akropolis', 'Mausstrasse', '54', 'Griechenland', 'Athen', '54862', '70', '2', '2', '1', 'true', 'false', 'false', 'Sehr nah zu der Innenstadt.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'wohnungsname10', 'tutorstrasse', '2', 'Japan', 'Tokio', '79423', '88', '4', '2', '1', 'true', 'false', 'true', 'Dies ist eine Beschreibung.', 'false');
+VALUES ('10', 'Kaiserpalast', 'tutorstrasse', '2', 'Japan', 'Tokio', '79423', '88', '4', '2', '1', 'true', 'false', 'true', 'Dies ist eine Beschreibung.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'Kolosseum', 'Raststrasse', '4', 'Italien', 'Rom', '95127', '88', '4', '2', '1', 'true', 'false', 'true', 'Rom ist toll.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'Hamburg', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'München', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'Bremen', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Marseille', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Bordeaux', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Lyon', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Liverpool', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Manchester', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Bristol', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Szeged', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Debrecen', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Miskloc', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Uppsala', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Malmoe', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Goeteborg', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Valencia', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Barcelona', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Sevilla', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Toronto', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Quebec', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Vancouver', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Chongjin', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Hamhung', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Wonsan', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Thessaloniki', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Chania', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Iraklion', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Kyoto', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Osaka', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Fukuoka', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Florenz', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Venedig', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
+
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Bologna', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('1', '01.01.2022', '08.01.2022', '01.12.2021', '100', '700', 'false');
+VALUES ('1', '01.01.2022', '08.01.2022', '01.12.2021', '100', '3548', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('1', '09.01.2023', '16.01.2023', '01.12.2021', '100', '700', 'false');
+VALUES ('1', '09.01.2023', '16.01.2023', '01.12.2021', '100', '3526', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('2', '01.01.2023', '08.01.2023', '01.12.2021', '100', '500', 'true');
+VALUES ('2', '01.01.2023', '08.01.2023', '01.12.2021', '100', '1829', 'true');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('4', '01.03.2023', '31.03.2023', '01.2.2023', '100', '1300', 'false');
+VALUES ('3', '01.03.2023', '31.03.2023', '01.2.2023', '100', '268', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.01.2023', '31.01.2023', '01.12.2022', '100', '1500', 'true');
+VALUES ('4', '01.03.2023', '31.03.2023', '01.2.2023', '100', '3445', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.02.2023', '28.02.2023', '01.12.2022', '100', '1400', 'true');
+VALUES ('5', '01.01.2023', '31.01.2023', '01.12.2022', '100', '4033', 'true');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('7', '01.02.2022', '08.02.2022', '01.12.2022', '100', '400', 'false');
+VALUES ('5', '01.02.2023', '28.02.2023', '01.12.2022', '100', '954', 'true');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('8', '01.04.2022', '16.04.2022', '01.3.2023', '100', '1000', 'false');
+VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '400', '3265', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('9', '24.01.2023', '30.01.2023', '01.12.2022', '100', '600', 'false');
+VALUES ('6', '01.03.2023', '31.03.2023', '01.2.2023', '100', '2588', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('10', '03.01.2023', '08.01.2023', '01.12.2022', '100', '700', 'false');
+VALUES ('7', '01.02.2022', '08.02.2022', '01.12.2022', '100', '4867', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '400', '2000', 'false');
+VALUES ('8', '01.04.2022', '16.04.2022', '01.3.2023', '100', '779', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('9', '24.01.2023', '30.01.2023', '01.12.2022', '100', '3473', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('10', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3274', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('11', '03.01.2023', '08.01.2023', '01.12.2022', '100', '579', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('12', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2688', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('13', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3899', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('14', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2147', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('15', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4825', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('16', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2118', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('17', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3840', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('18', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3984', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('19', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2950', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('20', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1571', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('21', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2811', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('22', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2929', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('23', '03.01.2023', '08.01.2023', '01.12.2022', '100', '495', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('24', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4616', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('25', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4655', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('26', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2158', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('27', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2933', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('28', '03.01.2023', '08.01.2023', '01.12.2022', '100', '363', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('29', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2927', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('30', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1349', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('31', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2438', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('32', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2071', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('33', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3598', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('34', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1425', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('35', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1120', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('36', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4895', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('37', '03.01.2023', '08.01.2023', '01.12.2022', '100', '490', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('38', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1726', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('39', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4051', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('40', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3469', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('41', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2593', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('42', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2008', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('43', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2094', 'false');
+
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
+VALUES ('44', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1394', 'false');
 
 
 

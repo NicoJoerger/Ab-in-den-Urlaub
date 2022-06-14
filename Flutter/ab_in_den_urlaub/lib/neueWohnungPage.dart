@@ -1,6 +1,12 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
+import 'package:cross_file_image/cross_file_image.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'globals.dart';
 import 'dart:html';
 import 'appBars.dart';
@@ -10,6 +16,9 @@ class nWohnung extends StatefulWidget {
   @override
   _nWohnungState createState() => _nWohnungState();
 }
+
+Image image = Image(image: AssetImage("/images/Empty.png"));
+List<Widget> Bilder = [];
 
 class _nWohnungState extends State<nWohnung> {
   // vars
@@ -25,6 +34,17 @@ class _nWohnungState extends State<nWohnung> {
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
     LoginInfo().tokens =
         int.parse(window.localStorage['tokenstand'].toString());
+  }
+
+  void pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? Ximage = await _picker.pickImage(source: ImageSource.gallery);
+    if (Ximage != null) {
+      image = Image(image: XFileImage(Ximage));
+      Bilder.add(image);
+    }
+
+    setState(() {});
   }
 
   final List<String> _address_countries_list = [
@@ -135,28 +155,21 @@ class _nWohnungState extends State<nWohnung> {
                     ),
                     child: Column(
                       children: [
-                        Text("Bilder", style: TextStyle(fontSize: 20)),
-                        Image(image: AssetImage("images/beach.jpg")),
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: ListView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              Image(image: AssetImage("images/beach.jpg")),
-                              Image(image: AssetImage("images/beach.jpg")),
-                              Image(image: AssetImage("images/beach.jpg")),
-                              Image(image: AssetImage("images/beach.jpg")),
-                            ],
-                          ),
+                          child: ImageSlideshow(
+                              width: 1000,
+                              height: 500,
+                              initialPage: 0,
+                              children: Bilder),
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.5,
                           alignment: Alignment.centerRight,
                           margin: EdgeInsets.all(20),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              pickImage();
+                            },
                             child: Text("Neues Bild hochladen"),
                           ),
                         ),
@@ -179,7 +192,7 @@ class _nWohnungState extends State<nWohnung> {
                       children: [
                         Text('Beschreibung', style: TextStyle(fontSize: 20)),
                         Text(
-                            "Hier kännen Sie eine Beschreibung zu Ihrer Wohnung abgeben."),
+                            "Hier können Sie eine Beschreibung zu Ihrer Wohnung abgeben."),
                         TextField(
                           keyboardType: TextInputType.multiline,
                           textInputAction: TextInputAction.newline,

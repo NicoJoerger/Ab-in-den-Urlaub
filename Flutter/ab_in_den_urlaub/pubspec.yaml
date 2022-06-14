@@ -38,6 +38,10 @@ dependencies:
   http: ^0.13.4
   cookie_jar: 3.0.1
   flutter_image_slideshow: any
+  file_picker: ^4.6.1
+  image_picker: ^0.8.5+3
+  cross_file_image: ^1.0.0
+  mime: ^1.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

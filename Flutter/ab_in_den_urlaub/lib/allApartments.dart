@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +17,54 @@ class AllApartments extends StatefulWidget {
 }
 
 class _AllApartmentsState extends State<AllApartments> {
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
+  }
+
+  Uint8List dataFromBase64String(String base64String) {
+    return base64Decode(base64String);
+  }
+
+  String base64String(Uint8List data) {
+    return base64Encode(data);
+  }
+
   String url = LoginInfo().serverIP + '/api/Ferienwohnung';
   var jsons = [];
+
   var jsonItalien = [];
   var jsonSpanien = [];
   var jsonGriechenland = [];
   var jsonDeutschland = [];
   var response;
+  List<Widget> ItalienBilder = [];
+  List<Widget> SpanienBilder = [];
+  List<Widget> GriechenlandBilder = [];
+  List<Widget> DeutschlandBilder = [];
 
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
     LoginInfo().tokens =
         int.parse(window.localStorage['tokenstand'].toString());
+  }
+
+  void fetchImage(String fwID) async {
+    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + fwID;
+    try {
+      response = await http.get(Uri.parse(urlImg));
+      jsons = jsonDecode(response.body) as List;
+      print("lange: " + jsons.length.toString());
+      setState(() {
+        for (int i = 0; i < (jsons.length); i++) {
+          Image image = imageFromBase64String(jsons[i]["bild"]);
+          print("test");
+          //bilder.add(image);
+        }
+      });
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void fetchFerienwohnung() async {

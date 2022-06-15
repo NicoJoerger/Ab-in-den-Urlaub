@@ -94,10 +94,7 @@ class _nWohnungState extends State<nWohnung> {
                   // address
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                   
                     child: Column(
                       children: [
                         Text('Adresse', style: TextStyle(fontSize: 20)),
@@ -147,12 +144,7 @@ class _nWohnungState extends State<nWohnung> {
                   // pictures
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                    
                     child: Column(
                       children: [
                         Container(
@@ -182,12 +174,7 @@ class _nWohnungState extends State<nWohnung> {
                   // flat description
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                    
                     child: Column(
                       children: [
                         Text('Beschreibung', style: TextStyle(fontSize: 20)),
@@ -209,12 +196,7 @@ class _nWohnungState extends State<nWohnung> {
                   // other
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                    
                     child: Column(
                       children: [
                         Text('Weitere Angaben', style: TextStyle(fontSize: 20)),

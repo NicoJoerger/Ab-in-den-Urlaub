@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'globals.dart';
 import 'dart:html';
 import 'appBars.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class nAngebot extends StatefulWidget {
   nAngebot({Key? key}) : super(key: key);
@@ -15,7 +18,8 @@ class _nAngebotState extends State<nAngebot> {
   var Containerw = 400.0;
   var ContentWFactor = 0.2;
   String dropdownValue = 'One';
-
+  List<String> wohnungen2 = ['Wähle']; // Option 2
+  String _selectedLocation = "Wähle";
   DateTime selectedRBeginn = DateTime.now();
   DateTime selectedABeginn = DateTime.now();
   DateTime selectedREnde = DateTime.now();
@@ -81,6 +85,37 @@ class _nAngebotState extends State<nAngebot> {
     }
   }
 
+  Future<void> getUserWohnungen() async {
+    try {
+      print("HI Get Wohnungsname");
+      var response = await http.get(Uri.parse(LoginInfo().serverIP +
+          "/api/Ferienwohnung/" +
+          LoginInfo().userid.toString() +
+          "/user"));
+      print("Wohnungsname get body: " + response.body);
+      final jsonData = jsonDecode(response.body) as List;
+      wohnungen2 = ['Wähle'];
+      for (int i = 0; i < jsonData.length; i++) {
+        print("jsonDataUserWohnungen[" +
+            i.toString() +
+            "].toString(): " +
+            jsonData[i].toString());
+        setState(() {
+          wohnungen2.add(jsonData[i]["wohnungsname"]);
+        });
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    getUserWohnungen();
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -102,40 +137,33 @@ class _nAngebotState extends State<nAngebot> {
                   "Wohnung",
                   style: TextStyle(fontSize: 30),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: Containerw,
-                      child: const Text("Zu vermietende Wohnung"),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  SizedBox(
+                    width: Containerw,
+                    child: const Text("Zu vermietende Wohnung"),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: DropdownButton<String>(
+                      dropdownColor: Colors.blue,
+                      value: _selectedLocation,
+                      icon: const Icon(Icons.arrow_downward),
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedLocation = newValue!;
+                        });
+                      },
+                      items: wohnungen2.map((location) {
+                        return DropdownMenuItem(
+                          child: Text(location),
+                          value: location,
+                        );
+                      }).toList(),
                     ),
-                    SizedBox(
-                      width: 200,
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
+                  )
+                ]),
                 const Text(
                   "Reise",
                   style: TextStyle(fontSize: 30),

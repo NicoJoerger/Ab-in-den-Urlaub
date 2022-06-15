@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> {
       //print("json[fwId].toString(): " + id);
       response = await http
           .get(Uri.parse(LoginInfo().serverIP + '/api/Ferienwohnung/' + id));
-          print("response body in fetchapartment: " + response.body);
+      print("response body in fetchapartment: " + response.body);
       final jsonData = jsonDecode(response.body);
 
       print("wohnung hinzugefügt: " + jsonData.toString());
@@ -312,10 +312,39 @@ class _ProfileState extends State<Profile> {
                               {Navigator.pushNamed(context, '/nWohnung')},
                           child: const Text('Neue Wohnung anlegen'),
                         ),
-                        ElevatedButton(
-                          onPressed: () => _showWohnungInputDialog,
-                          child: const Text('Wohnung löschen'),
-                        ),
+                        Row(children: [
+                          DropdownButton<String>(
+                            dropdownColor: Colors.blue,
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 15),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownValue = newValue!;
+                              });
+                            },
+                            items: <String>[
+                              'Wähle Wohnung',
+                              'Deutschland',
+                              'Frankreich',
+                              'Spanien'
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                          Container(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _showWohnungInputDialog,
+                            child: const Text('Wohnung löschen'),
+                          ),
+                        ]),
                       ],
                     ),
                   ),
@@ -499,7 +528,6 @@ class _ProfileState extends State<Profile> {
                     itemCount: wohnungen.length,
                     itemBuilder: (context, i) {
                       if (angebote.isNotEmpty && wohnungen.isNotEmpty) {
-                        
                         //print("Angebote werden angezeigt.\n");
                         final json = angebote[i];
                         final wohnung = wohnungen[i];
@@ -520,8 +548,7 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Container(
                                   width: 150,
-                                  child:
-                                      Text(wohnungen[i].toString()),
+                                  child: Text(wohnungen[i].toString()),
                                 ),
                                 Container(
                                   width: 150,
@@ -568,9 +595,8 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ]),
                         );
-                      }else{
+                      } else {
                         return GestureDetector();
-
                       }
                     },
                   ),

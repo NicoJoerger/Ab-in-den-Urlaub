@@ -37,10 +37,7 @@ class _AllApartmentsState extends State<AllApartments> {
   var jsonGriechenland = [];
   var jsonDeutschland = [];
   var response;
-  List<Widget> ItalienBilder = [];
-  List<Widget> SpanienBilder = [];
-  List<Widget> GriechenlandBilder = [];
-  List<Widget> DeutschlandBilder = [];
+  Map<int, Widget> Bilder = Map();
 
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
@@ -49,21 +46,80 @@ class _AllApartmentsState extends State<AllApartments> {
         int.parse(window.localStorage['tokenstand'].toString());
   }
 
-  void fetchImage(String fwID) async {
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + fwID;
-    try {
-      response = await http.get(Uri.parse(urlImg));
-      jsons = jsonDecode(response.body) as List;
-      print("lange: " + jsons.length.toString());
-      setState(() {
-        for (int i = 0; i < (jsons.length); i++) {
-          Image image = imageFromBase64String(jsons[i]["bild"]);
-          print("test");
-          //bilder.add(image);
+  void fetchImage() async {
+    for (int i = 0; i < jsonItalien.length; i++) {
+      int fwId = jsonItalien[i]["fwId"];
+      String urlImg = LoginInfo().serverIP +
+          '/api/Wohnungsbilder/' +
+          jsonItalien[i]["fwId"].toString();
+      try {
+        response = await http.get(Uri.parse(urlImg));
+        jsons = jsonDecode(response.body) as List;
+        if (jsons.length > 0) {
+          print("imageItalien\n");
+          Image image = imageFromBase64String(jsons[0]["bild"]);
+          setState(() {
+            Bilder[fwId] = image;
+          });
         }
-      });
-    } catch (err) {
-      print(err.toString());
+      } catch (err) {
+        print(err.toString());
+      }
+    }
+    for (int i = 0; i < jsonSpanien.length; i++) {
+      int fwId = jsonSpanien[i]["fwId"];
+      String urlImg = LoginInfo().serverIP +
+          '/api/Wohnungsbilder/' +
+          jsonSpanien[i]["fwId"].toString();
+      try {
+        response = await http.get(Uri.parse(urlImg));
+        jsons = jsonDecode(response.body) as List;
+        if (jsons.length > 0) {
+          Image image = imageFromBase64String(jsons[0]["bild"]);
+            setState(() {
+            Bilder[fwId] = image;
+          });
+        }
+      } catch (err) {
+        print(err.toString());
+      }
+    }
+    for (int i = 0; i < jsonDeutschland.length; i++) {
+      int fwId = jsonDeutschland[i]["fwId"];
+      String urlImg = LoginInfo().serverIP +
+          '/api/Wohnungsbilder/' +
+          jsonDeutschland[i]["fwId"].toString();
+      try {
+        response = await http.get(Uri.parse(urlImg));
+        jsons = jsonDecode(response.body) as List;
+        if (jsons.length > 0) {
+          print("imageDeutschland\n");
+          Image image = imageFromBase64String(jsons[0]["bild"]);
+          setState(() {
+            Bilder[fwId] = image;
+          });
+        }
+      } catch (err) {
+        print(err.toString());
+      }
+    }
+    for (int i = 0; i < jsonGriechenland.length; i++) {
+      int fwId = jsonGriechenland[i]["fwId"];
+      String urlImg = LoginInfo().serverIP +
+          '/api/Wohnungsbilder/' +
+          jsonGriechenland[i]["fwId"].toString();
+      try {
+        response = await http.get(Uri.parse(urlImg));
+        jsons = jsonDecode(response.body) as List;
+        if (jsons.length > 0) {
+          Image image = imageFromBase64String(jsons[0]["bild"]);
+            setState(() {
+            Bilder[fwId] = image;
+          });
+        }
+      } catch (err) {
+        print(err.toString());
+      }
     }
   }
 
@@ -115,9 +171,10 @@ class _AllApartmentsState extends State<AllApartments> {
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       // print(jsonData);
+      
       setState(() {
         jsonDeutschland = jsonData;
-        //  print(jsonDeutschland);
+        print(jsonDeutschland.toString());
       });
     } catch (err) {
       print(err.toString());
@@ -133,11 +190,12 @@ class _AllApartmentsState extends State<AllApartments> {
       // print(jsonData);
       setState(() {
         jsonSpanien = jsonData;
-        //  print(jsonSpanien);
+        print(jsonSpanien.toString());
       });
     } catch (err) {
       print(err.toString());
     }
+    fetchImage();
   }
 
   void fetchAngebotItalien(var land) async {
@@ -149,7 +207,7 @@ class _AllApartmentsState extends State<AllApartments> {
       //  print(jsonData);
       setState(() {
         jsonItalien = jsonData;
-        //    print(jsonItalien);
+        print(jsonItalien.toString());
       });
     } catch (err) {
       print(err.toString());
@@ -165,7 +223,7 @@ class _AllApartmentsState extends State<AllApartments> {
       //  print(jsonData);
       setState(() {
         jsonGriechenland = jsonData;
-        print(jsonGriechenland);
+        print(jsonGriechenland.toString());
       });
     } catch (err) {
       print(err.toString());
@@ -283,6 +341,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
                             angebotID: json["angebotId"].toString(),
+                            image: Bilder[json["fwId"]]!,
                           );
                         },
                       ),
@@ -332,7 +391,8 @@ class _AllApartmentsState extends State<AllApartments> {
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
                             angebotID: json["angebotId"].toString(),
-                          );
+                            image: Bilder[json["fwId"]]!,                          
+                            );
                         },
                       ),
                     ),
@@ -381,6 +441,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
                             angebotID: json["angebotId"].toString(),
+                            image: Bilder[json["fwId"]]!,
                           );
                         },
                       ),
@@ -431,6 +492,7 @@ class _AllApartmentsState extends State<AllApartments> {
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
                             angebotID: json["angebotId"].toString(),
+                            image: Bilder[json["fwId"]]!,
                           );
                         },
                       ),

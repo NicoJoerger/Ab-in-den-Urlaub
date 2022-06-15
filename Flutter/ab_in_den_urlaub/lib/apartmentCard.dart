@@ -1,4 +1,5 @@
 import 'package:ab_in_den_urlaub/globals.dart';
+import 'package:ab_in_den_urlaub/neueWohnungPage.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
 
@@ -8,7 +9,7 @@ class ApartmentCard extends StatefulWidget {
   String angebotID = "";
   String bewertung = "";
   String text = "";
-  String images = "";
+  Widget image;
   String von = "";
   String bis = "";
   String eurpP = "";
@@ -33,6 +34,7 @@ class ApartmentCard extends StatefulWidget {
       this.angebotID = "",
       this.bewertung = "",
       this.von = "",
+      this.image =const Image(image: AssetImage("images/beach.jpg")),
       this.bis = "",
       this.tokenP = 0,
       this.text = "0",
@@ -112,7 +114,7 @@ class _ApartmentCardState extends State<ApartmentCard> {
                         width: imageWitdh,
                         height: 250,
                         child: FittedBox(
-                          child: Image(image: AssetImage("images/beach.jpg")),
+                          child: widget.image,
                           fit: BoxFit.fill,
                         ),
                       ),

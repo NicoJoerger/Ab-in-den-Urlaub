@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:http/http.dart' as http;
 import 'globals.dart';
 import 'dart:html';
 import 'appBars.dart';
@@ -22,12 +25,234 @@ List<Widget> Bilder = [];
 
 class _nWohnungState extends State<nWohnung> {
   // vars
+  var response;
   bool _checkbox_garden = false;
   bool _checkbox_balcony = false;
   bool _checkbox_wlan = false;
   var Containerh = 40.0;
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
+  final _address_location = new TextEditingController();
+  final _address_street = new TextEditingController();
+  final _address_housenumber = new TextEditingController();
+  final description = new TextEditingController();
+  final rooms = new TextEditingController();
+  final area = new TextEditingController();
+  final wohnungsname = new TextEditingController();
+  final plz = new TextEditingController();
+  final anzbaeder = new TextEditingController();
+  final betten = new TextEditingController();
+  var wgbId = [];
+  var fwId;
+
+  void postWohnungsBilder() async {
+    try {
+      for (var i = 0; i < Bilder.length; i++) {
+        response = await http.post(
+            Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: """ {
+    "fwId": """ +
+                fwId.toString() +
+                """ } """);
+        print(response.statusCode);
+        final jsonData = jsonDecode(response.body);
+
+        print("basti");
+
+        print(jsonData);
+        wgbId.add(jsonData["wgbId"]);
+        print("mazze");
+      }
+      print(Bilder.length.toString());
+      for (var i = 0; i < Bilder.length; i++) {
+        print("try leude");
+        response = await http.put(Uri.parse(LoginInfo().serverIP +
+            "/api/Wohnungsbilder/" +
+            wgbId[i].toString()));
+        print("moin max hier");
+      }
+
+      if (response.statusCode == 200) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Erfolgreich'),
+            content: Text('Danke für das Registrieren Ihrer Wohnung.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        //LoginInfo().tokens = startToken;
+        //Navigator.pushNamed(context, '/Profile');
+      } /*else if (response.statusCode == 400) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Fehlgeschlagen'),
+            content: Text(response.body),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }*/
+      else {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Fehlgeschlagen'),
+            content: Text('Fehler'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+      print(response.body);
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void postWohnung() async {
+    String body = """ {
+    "userId": """ +
+        LoginInfo().userid.toString() +
+        """,
+    "strasse": \"""" +
+        _address_street.text +
+        """\",
+    "hausnummer": """ +
+        _address_housenumber.text +
+        """,
+    "ort": \"""" +
+        _address_location.text +
+        """\",
+    "plz": """ +
+        plz.text +
+        """,
+    "wohnflaeche": """ +
+        area.text +
+        """,
+    "anzzimmer": """ +
+        rooms.text +
+        """,
+    "anzbetten": """ +
+        betten.text +
+        """,
+    "anzbaeder": """ +
+        anzbaeder.text +
+        """,
+    "wifi": """ +
+        _checkbox_wlan.toString() +
+        """,
+    "garten": """ +
+        _checkbox_garden.toString() +
+        """,
+    "balkon": """ +
+        _checkbox_balcony.toString() +
+        """,                
+    "beschreibung": \"""" +
+        description.text +
+        """\",                
+    "wohnungsname": \"""" +
+        wohnungsname.text +
+        """\",    
+    "land": \"""" +
+        _selected_country +
+        """\",
+    "deaktiviert": """ +
+        "false" +
+        """  
+  }""";
+    try {
+      response = await http.post(
+          Uri.parse(LoginInfo().serverIP + "/api/Ferienwohnung"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: body);
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        fwId = jsonData["fwId"];
+        postWohnungsBilder();
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Erfolgreich'),
+            content: Text('Danke für das Registrieren Ihrer Wohnung.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        //LoginInfo().tokens = startToken;
+        //Navigator.pushNamed(context, '/Profile');
+      } /*else if (response.statusCode == 400) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Fehlgeschlagen'),
+            content: Text(response.body),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }*/
+      else {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Fehlgeschlagen'),
+            content: Text('Fehler'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+      print(response.body);
+    } catch (err) {
+      print(err.toString());
+    }
+  } /*else {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Registrierung Fehlgeschlagen'),
+          content: Text('Passwörter stimmen nicht überein.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });*/
 
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
@@ -61,13 +286,6 @@ class _nWohnungState extends State<nWohnung> {
   ];
   String _selected_country = '';
 
-  TextEditingController _address_location =
-      new TextEditingController(); // address location    controller
-  TextEditingController _address_street =
-      new TextEditingController(); // address street      controller
-  TextEditingController _address_housenumber =
-      new TextEditingController(); // address housenumber controller
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -94,7 +312,10 @@ class _nWohnungState extends State<nWohnung> {
                   // address
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                   
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                     child: Column(
                       children: [
                         Text('Adresse', style: TextStyle(fontSize: 20)),
@@ -114,10 +335,24 @@ class _nWohnungState extends State<nWohnung> {
                           }).toList(),
                         ),
                         TextFormField(
+                          controller: wohnungsname,
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: 'Name ihrer Wohnung',
+                          ),
+                        ),
+                        TextFormField(
                           controller: _address_location,
                           decoration: const InputDecoration(
                             border: UnderlineInputBorder(),
                             labelText: 'Ort',
+                          ),
+                        ),
+                        TextFormField(
+                          controller: plz,
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: 'PLZ',
                           ),
                         ),
                         TextFormField(
@@ -144,7 +379,12 @@ class _nWohnungState extends State<nWohnung> {
                   // pictures
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blue,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                     child: Column(
                       children: [
                         Container(
@@ -174,7 +414,12 @@ class _nWohnungState extends State<nWohnung> {
                   // flat description
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blue,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                     child: Column(
                       children: [
                         Text('Beschreibung', style: TextStyle(fontSize: 20)),
@@ -196,11 +441,17 @@ class _nWohnungState extends State<nWohnung> {
                   // other
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.blue,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
                     child: Column(
                       children: [
                         Text('Weitere Angaben', style: TextStyle(fontSize: 20)),
                         TextFormField(
+                          controller: rooms,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
@@ -211,6 +462,18 @@ class _nWohnungState extends State<nWohnung> {
                           ),
                         ),
                         TextFormField(
+                          controller: anzbaeder,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ], // Only numbers can be entered
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: 'Anzahl Bäder',
+                          ),
+                        ),
+                        TextFormField(
+                          controller: betten,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
@@ -221,16 +484,7 @@ class _nWohnungState extends State<nWohnung> {
                           ),
                         ),
                         TextFormField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ], // Only numbers can be entered
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Anzahl Personen',
-                          ),
-                        ),
-                        TextFormField(
+                          controller: area,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
@@ -309,8 +563,9 @@ class _nWohnungState extends State<nWohnung> {
                       child: const Text('Wohnung registrieren',
                           style: TextStyle(color: Colors.black)),
                       onPressed: () {
+                        postWohnung();
+
                         // when button is pressed
-                        __send_registration_of_appartment();
                       },
                     ),
                   ),
@@ -324,7 +579,7 @@ class _nWohnungState extends State<nWohnung> {
       ),
     );
   }
-
+/*
   // push button ->
   void __send_registration_of_appartment() {
     print('\n');
@@ -335,5 +590,5 @@ class _nWohnungState extends State<nWohnung> {
 
     //post
     // registrierungseite kopieren
-  }
+  }*/
 }

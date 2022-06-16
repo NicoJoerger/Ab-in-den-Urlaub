@@ -94,9 +94,12 @@ class _ProfileState extends State<Profile> {
             i.toString() +
             "].toString(): " +
             jsonData[i].toString());
-        setState(() {
-          wohnungen2.add(jsonData[i]["wohnungsname"]);
-        });
+        print(jsonData[i]["deaktiviert"]);
+        if (!jsonData[i]["deaktiviert"]) {
+          setState(() {
+            wohnungen2.add(jsonData[i]["wohnungsname"]);
+          });
+        }
       }
     } catch (err) {
       print(err.toString());

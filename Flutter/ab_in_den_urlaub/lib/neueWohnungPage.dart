@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
-
+import 'package:universal_io/io.dart' as io;
 import 'dart:typed_data';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
@@ -13,8 +13,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'globals.dart';
-import 'dart:html';
+import 'dart:html' as html;
 import 'appBars.dart';
+
+
 
 class nWohnung extends StatefulWidget {
   nWohnung({Key? key}) : super(key: key);
@@ -22,9 +24,10 @@ class nWohnung extends StatefulWidget {
   _nWohnungState createState() => _nWohnungState();
 }
 
+
 Image image = Image(image: AssetImage("/images/Empty.png"));
 List<Widget> Bilder = [];
-List<File> images = [];
+List<html.File> images = [];
 List<XFile> xImages = [];
 
 class _nWohnungState extends State<nWohnung> {
@@ -74,16 +77,23 @@ class _nWohnungState extends State<nWohnung> {
       print(Bilder.length.toString());
       for (var i = 0; i < Bilder.length; i++) {
         print("try leude");
-        Image bild = Bilder[i] as Image;
+       // Image bild = Bilder[i] as Image;
         print("mazze stinkt");
-        //print("\n" + Bilder[i] +"\n");
-        File test = File()
-        Uint8List _bytesData = Base64Decoder().convert(bild.toString().split(",").last);
+        //print("\n" + Bilder[i] +"\n")
+        try {
+            io.File fBild = io.File(xImages[i].path);
+        } catch (e) {
+          print(e.toString());
+        }
+        io.File fBild = io.File(xImages[i].path);
+        print("\n FILE::" + fBild.toString() + "\n");
+        Uint8List _bytesData = Base64Decoder().convert(fBild.toString().split(",").last);
         print("mazze stinkt ziemlich");
+        
         List<int> selectedFile = _bytesData;
         var req = http.MultipartRequest('PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
-        //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
-        req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
+        req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
+        //req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
         req.send().then((response));
         print("moinmacs hier");
       }
@@ -268,10 +278,10 @@ class _nWohnungState extends State<nWohnung> {
     });*/
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo().userid = int.parse(html.window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot = html.window.localStorage['angebotID'].toString();
     LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+        int.parse(html.window.localStorage['tokenstand'].toString());
   }
 
   void pickImage() async {

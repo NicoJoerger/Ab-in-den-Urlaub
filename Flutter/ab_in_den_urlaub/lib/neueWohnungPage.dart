@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
 
+import 'dart:typed_data';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
 import 'package:file_picker/file_picker.dart';
@@ -22,6 +24,8 @@ class nWohnung extends StatefulWidget {
 
 Image image = Image(image: AssetImage("/images/Empty.png"));
 List<Widget> Bilder = [];
+List<File> images = [];
+List<XFile> xImages = [];
 
 class _nWohnungState extends State<nWohnung> {
   // vars
@@ -57,6 +61,7 @@ class _nWohnungState extends State<nWohnung> {
     "fwId": """ +
                 fwId.toString() +
                 """ } """);
+        
         print(response.statusCode);
         final jsonData = jsonDecode(response.body);
 
@@ -69,10 +74,18 @@ class _nWohnungState extends State<nWohnung> {
       print(Bilder.length.toString());
       for (var i = 0; i < Bilder.length; i++) {
         print("try leude");
-        response = await http.put(Uri.parse(LoginInfo().serverIP +
-            "/api/Wohnungsbilder/" +
-            wgbId[i].toString()));
-        print("moin max hier");
+        Image bild = Bilder[i] as Image;
+        print("mazze stinkt");
+        //print("\n" + Bilder[i] +"\n");
+        File test = File()
+        Uint8List _bytesData = Base64Decoder().convert(bild.toString().split(",").last);
+        print("mazze stinkt ziemlich");
+        List<int> selectedFile = _bytesData;
+        var req = http.MultipartRequest('PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
+        //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
+        req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
+        req.send().then((response));
+        print("moinmacs hier");
       }
 
       if (response.statusCode == 200) {
@@ -267,6 +280,8 @@ class _nWohnungState extends State<nWohnung> {
     if (Ximage != null) {
       image = Image(image: XFileImage(Ximage));
       Bilder.add(image);
+      xImages.add(Ximage);
+      //final File? imageFile = File(Ximage!.path);
     }
 
     setState(() {});

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
+import 'dart:io' as Io;
+import 'package:image_picker_web/image_picker_web.dart';
 
 import 'dart:typed_data';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
@@ -23,7 +25,7 @@ class nWohnung extends StatefulWidget {
 }
 
 Image image = Image(image: AssetImage("/images/Empty.png"));
-List<Widget> Bilder = [];
+List<Image> Bilder = [];
 List<File> images = [];
 List<XFile> xImages = [];
 
@@ -48,6 +50,13 @@ class _nWohnungState extends State<nWohnung> {
   final betten = new TextEditingController();
   var wgbId = [];
   var fwId;
+  List<Uint8List> bytesFromPicker = [];
+
+  String uint8ListTob64(Uint8List uint8list) {
+    String base64String = base64Encode(uint8list);
+    String header = "data:image/png;base64,";
+    return header + base64String;
+  }
 
   void postWohnungsBilder() async {
     try {
@@ -61,7 +70,11 @@ class _nWohnungState extends State<nWohnung> {
     "fwId": """ +
                 fwId.toString() +
                 """ } """);
-        
+/*
+                """, + "bild\":\"""" +
+                uint8ListTob64(bytesFromPicker[i]) +
+                """\"} """
+*/
         print(response.statusCode);
         final jsonData = jsonDecode(response.body);
 
@@ -70,24 +83,33 @@ class _nWohnungState extends State<nWohnung> {
         print(jsonData);
         wgbId.add(jsonData["wgbId"]);
         print("mazze");
+        print("Imagedata :" + bytesFromPicker[i].toString());
       }
+      /*
       print(Bilder.length.toString());
       for (var i = 0; i < Bilder.length; i++) {
         print("try leude");
-        Image bild = Bilder[i] as Image;
+        Image bild = Bilder[i];
         print("mazze stinkt");
-        //print("\n" + Bilder[i] +"\n");
-        File test = File()
-        Uint8List _bytesData = Base64Decoder().convert(bild.toString().split(",").last);
+        bild.image
+            //print("\n" + Bilder[i] +"\n");
+            //final bytes = Io.File(bil).readAsBytesSync();
+            ;
+        print("bild string" + bild.image.toString());
+
+        //String img64 = base64Encode(bytes);
+        Uint8List _bytesData =
+            Base64Decoder().convert(bild.toString().split(",").last);
         print("mazze stinkt ziemlich");
         List<int> selectedFile = _bytesData;
-        var req = http.MultipartRequest('PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
+        var req = http.MultipartRequest(
+            'PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
         //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
         req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
         req.send().then((response));
         print("moinmacs hier");
       }
-
+*/
       if (response.statusCode == 200) {
         showDialog<String>(
           context: context,
@@ -274,6 +296,22 @@ class _nWohnungState extends State<nWohnung> {
         int.parse(window.localStorage['tokenstand'].toString());
   }
 
+  void pickImage2() async {
+//    List<Uint8List>? bytesFromPicker = await ImagePickerWeb.getMultiImagesAsBytes();
+
+    //List<Image> fromPicker = (await ImagePickerWeb.getMultiImagesAsWidget())!;
+    bytesFromPicker = (await ImagePickerWeb.getMultiImagesAsBytes())!;
+    List<Image> tempBilder = [];
+    for (int i = 0; i < bytesFromPicker.length; i++) {
+      tempBilder.add(Image(
+        image: MemoryImage(bytesFromPicker[i]),
+      ));
+    }
+    setState(() {
+      Bilder = tempBilder;
+    });
+  }
+
   void pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? Ximage = await _picker.pickImage(source: ImageSource.gallery);
@@ -415,7 +453,7 @@ class _nWohnungState extends State<nWohnung> {
                           margin: EdgeInsets.all(20),
                           child: ElevatedButton(
                             onPressed: () {
-                              pickImage();
+                              pickImage2();
                             },
                             child: Text("Neues Bild hochladen"),
                           ),

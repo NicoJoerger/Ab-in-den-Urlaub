@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';

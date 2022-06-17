@@ -16,11 +16,10 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String url = LoginInfo().serverIP + '/api/Nutzer';
+  bool vermieter = false;
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
-  List<String> wohnungen2 = ['Wähle']; // Option 2
-  String _selectedLocation = "Wähle";
   var response;
   var Texth = 40.0;
   var Textw = 400.0;
@@ -45,58 +44,34 @@ class _ProfileState extends State<Profile> {
           rechnungshistorie[i].toString());
     }
     print("\n");
-    print("rechnungshistorie[] für Rechnungshistorie");
+
     for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
-      //print("i before fetchOffer: " + i.toString());
-      print("rechnungshistorie[" + i.toString() + "] -> Angebot ID: " + json["angebotId"].toString());
+      print("i before fetchOffer: " + i.toString());
+      print("json[angebotId].toString(): " + json["angebotId"].toString());
       await fetchOffer(json["angebotId"].toString());
-      //print("i after fetchOffer: " + i.toString());
+      print("i after fetchOffer: " + i.toString());
+      print("\n");
     }
 
-    /*
+    print("we got here");
+
     for (int i = 0; i < angebote.length; i++) {
       print("angebote[" + i.toString() + "]: " + angebote[i].toString());
     }
-    */
+
     print("\n");
-    print("angebote[] für Rechnungshistorie");
+
     for (int i = 0; i < angebote.length; i++) {
       final json = angebote[i];
-      print("angebote[" + i.toString() + "] -> FW ID: " + json["fwId"].toString());
+      print("json[fwId].toString(): " + json["fwId"].toString());
       await fetchApartment(json["fwId"].toString());
     }
 
     print("\n");
-    print("wohnungen[] für Rechnungshistorie");
+
     for (int i = 0; i < wohnungen.length; i++) {
       print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
-    }
-
-    print("\n");
-  }
-
-  Future<void> getUserWohnungen() async {
-    try {
-      print("HI Get Wohnungsname");
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
-          "/api/Ferienwohnung/" +
-          LoginInfo().userid.toString() +
-          "/user"));
-      //print("Wohnungsname get body: " + response.body);
-      final jsonData = jsonDecode(response.body) as List;
-      wohnungen2 = ['Wähle'];
-      for (int i = 0; i < jsonData.length; i++) {
-        //print("jsonDataUserWohnungen[" +
-        //    i.toString() +
-        //    "].toString(): " +
-        //    jsonData[i].toString());
-        setState(() {
-          wohnungen2.add(jsonData[i]["wohnungsname"]);
-        });
-      }
-    } catch (err) {
-      print(err.toString());
     }
   }
 
@@ -138,10 +113,10 @@ class _ProfileState extends State<Profile> {
       //print("json[fwId].toString(): " + id);
       response = await http
           .get(Uri.parse(LoginInfo().serverIP + '/api/Ferienwohnung/' + id));
-      //print("response body in fetchapartment: " + response.body);
+      print("response body in fetchapartment: " + response.body);
       final jsonData = jsonDecode(response.body);
 
-      //print("wohnung hinzugefügt: " + jsonData.toString());
+      print("wohnung hinzugefügt: " + jsonData.toString());
       setState(() {
         wohnungen.add(jsonData["wohnungsname"]);
       });
@@ -158,26 +133,30 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: const Text('Maximale Tokenkosten'),
           content: SingleChildScrollView(
-              /*
             child: DropdownButton<String>(
               dropdownColor: Colors.blue,
-              value: _selectedLocation,
+              value: dropdownValue,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
               style: const TextStyle(color: Colors.white, fontSize: 15),
               onChanged: (String? newValue) {
                 setState(() {
-                  _selectedLocation = newValue!;
+                  dropdownValue = newValue!;
                 });
               },
-              items: wohnungen2.map((location) {
-                return DropdownMenuItem(
-                  child: Text(location),
-                  value: location,
+              items: <String>[
+                'Wähle Wohnung',
+                'Deutschland',
+                'Frankreich',
+                'Spanien'
+              ].map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
                 );
               }).toList(),
-            ),*/
-              ),
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Bestätigen'),
@@ -297,7 +276,7 @@ class _ProfileState extends State<Profile> {
     print("initState() entered.\n");
     // TODO: implement initState
     fuckyouasynchron();
-    getUserWohnungen();
+
     super.initState();
     print("initState() exited.\n");
   }
@@ -337,20 +316,25 @@ class _ProfileState extends State<Profile> {
                         Row(children: [
                           DropdownButton<String>(
                             dropdownColor: Colors.blue,
-                            value: _selectedLocation,
+                            value: dropdownValue,
                             icon: const Icon(Icons.arrow_downward),
                             elevation: 16,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 15),
                             onChanged: (String? newValue) {
                               setState(() {
-                                _selectedLocation = newValue!;
+                                dropdownValue = newValue!;
                               });
                             },
-                            items: wohnungen2.map((location) {
-                              return DropdownMenuItem(
-                                child: Text(location),
-                                value: location,
+                            items: <String>[
+                              'Wähle Wohnung',
+                              'Deutschland',
+                              'Frankreich',
+                              'Spanien'
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
                               );
                             }).toList(),
                           ),
@@ -470,6 +454,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
+                // checkbox vermieter true/false
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -479,6 +464,10 @@ class _ProfileState extends State<Profile> {
                         onChanged: (val) {
                           setState(() {
                             LoginInfo().vermieter = val!;
+                            // oleg
+                            vermieter = val;
+                            // oleg
+                            setUserToVermieter();
                           });
                         }),
                     Text("Ich möchte Wohnungen vermieten.")
@@ -669,5 +658,37 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+  void setUserToVermieter() async {
+
+    // fetch user
+    String get_user_url    = LoginInfo().serverIP + '/api/Nutzer/';
+    String put_user_url      = LoginInfo().serverIP + '/api/Nutzer';
+    String get_user_userId       = LoginInfo().userid.toString();
+    var response_get = await http.get(Uri.parse(get_user_url + get_user_userId));
+
+
+
+    if(response.statusCode != 200)
+    {
+      // http call /api/user/{id} didn't worked
+    }
+    else
+    {
+      // http call /api/user/{id} worked
+      final jsonData = jsonDecode(response_get.body);
+
+      // set vermieter status
+      jsonData['vermieter'] = vermieter; 
+ 
+      var response_put = await http.put(
+        Uri.parse(put_user_url),
+        headers: <String, String> 
+        {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },    
+        body: jsonEncode(jsonData)
+      );      
+    }
   }
 }

@@ -1,12 +1,8 @@
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
-<<<<<<< HEAD
 import 'dart:io' as Io;
 import 'package:image_picker_web/image_picker_web.dart';
 
-=======
-import 'package:universal_io/io.dart' as io;
->>>>>>> bae65f1cb7aed9d2876c79a0d3bb825887a6d9be
 import 'dart:typed_data';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
@@ -22,23 +18,15 @@ import 'globals.dart';
 import 'dart:html' as html;
 import 'appBars.dart';
 
-
-
 class nWohnung extends StatefulWidget {
   nWohnung({Key? key}) : super(key: key);
   @override
   _nWohnungState createState() => _nWohnungState();
 }
 
-
 Image image = Image(image: AssetImage("/images/Empty.png"));
-<<<<<<< HEAD
 List<Image> Bilder = [];
-List<File> images = [];
-=======
-List<Widget> Bilder = [];
-List<html.File> images = [];
->>>>>>> bae65f1cb7aed9d2876c79a0d3bb825887a6d9be
+//List<File> images = [];
 List<XFile> xImages = [];
 
 class _nWohnungState extends State<nWohnung> {
@@ -62,6 +50,8 @@ class _nWohnungState extends State<nWohnung> {
   final betten = new TextEditingController();
   var wgbId = [];
   var fwId;
+  List<Image> tempBilder = [];
+
   List<Uint8List> bytesFromPicker = [];
 
   String uint8ListTob64(Uint8List uint8list) {
@@ -101,7 +91,6 @@ class _nWohnungState extends State<nWohnung> {
       print(Bilder.length.toString());
       for (var i = 0; i < Bilder.length; i++) {
         print("try leude");
-<<<<<<< HEAD
         Image bild = Bilder[i];
         print("mazze stinkt");
         bild.image
@@ -113,32 +102,13 @@ class _nWohnungState extends State<nWohnung> {
         //String img64 = base64Encode(bytes);
         Uint8List _bytesData =
             Base64Decoder().convert(bild.toString().split(",").last);
-=======
-       // Image bild = Bilder[i] as Image;
-        print("mazze stinkt");
-        //print("\n" + Bilder[i] +"\n")
-        try {
-            io.File fBild = io.File(xImages[i].path);
-        } catch (e) {
-          print(e.toString());
-        }
-        io.File fBild = io.File(xImages[i].path);
-        print("\n FILE::" + fBild.toString() + "\n");
-        Uint8List _bytesData = Base64Decoder().convert(fBild.toString().split(",").last);
->>>>>>> bae65f1cb7aed9d2876c79a0d3bb825887a6d9be
         print("mazze stinkt ziemlich");
         
         List<int> selectedFile = _bytesData;
-<<<<<<< HEAD
         var req = http.MultipartRequest(
             'PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
         //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
         req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
-=======
-        var req = http.MultipartRequest('PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
-        req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
-        //req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
->>>>>>> bae65f1cb7aed9d2876c79a0d3bb825887a6d9be
         req.send().then((response));
         print("moinmacs hier");
       }
@@ -323,8 +293,10 @@ class _nWohnungState extends State<nWohnung> {
     });*/
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(html.window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = html.window.localStorage['angebotID'].toString();
+    LoginInfo().userid =
+        int.parse(html.window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot =
+        html.window.localStorage['angebotID'].toString();
     LoginInfo().tokens =
         int.parse(html.window.localStorage['tokenstand'].toString());
   }
@@ -334,7 +306,6 @@ class _nWohnungState extends State<nWohnung> {
 
     //List<Image> fromPicker = (await ImagePickerWeb.getMultiImagesAsWidget())!;
     bytesFromPicker = (await ImagePickerWeb.getMultiImagesAsBytes())!;
-    List<Image> tempBilder = [];
     for (int i = 0; i < bytesFromPicker.length; i++) {
       tempBilder.add(Image(
         image: MemoryImage(bytesFromPicker[i]),
@@ -371,6 +342,13 @@ class _nWohnungState extends State<nWohnung> {
     'Japan'
   ];
   String _selected_country = '';
+
+  @override
+  void initState() {
+    tempBilder = [];
+// TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

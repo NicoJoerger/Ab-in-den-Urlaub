@@ -228,7 +228,8 @@ class _ProfileState extends State<Profile> {
           context: context,
           builder: (BuildContext context) => AlertDialog(
             title: const Text('Wohnung hat aktive Angebote.'),
-            content: const Text('Wohnung hat aktive Angebote und kann daher nicht gelöscht werden.'),
+            content: const Text(
+                'Wohnung hat aktive Angebote und kann daher nicht gelöscht werden.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),

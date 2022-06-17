@@ -16,7 +16,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String url = LoginInfo().serverIP + '/api/Nutzer';
-  bool vermieter = false;
+  bool vermieter = LoginInfo().vermieter;
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];

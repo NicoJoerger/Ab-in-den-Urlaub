@@ -339,7 +339,7 @@ INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_endd
 VALUES ('5', '01.02.2023', '28.02.2023', '01.12.2022', '100', '954', 'true');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '400', '3265', 'false');
+VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '100', '3265', 'false');
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
 VALUES ('6', '01.03.2023', '31.03.2023', '01.2.2023', '100', '2588', 'false');

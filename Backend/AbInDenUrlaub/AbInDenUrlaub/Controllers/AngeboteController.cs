@@ -93,6 +93,7 @@ namespace AbInDenUrlaub.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Angebote>>> AddAngebot(Angebote newAngebot)
         {
+            newAngebot.AktuellerTokenpreis = 100;
             context.Add(newAngebot);
             await context.SaveChangesAsync();
 

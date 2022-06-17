@@ -45,38 +45,35 @@ class _ProfileState extends State<Profile> {
           rechnungshistorie[i].toString());
     }
     print("\n");
-
+    print("rechnungshistorie[] für Rechnungshistorie");
     for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
-      print("i before fetchOffer: " + i.toString());
-      print("json[angebotId].toString(): " + json["angebotId"].toString());
+      //print("i before fetchOffer: " + i.toString());
+      print("rechnungshistorie[" + i.toString() + "] -> Angebot ID: " + json["angebotId"].toString());
       await fetchOffer(json["angebotId"].toString());
-      print("i after fetchOffer: " + i.toString());
-      print("\n");
+      //print("i after fetchOffer: " + i.toString());
     }
 
-    print("we got here");
-
+    /*
     for (int i = 0; i < angebote.length; i++) {
       print("angebote[" + i.toString() + "]: " + angebote[i].toString());
     }
-
+    */
     print("\n");
-
+    print("angebote[] für Rechnungshistorie");
     for (int i = 0; i < angebote.length; i++) {
       final json = angebote[i];
-      print("json[fwId].toString(): " + json["fwId"].toString());
+      print("angebote[" + i.toString() + "] -> FW ID: " + json["fwId"].toString());
       await fetchApartment(json["fwId"].toString());
     }
 
     print("\n");
-    wohnungen2 = ['Wähle'];
+    print("wohnungen[] für Rechnungshistorie");
     for (int i = 0; i < wohnungen.length; i++) {
       print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
-      setState(() {
-        wohnungen2.add(wohnungen[i].toString());
-      });
     }
+
+    print("\n");
   }
 
   Future<void> getUserWohnungen() async {
@@ -86,20 +83,17 @@ class _ProfileState extends State<Profile> {
           "/api/Ferienwohnung/" +
           LoginInfo().userid.toString() +
           "/user"));
-      print("Wohnungsname get body: " + response.body);
+      //print("Wohnungsname get body: " + response.body);
       final jsonData = jsonDecode(response.body) as List;
       wohnungen2 = ['Wähle'];
       for (int i = 0; i < jsonData.length; i++) {
-        print("jsonDataUserWohnungen[" +
-            i.toString() +
-            "].toString(): " +
-            jsonData[i].toString());
-        print(jsonData[i]["deaktiviert"]);
-        if (!jsonData[i]["deaktiviert"]) {
-          setState(() {
-            wohnungen2.add(jsonData[i]["wohnungsname"]);
-          });
-        }
+        //print("jsonDataUserWohnungen[" +
+        //    i.toString() +
+        //    "].toString(): " +
+        //    jsonData[i].toString());
+        setState(() {
+          wohnungen2.add(jsonData[i]["wohnungsname"]);
+        });
       }
     } catch (err) {
       print(err.toString());
@@ -144,10 +138,10 @@ class _ProfileState extends State<Profile> {
       //print("json[fwId].toString(): " + id);
       response = await http
           .get(Uri.parse(LoginInfo().serverIP + '/api/Ferienwohnung/' + id));
-      print("response body in fetchapartment: " + response.body);
+      //print("response body in fetchapartment: " + response.body);
       final jsonData = jsonDecode(response.body);
 
-      print("wohnung hinzugefügt: " + jsonData.toString());
+      //print("wohnung hinzugefügt: " + jsonData.toString());
       setState(() {
         wohnungen.add(jsonData["wohnungsname"]);
       });

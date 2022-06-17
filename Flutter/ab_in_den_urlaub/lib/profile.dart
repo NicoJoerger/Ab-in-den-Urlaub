@@ -20,6 +20,7 @@ class _ProfileState extends State<Profile> {
   var angebote = [];
   var wohnungen = [];
   List<String> wohnungen2 = ['Wähle']; // Option 2
+  var wohnungen2Infos = [];
   String _selectedLocation = "Wähle";
   var response;
   var Texth = 40.0;
@@ -32,8 +33,6 @@ class _ProfileState extends State<Profile> {
   final usernameCon = TextEditingController();
   final nachnameCon = TextEditingController();
   final vornameCon = TextEditingController();
-
-  String dropdownValue = 'Wähle Wohnung';
 
   void fuckyouasynchron() async {
     await fetchHistory();
@@ -49,7 +48,10 @@ class _ProfileState extends State<Profile> {
     for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
       //print("i before fetchOffer: " + i.toString());
-      print("rechnungshistorie[" + i.toString() + "] -> Angebot ID: " + json["angebotId"].toString());
+      print("rechnungshistorie[" +
+          i.toString() +
+          "] -> Angebot ID: " +
+          json["angebotId"].toString());
       await fetchOffer(json["angebotId"].toString());
       //print("i after fetchOffer: " + i.toString());
     }
@@ -63,7 +65,10 @@ class _ProfileState extends State<Profile> {
     print("angebote[] für Rechnungshistorie");
     for (int i = 0; i < angebote.length; i++) {
       final json = angebote[i];
-      print("angebote[" + i.toString() + "] -> FW ID: " + json["fwId"].toString());
+      print("angebote[" +
+          i.toString() +
+          "] -> FW ID: " +
+          json["fwId"].toString());
       await fetchApartment(json["fwId"].toString());
     }
 
@@ -93,6 +98,7 @@ class _ProfileState extends State<Profile> {
         //    jsonData[i].toString());
         setState(() {
           wohnungen2.add(jsonData[i]["wohnungsname"]);
+          wohnungen2Infos.add(jsonData[i]);
         });
       }
     } catch (err) {
@@ -189,6 +195,52 @@ class _ProfileState extends State<Profile> {
         );
       },
     );
+  }
+
+  Future<void> deactivateApartment(String id) async {
+    try {
+      //print("json[fwId].toString(): " + id);
+      response = await http.put(Uri.parse(LoginInfo().serverIP +
+          '/api/Ferienwohnung/deactivate?WohnungID=' +
+          id));
+
+      if (response.statusCode == 200) {
+        print("Ferienwohnung mit der id " + id + "wurde deaktiviert.");
+        _selectedLocation = "Wähle";
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Wohnung gelöscht.'),
+            content: const Text('Wohnung wurde gelöscht.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+
+      if (response.statusCode == 400) {
+        print("Wohnung hat aktive Angebote");
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Wohnung hat aktive Angebote.'),
+            content: const Text('Wohnung hat aktive Angebote und kann daher nicht gelöscht werden.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void loadCookies() async {
@@ -358,7 +410,17 @@ class _ProfileState extends State<Profile> {
                             width: 10,
                           ),
                           ElevatedButton(
-                            onPressed: () => _showWohnungInputDialog,
+                            onPressed: () {
+                              //_showWohnungInputDialog();
+                              //_selectedLocation
+                              for (int i = 0; i < wohnungen2Infos.length; i++) {
+                                if (wohnungen2Infos[i]["wohnungsname"] ==
+                                    _selectedLocation) {
+                                  deactivateApartment(
+                                      wohnungen2Infos[i]["fwId"].toString());
+                                }
+                              }
+                            },
                             child: const Text('Wohnung löschen'),
                           ),
                         ]),

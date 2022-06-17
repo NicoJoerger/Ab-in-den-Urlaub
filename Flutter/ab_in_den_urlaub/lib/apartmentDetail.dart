@@ -88,6 +88,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var jsonOffer;
   var jsonApart;
   var fwID = "";
+  String hochstbietender = "Basti stinkt";
   String mietzeitraumStart = "";
   String mietzeitraumEnde = "";
   String beschreibung = "";
@@ -124,92 +125,50 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   }""";
     try {
-      if (int.parse(tokenpreis) > 100) {
-        if (int.parse(newBet.text) > int.parse(tokenpreis)) {
-          response = await http.put(
-              Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              },
-              body: body);
-          print(response.body);
-          if (response.statusCode == 200) {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Bieten Erfolgreich'),
-                content: Text('Danke für das bieten auf eine Wohnung.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
+      //if (int.parse(tokenpreis) > 100) {
+      //if (int.parse(newBet.text) > int.parse(tokenpreis)) {
+      response = await http.post(Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: body);
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Bieten Erfolgreich'),
+            content: Text('Danke für das bieten auf eine Wohnung.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
               ),
-            );
-            setState(() {
-              tokenpreis = newBet.text;
-            });
-          } else {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Bieten Fehlgeschlagen'),
-                content: Text('Seite bitte neu laden'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
-          }
-        }
+            ],
+          ),
+        );
+        setState(() {
+          tokenpreis = newBet.text;
+        });
       } else {
-        if (int.parse(newBet.text) > int.parse(tokenpreis)) {
-          response = await http.post(
-              Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8'
-              },
-              body: body);
-          print(response.body);
-          if (response.statusCode == 200) {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Bieten Erfolgreich'),
-                content: Text('Danke für das bieten auf eine Wohnung.'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Bieten Fehlgeschlagen'),
+            content: Text(
+                'Sie müssen das aktuelle Gebot überbieten. (Gegegebenfalls Seite neu laden)'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
               ),
-            );
-            setState(() {
-              tokenpreis = newBet.text;
-            });
-          } else {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Bieten Fehlgeschlagen'),
-                content: Text('Seite bitte neu laden'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
-          }
-        }
+            ],
+          ),
+        );
       }
-      print(response.body);
+
+      fetchGebot();
     } catch (err) {
       print(err.toString());
     }
@@ -320,6 +279,25 @@ class _apartmentDetailState extends State<apartmentDetail> {
       print(err.toString());
     }
     fetchImage();
+  }
+
+  void fetchGebot() async {
+    String urlImg = LoginInfo().serverIP +
+        '/api/Gebot/' +
+        LoginInfo().currentAngebot +
+        '/a';
+    try {
+      response = await http.get(Uri.parse(urlImg));
+      jsons = jsonDecode(response.body);
+      String userId = jsons[0]["userId"].toString();
+      if (userId == LoginInfo().userid.toString()) {
+        setState(() {
+          hochstbietender = "Sie sind aktuell Höchstbietender";
+        });
+      }
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void loadCookies() async {
@@ -522,6 +500,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                                 TextButton(
                                   onPressed: () => {
                                     postBet(),
+
                                     /*setState(() {
                                       //tokenpreis = newBet.text;
                                     }),*/
@@ -532,8 +511,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                               ],
                             ),
                           ),
-                          child: const Text('Bieten3'),
+                          child: const Text('Bieten'),
                         ),
+                        Text(hochstbietender)
                       ],
                     )),
               ],

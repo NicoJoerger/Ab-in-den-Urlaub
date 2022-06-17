@@ -1,18 +1,13 @@
 import 'dart:convert';
-import 'package:http_parser/http_parser.dart';
-import 'dart:io' as Io;
 import 'package:image_picker_web/image_picker_web.dart';
 
 import 'dart:typed_data';
-import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'globals.dart';
 import 'dart:html' as html;
@@ -53,6 +48,7 @@ class _nWohnungState extends State<nWohnung> {
   List<Image> tempBilder = [];
 
   List<Uint8List> bytesFromPicker = [];
+  List<Int32List> int32bytesFromPicker = [];
 
   String uint8ListTob64(Uint8List uint8list) {
     String base64String = base64Encode(uint8list);
@@ -85,6 +81,7 @@ class _nWohnungState extends State<nWohnung> {
         print(jsonData);
         wgbId.add(jsonData["wgbId"]);
         print("mazze");
+        //bytesFromPicker[0]
         print("Imagedata :" + bytesFromPicker[i].toString());
       }
       /*
@@ -307,10 +304,20 @@ class _nWohnungState extends State<nWohnung> {
     //List<Image> fromPicker = (await ImagePickerWeb.getMultiImagesAsWidget())!;
     bytesFromPicker = (await ImagePickerWeb.getMultiImagesAsBytes())!;
     for (int i = 0; i < bytesFromPicker.length; i++) {
+      ByteData byteData = bytesFromPicker[i].buffer.asByteData();
+      int32bytesFromPicker.add(byteData.buffer.asInt32List());
       tempBilder.add(Image(
         image: MemoryImage(bytesFromPicker[i]),
       ));
+
+      //List<int> int32List = [
+      //  for (var offset = 0; offset < bytesFromPicker[i].length; offset += 4)
+      //    byteData.getInt32(offset, Endian.big),
+      //];
+      //byteData.buffer.asInt32List();
+      //print("Int32List: " + byteData.buffer.asInt32List().toString());
     }
+
     setState(() {
       Bilder = tempBilder;
     });

@@ -14,9 +14,9 @@ class nAngebot extends StatefulWidget {
 }
 
 class _nAngebotState extends State<nAngebot> {
-  var Containerh = 40.0;
-  var Containerw = 400.0;
-  var ContentWFactor = 0.2;
+  var containerHight = 40.0;
+  var containerWidth = 400.0;
+  var contentWidthFactor = 0.2;
   String dropdownValue = 'One';
   List<String> wohnungen2 = ['Wähle']; // Option 2
   String _selectedLocation = "Wähle";
@@ -24,6 +24,13 @@ class _nAngebotState extends State<nAngebot> {
   DateTime selectedABeginn = DateTime.now();
   DateTime selectedREnde = DateTime.now();
   DateTime selectedAEnde = DateTime.now();
+
+  bool landLordStatus   = LoginInfo().vermieter;
+  bool offerCancellable = false;
+  final tokenPriceController = TextEditingController();
+  final rentalPriceController = TextEditingController();
+  var dict = new Map();
+  Map<String, int> dictionaryFeriwnwohnungNameID = {};
 
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
@@ -86,7 +93,8 @@ class _nAngebotState extends State<nAngebot> {
   }
 
   Future<void> getUserWohnungen() async {
-    try {
+    try 
+    {
       print("HI Get Wohnungsname");
       var response = await http.get(Uri.parse(LoginInfo().serverIP +
           "/api/Ferienwohnung/" +
@@ -95,18 +103,22 @@ class _nAngebotState extends State<nAngebot> {
       print("Wohnungsname get body: " + response.body);
       final jsonData = jsonDecode(response.body) as List;
       wohnungen2 = ['Wähle'];
+      print('\ndict\n');
       for (int i = 0; i < jsonData.length; i++) {
-        print("jsonDataUserWohnungen[" +
+        /*print("jsonDataUserWohnungen[" +
             i.toString() +
             "].toString(): " +
             jsonData[i].toString());
-        print(jsonData[i]["deaktiviert"]);
+        print(jsonData[i]["deaktiviert"]);*/
         if (!jsonData[i]["deaktiviert"]) {
           setState(() {
             wohnungen2.add(jsonData[i]["wohnungsname"]);
+            // add fwId to dict
+            dict[jsonData[i]["wohnungsname"].toString()] = jsonData[i]["fwId"];
           });
         }
       }
+      print('\nfertiiiiiiiiiiiiiig\n');
     } catch (err) {
       print(err.toString());
     }
@@ -135,14 +147,22 @@ class _nAngebotState extends State<nAngebot> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
+                // spacing
+                SizedBox(
+                  height: 1/10 * MediaQuery.of(context).size.height,
+                ),
+
                 Container(),
+                
                 const Text(
                   "Wohnung",
                   style: TextStyle(fontSize: 30),
                 ),
+                
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SizedBox(
-                    width: Containerw,
+                    width: containerWidth,
                     child: const Text("Zu vermietende Wohnung"),
                   ),
                   SizedBox(
@@ -167,18 +187,20 @@ class _nAngebotState extends State<nAngebot> {
                     ),
                   )
                 ]),
+                
                 const Text(
                   "Reise",
                   style: TextStyle(fontSize: 30),
                 ),
+                
                 SizedBox(
-                  height: Containerh,
+                  height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Containerw,
+                        width: containerWidth,
                         child: Text("Reisebeginn: " +
                             "${selectedRBeginn.toLocal()}".split(' ')[0] +
                             "  "),
@@ -193,14 +215,15 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
+                
                 SizedBox(
-                  height: Containerh,
+                  height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Containerw,
+                        width: containerWidth,
                         child: Text("Abreisetag: " +
                             "${selectedREnde.toLocal()}".split(' ')[0] +
                             "  "),
@@ -215,18 +238,20 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
+                
                 const Text(
                   "Auktion",
                   style: TextStyle(fontSize: 30),
                 ),
+                
                 SizedBox(
-                  height: Containerh,
+                  height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Containerw,
+                        width: containerWidth,
                         child: Text("Auktionbeginn: " +
                             "${selectedABeginn.toLocal()}".split(' ')[0] +
                             "  "),
@@ -241,14 +266,15 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
+                
                 SizedBox(
-                  height: Containerh,
+                  height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Containerw,
+                        width: containerWidth,
                         child: Text("Auktionsende: " +
                             "${selectedAEnde.toLocal()}".split(' ')[0] +
                             "  "),
@@ -263,7 +289,100 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                Text("stonierbar")
+                
+                // Text
+                const Text(
+                  'Preise/Storno',
+                  style: TextStyle(fontSize: 30),
+                ),
+
+                // TextFormField token price
+                SizedBox
+                (
+                  width: 1.5 * containerWidth,
+                  child: TextFormField
+                  (
+                    controller: tokenPriceController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Please enter tokenprice',
+                    ),
+                  ),
+                ),
+
+                // TextFormField rental price
+                SizedBox
+                (
+                  width: 1.5 * containerWidth,
+                  child: TextFormField
+                  (
+                    controller: rentalPriceController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: UnderlineInputBorder(),
+                      labelText: 'Please enter rental price.',
+                    ),
+                  ),
+                ),
+  
+                // Checkbox cancellable
+                SizedBox
+                (
+                  width: 1.5 * containerWidth,
+                  child: Row
+                  (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: 
+                    [
+                      const Text("stonierbar"),
+                      Checkbox
+                      (
+                        activeColor: Colors.orange,
+                        checkColor: Colors.green,
+                        value: offerCancellable,
+                        onChanged: (value) 
+                        {
+                          setState(() 
+                          {
+                            offerCancellable = value!;
+                          });
+                        },
+                      ),
+                    ]
+                  )
+                ),
+              
+                // spacing
+                SizedBox(
+                  height: 1/30 * MediaQuery.of(context).size.height,
+                ),
+
+                // Button post Offer
+                SizedBox
+                (
+                  width: 1.5 * containerWidth,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.green,
+                    child: OutlinedButton(
+                      child: const Text('Wohnung registrieren',
+                          style: TextStyle(color: Colors.black)),
+                      onPressed: () {
+                        if(offerFormIsFilled())
+                        {
+                          postOffer();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+
+                // spacing
+                SizedBox(
+                  height: 1/10 * MediaQuery.of(context).size.height,
+                )              
+                
               ],
             ),
           ),
@@ -271,4 +390,136 @@ class _nAngebotState extends State<nAngebot> {
       ),
     );
   }
+
+  void postOffer() async {
+
+    // url for post offer
+    String url = LoginInfo().serverIP + '/api/Angebote';
+
+    // post Angebot
+    final postOfferResponse = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+      body: await buildPostOfferJSON()
+    );
+
+    if( postOfferResponse.statusCode == 200 ) // post Offer succeded
+    {
+      showDialog<String>
+      (
+        context: context,
+        builder: (BuildContext context) => AlertDialog
+        (
+          title: const Text('Angebot erfolgreich abgegeben.'),
+          actions: <Widget>
+          [
+            TextButton
+            (
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+    else // post Offer didnt succeded
+    {
+      String errorMessage = '';
+
+      // Error checking.
+      if(LoginInfo().userid == -1)
+      {
+        errorMessage = 'Sie sind nicht eingeloggt.';
+      }
+
+      showDialog<String>
+      (
+        context: context,
+        builder: (BuildContext context) => AlertDialog
+        (
+          title: const Text('Angebot nicht erfolgreich abgegeben.'),
+          content: Text(errorMessage),
+          actions: <Widget>
+          [
+            TextButton
+            (
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );     
+    }
+
+    // check if offer is in DB
+    
+  }
+
+  Future<String> buildPostOfferJSON() async 
+  {
+  
+    // vars
+    String startOfJourney = selectedRBeginn.year.toString() + '-' + 
+                            selectedRBeginn.month.toString().padLeft(2, '0')  + '-' + 
+                            selectedRBeginn.day.toString().padLeft(2, '0');
+                            
+
+    String endOfJourney   = selectedREnde.year.toString() + '-' + 
+                            selectedREnde.month.toString().padLeft(2, '0') + '-' +
+                            selectedREnde.day.toString().padLeft(2, '0');
+
+    String endOfAuction   = selectedAEnde.year.toString()   + '-' + 
+                            selectedAEnde.month.toString().padLeft(2, '0') + '-' + 
+                            selectedAEnde.day.toString().padLeft(2, '0');
+                            
+
+    String offerPostQuery = jsonEncode(<String, Object>{
+      "fwId"               : dict[_selectedLocation]!,
+      "mietzeitraumStart"  : startOfJourney,
+      "mietzeitraumEnde"   : endOfJourney,
+      "auktionEnddatum"    : endOfAuction,
+      "aktuellerTokenpreis": tokenPriceController.text,
+      "mietpreis"          : rentalPriceController.text,
+      "stornierbar"        :  offerCancellable
+    });
+
+    print('\nofferPostQuery\n'+offerPostQuery+'\n');
+
+    return offerPostQuery;
+  }
+
+  bool offerFormIsFilled()
+  {
+    bool offerFormIsFilled = false;
+
+    if(
+            tokenPriceController.text.isNotEmpty
+        &&  rentalPriceController.text.isNotEmpty
+        &&  _selectedLocation != 'Wähle') 
+    {
+      offerFormIsFilled = true;
+    }
+    else
+    {
+      showDialog<String>
+      (
+        context: context,
+        builder: (BuildContext context) => AlertDialog
+        (
+          title: const Text('Formular ist nicht ausgefüllt.'),
+          actions: <Widget>
+          [
+            TextButton
+            (
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return offerFormIsFilled;
+  }
+  
 }

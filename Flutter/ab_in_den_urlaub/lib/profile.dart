@@ -16,7 +16,6 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String url = LoginInfo().serverIP + '/api/Nutzer';
-  bool vermieter = LoginInfo().vermieter;
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
@@ -31,11 +30,13 @@ class _ProfileState extends State<Profile> {
   final usernameCon = TextEditingController();
   final nachnameCon = TextEditingController();
   final vornameCon = TextEditingController();
+  bool vermieter = false;
 
   String dropdownValue = 'Wähle Wohnung';
 
   void fuckyouasynchron() async {
     await fetchHistory();
+    vermieter = await getUserVermieterStatus();
 
     for (int i = 0; i < rechnungshistorie.length; i++) {
       print("rechnungshistorie[" +
@@ -276,7 +277,6 @@ class _ProfileState extends State<Profile> {
     print("initState() entered.\n");
     // TODO: implement initState
     fuckyouasynchron();
-
     super.initState();
     print("initState() exited.\n");
   }
@@ -296,7 +296,7 @@ class _ProfileState extends State<Profile> {
             child: Column(
               children: [
                 Visibility(
-                  visible: LoginInfo().vermieter,
+                  visible: vermieter,
                   child: Container(
                     height: 50,
                     color: Colors.blue,
@@ -460,13 +460,11 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Checkbox(
-                        value: LoginInfo().vermieter,
+                        value: vermieter,
                         onChanged: (val) {
                           setState(() {
                             LoginInfo().vermieter = val!;
-                            // oleg
                             vermieter = val;
-                            // oleg
                             setUserToVermieter();
                           });
                         }),
@@ -690,5 +688,21 @@ class _ProfileState extends State<Profile> {
         body: jsonEncode(jsonData)
       );      
     }
+  }
+
+  Future<bool> getUserVermieterStatus() async {
+
+    // fetch user
+    String url = LoginInfo().serverIP + '/api/Nutzer/'+LoginInfo().userid.toString();
+    
+    // run Querry
+    var responseUserIDQuery = await http.get(
+      Uri.parse(url),
+      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    // return user vermmieter
+    return jsonDecode(responseUserIDQuery.body)['vermieter'];
+
   }
 }

@@ -14,11 +14,9 @@ class nAngebot extends StatefulWidget {
 }
 
 class _nAngebotState extends State<nAngebot> {
-
   var Containerh = 40.0;
   var Containerw = 400.0;
   var ContentWFactor = 0.2;
-
   String dropdownValue = 'One';
   List<String> wohnungen2 = ['Wähle']; // Option 2
   String _selectedLocation = "Wähle";
@@ -26,8 +24,6 @@ class _nAngebotState extends State<nAngebot> {
   DateTime selectedABeginn = DateTime.now();
   DateTime selectedREnde = DateTime.now();
   DateTime selectedAEnde = DateTime.now();
-  bool stornierbar = false;
-  final mietpreisController = TextEditingController();
 
   void loadCookies() async {
     LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
@@ -104,9 +100,12 @@ class _nAngebotState extends State<nAngebot> {
             i.toString() +
             "].toString(): " +
             jsonData[i].toString());
-        setState(() {
-          wohnungen2.add(jsonData[i]["wohnungsname"]);
-        });
+        print(jsonData[i]["deaktiviert"]);
+        if (!jsonData[i]["deaktiviert"]) {
+          setState(() {
+            wohnungen2.add(jsonData[i]["wohnungsname"]);
+          });
+        }
       }
     } catch (err) {
       print(err.toString());
@@ -264,165 +263,12 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                Container
-                (
-                  alignment: Alignment.center,
-                  child: TextField
-                  (
-                    controller: mietpreisController,
-                    decoration: const InputDecoration
-                    (
-                      border: OutlineInputBorder(),
-                      labelText: 'mietpreis',
-                    ),
-                  ),
-                ),
-                Container
-                (
-                  alignment: Alignment.center,
-                  child: Row
-                  (
-                    children: 
-                    [
-                      const Text("stonierbar", textAlign: TextAlign.center),
-                      Checkbox(value: stornierbar,
-                        activeColor: Colors.green,
-                        onChanged: (newVal)
-                        {
-                          stornierbar = newVal!;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                // send button
-                Container
-                (
-                  width: Containerw,
-                  color: Colors.green,
-                  child: OutlinedButton(
-                  child: const Text
-                  (
-                    'Angebot abgeben',
-                    style: TextStyle(color: Colors.black)),
-                    onPressed: () 
-                    {
-                      addAngebot();
-                    },
-                  ),
-                ),
+                Text("stonierbar")
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  void addAngebot() async
-  {    
-    String url = LoginInfo().serverIP + '/api/Angebote';
-
-    String s = jsonEncode(<String, String>{
-        'FW_ID'              : await fetchWohnungsID()     ,
-        'Mietzeitraum_Start' : selectedRBeginn.toString()  ,
-        'Mietzeitraum_Ende'  : selectedREnde.toString()    ,
-        'Auktion_EndDatum'   : selectedABeginn.toString()  ,
-        'aktuellerTokenpreis': selectedAEnde.toString()    ,
-        'Mietpreis'          : mietpreisController.text    ,
-        'Stornierbar'        : stornierbar.toString()      ,
-
-      });
-
-      print('\n post request: \n '+s+'\n');
-
-    
-    var res = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-
-      body: jsonEncode(<String, String>{
-        'fwId'              : fetchWohnungsID().toString(),
-        'Mietzeitraum_Start' : selectedRBeginn.toString()  ,
-        'Mietzeitraum_Ende'  : selectedREnde.toString()    ,
-        'Auktion_EndDatum'   : selectedABeginn.toString()  ,
-        'aktuellerTokenpreis': selectedAEnde.toString()    ,
-        'Mietpreis'          : mietpreisController.text    ,
-        'Stornierbar'        : stornierbar.toString()      ,
-
-      }),
-    );
-
-    // AlertDialog
-    if(res.statusCode != 200)
-    {
-      showDialog<String>
-      (
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Angebot nicht erstellt.'),
-          content: const Text('Angebot nicht erstellt.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-    else
-    {
-      showDialog<String>
-      (
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Angebot erstellt.'),
-          content: const Text('Angebot erstellt.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    print('\n'+res.statusCode.toString()+'\n');
-
-    // check
-    var testRes = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    print('\n'+testRes.body+'\n');
-
-    
-  }
-
-  Future<String> fetchWohnungsID () async
-  {
-
-    // send get request '/api/Ferienwohnung/{userID}/user'
-    String userID        = LoginInfo().userid.toString();
-    String getWohnungUrl = LoginInfo().serverIP + '/api/Ferienwohnung/'+userID;
-
-    // fetch fwId
-    var responseGet = await http.get(Uri.parse(getWohnungUrl));
-
-    var body = jsonDecode(responseGet.body);
-
-    int fwId = body['fwId'];
-
-    print('\nfwId: '+fwId.toString()+'\n');
-
-    // return fwId
-    return fwId.toString();
-
   }
 }

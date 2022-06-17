@@ -1,22 +1,17 @@
 import 'dart:convert';
-import 'package:http_parser/http_parser.dart';
-import 'package:universal_io/io.dart' as io;
+import 'package:image_picker_web/image_picker_web.dart';
+
 import 'dart:typed_data';
-import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:cross_file_image/cross_file_image.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import 'globals.dart';
 import 'dart:html' as html;
 import 'appBars.dart';
-
-
 
 class nWohnung extends StatefulWidget {
   nWohnung({Key? key}) : super(key: key);
@@ -24,10 +19,9 @@ class nWohnung extends StatefulWidget {
   _nWohnungState createState() => _nWohnungState();
 }
 
-
 Image image = Image(image: AssetImage("/images/Empty.png"));
-List<Widget> Bilder = [];
-List<html.File> images = [];
+List<Image> Bilder = [];
+//List<File> images = [];
 List<XFile> xImages = [];
 
 class _nWohnungState extends State<nWohnung> {
@@ -51,6 +45,16 @@ class _nWohnungState extends State<nWohnung> {
   final betten = new TextEditingController();
   var wgbId = [];
   var fwId;
+  List<Image> tempBilder = [];
+
+  List<Uint8List> bytesFromPicker = [];
+  List<Int32List> int32bytesFromPicker = [];
+
+  String uint8ListTob64(Uint8List uint8list) {
+    String base64String = base64Encode(uint8list);
+    String header = "data:image/png;base64,";
+    return header + base64String;
+  }
 
   void postWohnungsBilder() async {
     try {
@@ -64,7 +68,11 @@ class _nWohnungState extends State<nWohnung> {
     "fwId": """ +
                 fwId.toString() +
                 """ } """);
-        
+/*
+                """, + "bild\":\"""" +
+                uint8ListTob64(bytesFromPicker[i]) +
+                """\"} """
+*/
         print(response.statusCode);
         final jsonData = jsonDecode(response.body);
 
@@ -73,31 +81,35 @@ class _nWohnungState extends State<nWohnung> {
         print(jsonData);
         wgbId.add(jsonData["wgbId"]);
         print("mazze");
+        //bytesFromPicker[0]
+        print("Imagedata :" + bytesFromPicker[i].toString());
       }
+      /*
       print(Bilder.length.toString());
       for (var i = 0; i < Bilder.length; i++) {
         print("try leude");
-       // Image bild = Bilder[i] as Image;
+        Image bild = Bilder[i];
         print("mazze stinkt");
-        //print("\n" + Bilder[i] +"\n")
-        try {
-            io.File fBild = io.File(xImages[i].path);
-        } catch (e) {
-          print(e.toString());
-        }
-        io.File fBild = io.File(xImages[i].path);
-        print("\n FILE::" + fBild.toString() + "\n");
-        Uint8List _bytesData = Base64Decoder().convert(fBild.toString().split(",").last);
+        bild.image
+            //print("\n" + Bilder[i] +"\n");
+            //final bytes = Io.File(bil).readAsBytesSync();
+            ;
+        print("bild string" + bild.image.toString());
+
+        //String img64 = base64Encode(bytes);
+        Uint8List _bytesData =
+            Base64Decoder().convert(bild.toString().split(",").last);
         print("mazze stinkt ziemlich");
         
         List<int> selectedFile = _bytesData;
-        var req = http.MultipartRequest('PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
-        req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
-        //req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
+        var req = http.MultipartRequest(
+            'PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
+        //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
+        req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
         req.send().then((response));
         print("moinmacs hier");
       }
-
+*/
       if (response.statusCode == 200) {
         showDialog<String>(
           context: context,
@@ -278,10 +290,37 @@ class _nWohnungState extends State<nWohnung> {
     });*/
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(html.window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = html.window.localStorage['angebotID'].toString();
+    LoginInfo().userid =
+        int.parse(html.window.localStorage['userId'].toString());
+    LoginInfo().currentAngebot =
+        html.window.localStorage['angebotID'].toString();
     LoginInfo().tokens =
         int.parse(html.window.localStorage['tokenstand'].toString());
+  }
+
+  void pickImage2() async {
+//    List<Uint8List>? bytesFromPicker = await ImagePickerWeb.getMultiImagesAsBytes();
+
+    //List<Image> fromPicker = (await ImagePickerWeb.getMultiImagesAsWidget())!;
+    bytesFromPicker = (await ImagePickerWeb.getMultiImagesAsBytes())!;
+    for (int i = 0; i < bytesFromPicker.length; i++) {
+      ByteData byteData = bytesFromPicker[i].buffer.asByteData();
+      int32bytesFromPicker.add(byteData.buffer.asInt32List());
+      tempBilder.add(Image(
+        image: MemoryImage(bytesFromPicker[i]),
+      ));
+
+      //List<int> int32List = [
+      //  for (var offset = 0; offset < bytesFromPicker[i].length; offset += 4)
+      //    byteData.getInt32(offset, Endian.big),
+      //];
+      //byteData.buffer.asInt32List();
+      //print("Int32List: " + byteData.buffer.asInt32List().toString());
+    }
+
+    setState(() {
+      Bilder = tempBilder;
+    });
   }
 
   void pickImage() async {
@@ -310,6 +349,13 @@ class _nWohnungState extends State<nWohnung> {
     'Japan'
   ];
   String _selected_country = '';
+
+  @override
+  void initState() {
+    tempBilder = [];
+// TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -425,7 +471,7 @@ class _nWohnungState extends State<nWohnung> {
                           margin: EdgeInsets.all(20),
                           child: ElevatedButton(
                             onPressed: () {
-                              pickImage();
+                              pickImage2();
                             },
                             child: Text("Neues Bild hochladen"),
                           ),

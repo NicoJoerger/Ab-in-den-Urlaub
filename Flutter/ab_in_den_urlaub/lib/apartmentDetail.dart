@@ -1,5 +1,6 @@
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:io';
@@ -107,6 +108,145 @@ class _apartmentDetailState extends State<apartmentDetail> {
   bool balkon = false;
   bool stornierbar = false;
   TextEditingController _controller = TextEditingController();
+  final newBet = TextEditingController();
+
+  void postBet() async {
+    String body = """ {
+    "angebotId": """ +
+        LoginInfo().currentAngebot +
+        """,
+    "userId": """ +
+        LoginInfo().userid.toString() +
+        """,
+    "preis": """ +
+        newBet.text +
+        """
+
+  }""";
+    try {
+      if (int.parse(tokenpreis) > 100) {
+        if (int.parse(newBet.text) > int.parse(tokenpreis)) {
+          response = await http.put(
+              Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              },
+              body: body);
+          print(response.body);
+          if (response.statusCode == 200) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Bieten Erfolgreich'),
+                content: Text('Danke für das bieten auf eine Wohnung.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+            setState(() {
+              tokenpreis = newBet.text;
+            });
+          } else {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Bieten Fehlgeschlagen'),
+                content: Text('Seite bitte neu laden'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+      } else {
+        if (int.parse(newBet.text) > int.parse(tokenpreis)) {
+          response = await http.post(
+              Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8'
+              },
+              body: body);
+          print(response.body);
+          if (response.statusCode == 200) {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Bieten Erfolgreich'),
+                content: Text('Danke für das bieten auf eine Wohnung.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+            setState(() {
+              tokenpreis = newBet.text;
+            });
+          } else {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Bieten Fehlgeschlagen'),
+                content: Text('Seite bitte neu laden'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+      }
+      print(response.body);
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  Future<void> _showTokenInputDialog() async {
+    //
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return TextButton(
+          onPressed: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Wieviele Tokens wollen Sie bieten?'),
+              content: const Text('AlertDialog description'),
+              actions: <Widget>[
+                const TextField(
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ),
+          child: const Text('Show Dialog'),
+        );
+      },
+    );
+  }
 
   void fetchOffer() async {
     print("ID: " + angebotID);
@@ -196,9 +336,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   void fetchImage() async {
     print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP +
-        '/api/Wohnungsbilder/' +
-        fwID;
+    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + fwID;
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
@@ -360,14 +498,44 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   ],
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  alignment: Alignment.centerRight,
-                  margin: EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Bieten"),
-                  ),
-                ),
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Bieten'),
+                              content: const Text(
+                                  'Wieviele Tokens wollen Sie bieten?'),
+                              actions: <Widget>[
+                                TextFormField(
+                                  controller: newBet,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[0-9]')),
+                                  ],
+                                ),
+                                TextButton(
+                                  onPressed: () => {
+                                    postBet(),
+                                    /*setState(() {
+                                      //tokenpreis = newBet.text;
+                                    }),*/
+                                    Navigator.pop(context, 'Bieten'),
+                                  },
+                                  child: const Text('Bieten'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: const Text('Bieten3'),
+                        ),
+                      ],
+                    )),
               ],
             ),
           ),

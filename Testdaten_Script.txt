@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS kreditkartendaten;
 DROP TABLE IF EXISTS nutzer;
 
 
+
 CREATE TABLE IF NOT EXISTS nutzer (
 	user_id serial PRIMARY KEY,
 	username VARCHAR (50) UNIQUE NOT NULL,
@@ -22,6 +23,7 @@ CREATE TABLE IF NOT EXISTS nutzer (
 	lastbuy timestamp NOT NULL,
 	deaktiviert boolean
 );
+	
 
 CREATE TABLE IF NOT EXISTS kreditkartendaten (
 	kdd_ID serial PRIMARY KEY,
@@ -116,8 +118,6 @@ CREATE TABLE IF NOT EXISTS bewertung (
 );
 
 
--- Nutzer
-
 
 INSERT INTO nutzer (username, nachname, vorname, password, email, tokenstand, vermieter, admin, lastbuy, deaktiviert)
 VALUES ('BastianDerKönig', 'Huber', 'Bastian', 'mylittlepony123', 'emailtest', '0', 'false', 'true', '01.01.2000', 'false');
@@ -149,8 +149,6 @@ VALUES ('Jonas', 'Weber', 'Jonas', 'sfghthe23141', 'emailtest8', '0', 'false', '
 INSERT INTO nutzer (username, nachname, vorname, password, email, tokenstand, vermieter, admin, lastbuy, deaktiviert)
 VALUES ('Thorben', 'Wagner', 'Thorben', 'sdgaerhe253579', 'emailtest9', '0', 'true', 'false', '01.01.2000', 'false');
 
-
--- Kreditkarten
 
 
 INSERT INTO kreditkartendaten (user_id, kartennummer, cvv)
@@ -185,175 +183,138 @@ VALUES ('10', '56854877465213', '462');
 
 
 
--- Ferienwohnungen
-
-
--- Deutschland
+INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
+VALUES ('1', 'Goldgrube', 'Goldstrasse', '1', 'Deutschland', 'Hamburg', '20095', '60', '3', '1', '1', 'true', 'false', 'false', 'Dies ist eine Beschreibung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('1', 'Fernsehturm Tower', 'Voltastrasse', '16', 'Deutschland', 'Berlin', '10115', '60', '3', '1', '1', 'true', 'false', 'false', 'Der Stuttgarter Fernsehturm ist ein 216,6 Meter hoher Fernseh- und Aussichtsturm auf dem Gipfel des Hohen Bopsers in der baden-württembergischen Landeshauptstadt Stuttgart.', 'false');
+VALUES ('1', 'Apartment Eifeltraum', 'Gunterstrasse', '22', 'Frankreich', 'Paris', '75000', '84', '4', '2', '1', 'true', 'true', 'true', 'Es hat einen tollen Balkon.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'St. Michaelis', 'Bartelsstrasse', '15', 'Deutschland', 'Hamburg', '20095', '88', '4', '2', '1', 'true', 'false', 'true', 'Die evangelische Hauptkirche Sankt Michaelis ist der bekannteste Kirchenbau von Hamburg und gilt als bedeutendste Barockkirche Norddeutschlands. Für die Schifffahrt auf der Elbe stellt der weithin sichtbare Sakralbau mit seiner markanten Architektur seit langem das Wahrzeichen der Hansestadt dar.', 'false');
+VALUES ('3', 'Big Ben Palast', 'Hansjosephstrasse', '69', 'Großbritannien', 'London', '74000', '57', '1', '1', '1', 'true', 'false', 'false', 'Die Wohnung ist neu möbeliert.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Schloss Nymphenburg', 'Klarastrasse', '13', 'Deutschland', 'München', '80331', '88', '4', '2', '1', 'true', 'false', 'true', 'Schloss Nymphenburg ist ein Baudenkmal im Bezirk Neuhausen-Nymphenburg der bayerischen Landeshauptstadt München. Es war von 1715 bis 1918 Sommersitz der Kurfürsten und Könige von Bayern aus dem Haus Wittelsbach.', 'false');
+VALUES ('4', 'Kettenhaus', 'Klausstrasse', '4', 'Ungarn', 'Budapest', '24687', '87', '4', '1', '1', 'true', 'false', 'true', 'Der Garten ist toll.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'St. Petri Dom Bremen', 'Emmastrasse', '8', 'Deutschland', 'Bremen', '28195', '88', '4', '2', '1', 'true', 'false', 'true', 'Der St.-Petri-Dom in Bremen wurde über den Fundamenten älterer Vorgängerbauten vom 11. Jahrhundert an in romanischem Stil errichtet und seit dem 13. Jahrhundert in gotischem Stil umgebaut und erweitert. Gemauert ist dieser Kirchenbau aus Sandstein, an verborgenen Stellen der älteren Teile auch Tuffstein.', 'false');
-
-
--- Frankreich
+VALUES ('5', 'Gamla Stan', 'Guntherstrasse', '34', 'Schweden', 'Stockholm', '54762', '55', '2', '2', '1', 'false', 'false', 'false', 'Kleine Wohnung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('1', 'Apartment Eifeltraum', 'Rue Le Peletier', '11', 'Frankreich', 'Paris', '75000', '84', '4', '2', '1', 'true', 'true', 'true', 'Der Eiffelturm ist ein 330 Meter hoher Eisenfachwerkturm in Paris. Er steht im 7. Arrondissement am nordwestlichen Ende des Champ de Mars, nahe dem Ufer der Seine.', 'false');
+VALUES ('5', 'Gran Via', 'Techstrasse', '11', 'Spanien', 'Madrid', '35486', '97', '5', '4', '2', 'true', 'true', 'true', 'Wunderschöne Wohnung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Notre Dame de la Garde', 'Rue de la Rotonde', '3', 'Frankreich', 'Marseille', '13000', '88', '4', '2', '1', 'true', 'false', 'true', 'Notre-Dame de la Garde, im Volksmund La Bonne Mère – „die gute Mutter“, ist eine Marien-Wallfahrtskirche in Marseille. Sie wird jährlich von zwei Millionen Menschen besucht. Das neuromanisch-byzantinische Gotteshaus steht auf einer 161 m hohen Anhöhe und ist ein weithin sichtbares Wahrzeichen der Stadt.', 'false');
+VALUES ('7', 'NOTRE-DAME CATHEDRAL BASILICA', 'Pustekuchenstrasse', '42', 'Kanada', 'Ottawa', '54882', '74', '3', '1', '1', 'true', 'false', 'false', 'Super.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Place de la Bourse', 'Rue Malleret', '20', 'Frankreich', 'Bordeaux', '30072', '88', '4', '2', '1', 'true', 'false', 'true', 'Place de la Bourse ist ein Platz in Bordeaux, Frankreich und eine der bekanntesten Sehenswürdigkeiten der Stadt. Es wurde von 1730 bis 1775 entlang des Flusses Garonne erbaut und war eine Mehrgebäudeanlage, die vom Architekten Ange-Jacques Gabriel entworfen wurde.', 'false');
+VALUES ('8', 'Monument der Chuch e', 'Graustrasse', '8', 'Nordkorea', 'Pjöngjang', '12684', '60', '3', '1', '1', 'true', 'false', 'false', 'Nette Bude.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Vieux Lyon', 'Rue Raulin', '1', 'Frankreich', 'Lyon', '69000', '88', '4', '2', '1', 'true', 'false', 'true', 'Vieux Lyon liegt am Ufer der Saône und ist von Herrenhäusern aus der Renaissancezeit mit versteckten Innenhöfen und Dächern aus Terracottaziegeln geprägt. Die mittelalterliche Kathedrale von Lyon ist wegen ihrer prächtigen astronomischen Uhr bekannt. Im Musée Cinéma et Miniature werden maßstabsgetreue Modelle des Miniaturkünstlers Dan Ohlmann gezeigt. Die mittelalterlichen Straßen führen auf und ab, zu gehobenen Restaurants und stilvollen Bars, die Beaujolais anbieten.', 'false');
-
-
--- Großbritannien
+VALUES ('8', 'Akropolis', 'Mausstrasse', '54', 'Griechenland', 'Athen', '54862', '70', '2', '2', '1', 'true', 'false', 'false', 'Sehr nah zu der Innenstadt.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('3', 'Big Ben Palast', 'Orange St', '14', 'Großbritannien', 'London', '51639', '57', '1', '1', '1', 'true', 'false', 'false', 'Der Name Big Ben bezeichnet die mit 13,5 t Gewicht schwerste der fünf Glocken des berühmten Uhrturms am Palace of Westminster in London. Auch auf die Uhr oder den Uhrturm wird die Bezeichnung Big Ben häufig übertragen. Seit September 2012 heißt der Turm offiziell Elizabeth Tower.', 'false');
+VALUES ('10', 'Kaiserpalast', 'tutorstrasse', '2', 'Japan', 'Tokio', '79423', '88', '4', '2', '1', 'true', 'false', 'true', 'Dies ist eine Beschreibung.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Liverpool Cathedral', 'Great newton St', '4', 'Großbritannien', 'Liverpool', '35412', '88', '4', '2', '1', 'true', 'false', 'true', 'Liverpool Cathedral ist die im 20. Jahrhundert erbaute Kathedrale der anglikanischen Diözese Liverpool. Sie ist eine der letzten Großkirchen, die im Stil der Neogotik errichtet wurden. Die Kirche, deren offizieller Name Cathedral Church of Christ in Liverpool lautet, ist Jesus Christus dem Auferstandenen geweiht.', 'false');
+VALUES ('10', 'Kolosseum', 'Raststrasse', '4', 'Italien', 'Rom', '95127', '88', '4', '2', '1', 'true', 'false', 'true', 'Rom ist toll.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Kathedrale von Manchester', 'Bloom St', '19', 'Großbritannien', 'Manchester', '45645', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Kathedrale von Manchester ist die Domkirche der anglikanischen Diözese Manchester. Sie ist der hl. Maria, dem hl. Dionysius und dem hl. Georg geweiht.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'Hamburg', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Clifton Suspension Bridge', 'New Kingsley Rd', '10', 'Großbritannien', 'Bristol', '52600', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Clifton Suspension Bridge ist eine Kettenbrücke über den Fluss Avon im Südwesten Englands. Sie ist das Wahrzeichen der Stadt Bristol.', 'false');
-
-
--- Ungarn
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'München', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('4', 'Kettenbruecke', 'Izabella u.', '13', 'Ungarn', 'Budapest', '1007', '87', '4', '1', '1', 'true', 'false', 'true', 'Die Kettenbrücke, die in Budapest die Donau überspannt, wurde 1839 bis 1849 auf Anregung des ungarischen Reformers Graf István Széchenyi erbaut, dessen Namen sie trägt. Sie ist die älteste und bekannteste der neun Budapester Straßenbrücken über die Donau.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Deutschland', 'Bremen', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Szeged Zoo', 'Csemegi u.', '2', 'Ungarn', 'Szeged', '6700', '88', '4', '2', '1', 'true', 'false', 'true', 'Weitläufiger Tierpark mit verschiedenen exotischen Wildtieren in naturnahen Außengehegen.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Marseille', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Deri Museum', 'Kossuth u.', '4', 'Ungarn', 'Debrecen', '4000', '88', '4', '2', '1', 'true', 'false', 'true', 'Das Déri-Museum ist ein Kunst- und Volkskundemuseum in der ostungarischen Stadt Debrecen. Sein Hauptgebäude liegt am gleichnamigen Déri-Platz im Zentrum der Stadt.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Bordeaux', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Burg Diosgyoer', 'Szinyei Merse Pal u.', '17', 'Ungarn', 'Miskloc', '3500', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Burg Diósgyőr liegt in der ehemals selbstständigen Stadt Diósgyőr im Nordosten von Ungarn, die heute ein Stadtteil von Miskolc ist. Die Befestigung mit ihren vier mächtigen Ecktürmen ist auf der ungarischen 200-Forint-Banknote sowie auf Briefmarken abgebildet.', 'false');
-
-
--- Schweden
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Frankreich', 'Lyon', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('5', 'Gamla Stan', 'Jakobsgatan', '5', 'Schweden', 'Stockholm', '10316', '55', '2', '2', '1', 'false', 'false', 'false', 'Auf der kleinen und lebhaften Insel Gamla Stan liegt die Altstadt von Stockholm mit gepflasterten Straßen und Gebäuden aus dem 17. und 18. Jahrhundert. Zu den Sehenswürdigkeiten gehören die Sankt Nikolai kyrka aus dem Mittelalter und das Stockholmer Schloss, die offizielle Residenz des Königs. In den stilvollen Bistros wird neue skandinavische Küche serviert. Das Nachtleben spielt sich in traditionellen Bars und schicken Cocktailbars ab. In der Kirche Riddarholmskyrkan auf der angrenzenden Insel Riddarholmen finden im Sommer Konzerte statt.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Liverpool', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Dom zu Uppsala', 'Frodegatan', '13', 'Schweden', 'Uppsala', '74192', '88', '4', '2', '1', 'true', 'false', 'true', 'Der gotische Dom St. Erik, auch Eriksdom genannt, in der schwedischen Stadt Uppsala ist mit 118,7 Meter das höchste Kirchengebäude Skandinaviens. Der Dom ist sowohl Krönungs- als auch Grabstätte vieler schwedischer Könige und Sitz eines evangelisch-lutherischen Erzbischofs.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Manchester', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Oeresundbruecke', 'Barkgatan', '10', 'Schweden', 'Malmoe', '21111', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Öresundbrücke ist die weltweit längste Schrägseilbrücke für kombinierten Straßen- und Eisenbahnverkehr.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Großbritannien', 'Bristol', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Liseberg', 'Drottninggatan', '18', 'Schweden', 'Goeteborg', '40530', '88', '4', '2', '1', 'true', 'false', 'true', 'Liseberg ist ein Vergnügungspark im schwedischen Göteborg. Er wurde im Jahr 1923 eröffnet und hat eine Größe von 20 Hektar. Im Jahr 2016 wurde er von etwa 2,94 Millionen Menschen besucht.', 'false');
-
-
--- Spanien
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Szeged', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('5', 'Gran Via', 'C. de Bordadores', '13', 'Spanien', 'Madrid', '28001', '97', '5', '4', '2', 'true', 'true', 'true', 'Die Gran Vía war bis in die 1960er Jahre die größte und bedeutendste Einkaufsstraße Madrids. Auch heute gibt es dort noch zahlreiche Boutiquen, Kinos, Eisdielen und Theater. Sie beginnt in der Nähe der Plaza de Cibeles: An der Einmündung mit der Calle de Alcalá steht das Metropolis-Haus.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Debrecen', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Lonja de la Seda', 'Carrer de Cirilo Amoros', '10', 'Spanien', 'Valencia', '46001', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Lonja de la Seda bzw. Llotja de la Seda, zu deutsch Seidenbörse, befindet sich im spanischen Valencia in der Autonomen Gemeinschaft Valencia. Sie ist eine der wichtigsten Sehenswürdigkeiten der Stadt und Weltkulturerbe. Zurzeit ist sie Sitz der Kulturakademie Valencias und häufiger Ausstellungsort.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Ungarn', 'Miskloc', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Sagrada Familia', 'Carrer de Sardenya', '7', 'Spanien', 'Barcelona', '08001', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Sagrada Família (katalanisch [səˈɣɾaðə fəˈmiɫiə]; vollständige katalanische Bezeichnung Basílica i Temple Expiatori de la Sagrada Família, deutsch Basilika und Sühnetempel der Heiligen Familie) ist eine römisch-katholische Basilika der Modernisme in Barcelona und gilt als das Hauptwerk des katalanischen Baumeisters Antoni Gaudí. Ihr Bau wurde 1882 begonnen und dauert bis in die Gegenwart an. Das frühere Ziel, die Kirche bis zum 100. Todestag Gaudís im Jahre 2026 fertigzustellen, wird seit 2020 nicht mehr als realistisch angesehen.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Uppsala', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Plaza de Espana', 'C. Luis Cadarso', '1', 'Spanien', 'Sevilla', '41001', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Plaza de España ist einer der bekanntesten Plätze in Sevilla, Spanien. Als Sevilla 1929 die Iberoamerikanische Ausstellung veranstaltete, wurden viele Gebäude für die Ausstellung im María Luisa Park errichtet, unter diesen die Plaza de España von Aníbal González Álvarez-Ossorio.', 'false');
-
-
--- Kanada
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Malmoe', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('7', 'NOTRE-DAME CATHEDRAL BASILICA', 'Bassano St', '2', 'Kanada', 'Ottawa', '30468', '74', '3', '1', '1', 'true', 'false', 'false', 'Die Kathedralbasilika Notre Dame ist die älteste Kirche Ottawas und Sitz des römisch-katholischen Erzbistums Ottawa-Cornwall. Die Kirche befindet sich am Sussex Drive im Viertel Lowertown unweit der National Gallery of Canada östlich des Stadtzentrums. Dominiert wird das Bauwerk durch die Doppelturmfassade.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Schweden', 'Goeteborg', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'CN Tower', 'Golfdale Rd', '12', 'Kanada', 'Toronto', '94169', '88', '4', '2', '1', 'true', 'false', 'true', 'Der CN Tower in der südlichen Innenstadt Torontos ist ein 553 Meter hoher Fernsehturm und Wahrzeichen der Stadt. Er war von 1975 bis 2009 der höchste Fernsehturm der Welt.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Valencia', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Chateau Frontenac', 'Rue des Ormes', '8', 'Kanada', 'Quebec', '69586', '88', '4', '2', '1', 'true', 'false', 'true', 'Das Château Frontenac ist ein Luxushotel im Zentrum der kanadischen Stadt Québec und gilt als eine der Hauptsehenswürdigkeiten der Stadt. Es wurde 1893 durch den Architekten Bruce Price als typisches Eisenbahnhotel für die Eisenbahngesellschaft Canadian Pacific Railway im Stil des Historismus (Neogotik- und Neorenaissance-Elemente) errichtet und gehörte zur Kette der Canadian Pacific Hotels (heute Fairmont Hotels and Resorts). 1943 fand hier die Quadrant-Konferenz statt.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Barcelona', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Stanley Park', 'Laurel St', '12', 'Kanada', 'Vancouver', '79373', '88', '4', '2', '1', 'true', 'false', 'true', 'Der Stanley Park ist ein 404,9 Hektar großer Park in Vancouver. Er ist der größte Stadtpark Kanadas und der drittgrößte Nordamerikas. Der nach Frederick Arthur Stanley benannte Park befindet sich direkt neben der Innenstadt an der Nordspitze einer Halbinsel, die in den Fjord Burrard Inlet hineinragt.', 'false');
-
-
--- Niederlande
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Spanien', 'Sevilla', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('8', 'Rijksmuseum Amsterdam', 'Andreasplein', '8', 'Niederlande', 'Amsterdam', '1000', '60', '3', '1', '1', 'true', 'false', 'false', 'Das Rijksmuseum Amsterdam ist ein niederländisches Nationalmuseum am Museumplein im Amsterdamer Stadtteil Oud-Zuid im Stadtbezirk Amsterdam-Zuid. Das Museum ist den Künsten, dem Handwerk und der Geschichte gewidmet.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Toronto', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Mauritshuis', 'De Perponcherstraat', '2', 'Niederlande', 'Den Haag', '2500', '88', '4', '2', '1', 'true', 'false', 'true', 'Staatliche Sammlung mit Hunderten holländischer Gemälde, darunter Werke von Rembrandt und Vermeer.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Quebec', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Kubushaus', 'Anna Paulownastraat', '15', 'Niederlande', 'Rotterdam', '3000', '88', '4', '2', '1', 'true', 'false', 'true', 'Das Kubushaus ist ein Entwurfsmuster für Wohngebäude, das von dem Architekten Piet Blom auf der Basis von würfelförmigen, auf einer Ecke stehenden Baukörpern entwickelt wurde. In Helmond und Rotterdam wurden zwei Gebäudekomplexe errichtet, die modular aus diesen Baukörpern zusammengesetzt wurden.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Kanada', 'Vancouver', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Prinsentuin', 'Ernst Casimirlaan', '3', 'Niederlande', 'Groningen', '9700', '88', '4', '2', '1', 'true', 'false', 'true', 'Das Prinsentuin oder Prinsenhoftuin ist ein Garten im Renaissancestil, der sich in Groningen hinter dem Prinsenhof befindet Dieser Garten besteht aus einem Rosengarten, einem Kräutergarten, einem Teil mit Berceaus und einer Sonnenuhr an der Wand über dem Eingang.', 'false');
-
-
--- Griechenland
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Chongjin', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('8', 'Akropolis', 'Parasiou', '9', 'Griechenland', 'Athen', '10431', '70', '2', '2', '1', 'true', 'false', 'false', 'Die Akropolis in Athen ist die wohl bekannteste Vertreterin der als Akropolis bezeichneten Stadtfestungen des antiken Griechenlands. Die Athener Akropolis mit ihren bemerkenswerten Gebäuden wird deshalb oft einfach „die Akropolis“ genannt. Den ältesten Teil der Stadt Athen ließ Perikles nach der Zerstörung durch die Perser unter Leitung des berühmten Bildhauers Phidias von den Architekten Iktinos und Kallikrates sowie Mnesikles neu bebauen.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Hamhung', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Hagios Demetrios', 'Loustinianou', '6', 'Griechenland', 'Thessaloniki', '54248', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Kirche Hagios Demetrios oder einfach Demetriosbasilika ist eine dem heiligen Demetrios von Thessaloniki geweihte frühbyzantinische Kirche in Thessaloniki.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Nordkorea', 'Wonsan', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Lighthouse of Chania', 'Smirnis', '17', 'Griechenland', 'Chania', '73131', '88', '4', '2', '1', 'true', 'false', 'true', 'Ursprünglich im 16. Jahrhundert errichteter und 1839 von den Ägyptern umgebauter venezianischer Leuchtturm.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Thessaloniki', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Agios Titos', 'Dionisiou Solomou', '20', 'Griechenland', 'Iraklion', '14122', '88', '4', '2', '1', 'true', 'false', 'true', 'Agios Titos ist ein orthodoxer Kirchenbau im Zentrum der Altstadt von Iraklio. Er gehört zum Erzbistum von Kreta und beherbergt die Schädelreliquie des hl. Titos.', 'false');
-
-
--- Japan
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Chania', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Asakusa Schrein', 'Fujimi zaka', '8', 'Japan', 'Tokio', '1000000', '88', '4', '2', '1', 'true', 'false', 'true', 'Sensō-ji, bei anderer Lesung der Zeichen auch Asakusa-dera, ist ein buddhistischer Tempel in Asakusa, Tokio. Sein formeller Tempelname ist Kinryūzan. Es ist Tokios ältester und bedeutendster Tempel.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Griechenland', 'Iraklion', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Fushimi Inari Taisha', 'Tenji Dori', '7', 'Japan', 'Kyoto', '5200461', '88', '4', '2', '1', 'true', 'false', 'true', 'Der Fushimi Inari-Taisha ist ein Shintō-Schrein im Stadtbezirk Fushimi der Stadt Kyōto. Er ist dem Kami Inari gewidmet und ist der Hauptschrein etwa eines Drittels aller Inari-Schreine in Japan. Er gehört zu den ältesten und bekanntesten Shintō-Schreinen in Kyōto.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Kyoto', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Osaka Castle', 'Nagahori-dori', '3', 'Japan', 'Osaka', '5300000', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Burg Ōsaka befindet sich in der Stadt Osaka in der Präfektur Osaka in Japan. Sie ist eine von Japans berühmtesten Burgen und spielte eine wichtige Rolle bei der Vereinigung Japans im 16. Jahrhundert.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Osaka', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Ohori Park', 'Jidokaikan Dori', '19', 'Japan', 'Fukuoka', '8100000', '88', '4', '2', '1', 'true', 'false', 'true', 'Park mit Wegen am See & Bootsverleih.', 'false');
-
-
--- Italien
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Japan', 'Fukuoka', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Kolosseum', 'Via Milano', '14', 'Italien', 'Rom', '00042', '88', '4', '2', '1', 'true', 'false', 'true', 'Das Kolosseum ist das größte der im antiken Rom erbauten Amphitheater, der größte geschlossene Bau der römischen Antike und weiterhin das größte je gebaute Amphitheater der Welt. Zwischen 72 und 80 n. Chr. errichtet, diente das Kolosseum als Austragungsort zumeist höchst grausamer und brutaler Veranstaltungen, die von Mitgliedern des Kaiserhauses zur Unterhaltung und Belustigung der freien Bewohner Roms und des römischen Reichs bei kostenlosem Eintritt ausgerichtet wurden. Heute ist die Ruine des Bauwerks eines der Wahrzeichen der Stadt und zugleich ein Zeugnis für die hochstehende Baukunst der Römer in der Antike.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Florenz', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Uffizien', 'Via Giambattista Lulli', '16', 'Italien', 'Florenz', '50100', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Uffizien sind ein von 1560 bis etwa 1580 ursprünglich für die Unterbringung von Ministerien und Ämtern in Florenz errichteter Gebäudekomplex. Architekten waren Giorgio Vasari, Bernardo Buontalenti und Alfonso Parigi der Jüngere.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Venedig', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
 INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Rialtobruecke', 'Via Alipio Cappelletto', '10', 'Italien', 'Venedig', '30100', '88', '4', '2', '1', 'true', 'false', 'true', 'Die Rialtobrücke in Venedig ist eines der bekanntesten Bauwerke der Stadt. Die Brücke führt über den Canal Grande und hat eine Länge von 48 m, eine Breite von 22 m und eine Durchfahrtshöhe von 7,50 m. Die lichte Weite des einzigen Bogens beträgt 28,8 m.', 'false');
+VALUES ('10', 'tempname', 'tempstrasse', '4', 'Italien', 'Bologna', '11111', '88', '4', '2', '1', 'true', 'false', 'true', 'Beschreibung hier.', 'false');
 
-INSERT INTO ferienwohnung (user_id, wohnungsname, strasse, hausnummer, land, ort, plz, wohnflaeche, anzzimmer, anzbetten, anzbaeder, wifi, garten, balkon, beschreibung, deaktiviert)
-VALUES ('10', 'Garisenda', 'Via Domenico Zampieri', '4', 'Italien', 'Bologna', '40121', '88', '4', '2', '1', 'true', 'false', 'true', 'Die mittelalterlichen Geschlechtertürme sind ein Wahrzeichen der Stadt Bologna. Eine Besonderheit sind dabei die nebeneinander stehenden schiefen Türme Garisenda und Asinelli.', 'false');
-
-
--- Angebote
 
 
 INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
@@ -498,8 +459,6 @@ INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_endd
 VALUES ('44', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1394', 'false');
 
 
--- Gebote
-
 
 INSERT INTO gebot (angebot_id, user_id, preis)
 VALUES ('1', '10', '700');
@@ -517,14 +476,10 @@ INSERT INTO gebot (angebot_id, user_id, preis)
 VALUES ('9', '2', '800');
 
 
--- Token
-
 
 INSERT INTO tokens (tok_id, tokenpreis)
 VALUES ('1', '5');
 
-
--- Rechnungshistorie
 
 
 INSERT INTO rechnungshistorieeintrag (user_id, angebot_id, storniert)
@@ -541,23 +496,8 @@ VALUES ('7', '3', 'true');
 
 
 
--- Bewertungen
-
-
 INSERT INTO bewertung (user_id, fw_id, anzsterne, kommentar)
 VALUES ('1', '1', '5', 'Super Urlaub, kann ich nur empfehlen.');
 
 INSERT INTO bewertung (user_id, fw_id, anzsterne, kommentar)
 VALUES ('8', '1', '2', 'Angenehmer Wohnung, hätte aber besser sein koennen.');
-
-
-
-
-
-
-
-
-
-
-
-

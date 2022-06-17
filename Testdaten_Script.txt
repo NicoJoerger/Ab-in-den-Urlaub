@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS angebote (
 
 CREATE TABLE IF NOT EXISTS gebot (
 	gebot_id serial PRIMARY KEY,
-    angebot_ID INT NOT NULL PRIMARY KEY,
+    angebot_ID INT NOT NULL,
 	FOREIGN KEY (angebot_ID)
 		REFERENCES angebote (angebot_ID),
 	user_id INT NOT NULL,

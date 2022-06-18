@@ -429,8 +429,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
         print('review :'+countStarsList[i].toString()+'\n');
       }
 
+      // check if works tomorrow
+      if(usernameList.isNotEmpty) 
+      { 
+        setState(() {});
+      }
+
       print('\nEND fetchReviewsAndUsername\n');
-       
   }
 
   @override

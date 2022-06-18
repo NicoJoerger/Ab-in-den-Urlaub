@@ -34,7 +34,7 @@ class ApartmentCard extends StatefulWidget {
       this.angebotID = "",
       this.bewertung = "",
       this.von = "",
-      this.image =const Image(image: AssetImage("images/beach.jpg")),
+      this.image = const Image(image: AssetImage("images/beach.jpg")),
       this.bis = "",
       this.tokenP = 0,
       this.text = "0",
@@ -88,14 +88,17 @@ class _ApartmentCardState extends State<ApartmentCard> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            widget.anlagenName,
-                            style: TextStyle(fontSize: 30),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              widget.anlagenName,
+                              style: TextStyle(),
+                            ),
                           ),
-                          Text(
-                            widget.bewertung,
-                            style: TextStyle(color: Colors.grey, fontSize: 15),
-                          ),
+                          //Text(
+                          //  widget.bewertung,
+                          //  style: TextStyle(color: Colors.grey, fontSize: 15),
+                          //),
                           Text(
                             widget.tokenP.toString(),
                             style:

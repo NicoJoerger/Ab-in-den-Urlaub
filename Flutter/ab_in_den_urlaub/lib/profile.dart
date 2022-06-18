@@ -44,13 +44,6 @@ class _ProfileState extends State<Profile> {
     vermieter = await getUserVermieterStatus();
 
     for (int i = 0; i < rechnungshistorie.length; i++) {
-      /*
-      print("rechnungshistorie[" +
-          i.toString() +
-          "].toString(): " +
-          rechnungshistorie[i].toString());
-      */
-
       //print("rechnungshistorie[" +
       //    i.toString() +
       //    "].toString(): " +
@@ -60,19 +53,6 @@ class _ProfileState extends State<Profile> {
 
     for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
-      /*
-      print("i before fetchOffer: " + i.toString());
-      print("json[angebotId].toString(): " + json["angebotId"].toString());
-      */
-      await fetchOffer(json["angebotId"].toString());
-      /*
-      print("i after fetchOffer: " + i.toString());
-      print("\n");
-      */
-    }
-
-    /*
-    print("we got here");
       //print("i before fetchOffer: " + i.toString());
       //print("json[angebotId].toString(): " + json["angebotId"].toString());
       await fetchOffer(json["angebotId"].toString());
@@ -86,8 +66,6 @@ class _ProfileState extends State<Profile> {
       //print("angebote[" + i.toString() + "]: " + angebote[i].toString());
     }
 
-    print("\n");
-    */
     //print("\n");
 
     for (int i = 0; i < angebote.length; i++) {

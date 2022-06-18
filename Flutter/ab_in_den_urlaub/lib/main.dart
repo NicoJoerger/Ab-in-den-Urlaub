@@ -3,6 +3,7 @@ import 'package:ab_in_den_urlaub/neueWohnungPage.dart';
 import 'package:ab_in_den_urlaub/neuesAngebotPage.dart';
 import 'package:ab_in_den_urlaub/registrierung.dart';
 import 'package:ab_in_den_urlaub/testapi.dart';
+import 'package:ab_in_den_urlaub/testupload.dart';
 import 'package:ab_in_den_urlaub/tokens.dart';
 import 'package:flutter/material.dart';
 import 'profile.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       '/Tokens': (context) => Token(),
       '/Suche': (context) => sApartments(),
       '/Profile': (context) => Profile(),
-      '/apartmentDetail' :(context) => apartmentDetail(),
+      '/apartmentDetail': (context) => apartmentDetail(),
+      '/upload': (context) => UploadPage(),
     });
   }
 }

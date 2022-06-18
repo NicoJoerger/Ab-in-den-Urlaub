@@ -19,6 +19,7 @@ class _ProfileState extends State<Profile> {
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
+  var userData = [];
   var response;
   var Texth = 40.0;
   var Textw = 400.0;
@@ -50,6 +51,10 @@ class _ProfileState extends State<Profile> {
           rechnungshistorie[i].toString());
       */
 
+      //print("rechnungshistorie[" +
+      //    i.toString() +
+      //    "].toString(): " +
+      //    rechnungshistorie[i].toString());
     }
     //print("\n");
 
@@ -68,13 +73,22 @@ class _ProfileState extends State<Profile> {
 
     /*
     print("we got here");
+      //print("i before fetchOffer: " + i.toString());
+      //print("json[angebotId].toString(): " + json["angebotId"].toString());
+      await fetchOffer(json["angebotId"].toString());
+      //print("i after fetchOffer: " + i.toString());
+      //print("\n");
+    }
+
+    //print("we got here");
 
     for (int i = 0; i < angebote.length; i++) {
-      print("angebote[" + i.toString() + "]: " + angebote[i].toString());
+      //print("angebote[" + i.toString() + "]: " + angebote[i].toString());
     }
 
     print("\n");
     */
+    //print("\n");
 
     for (int i = 0; i < angebote.length; i++) {
       final json = angebote[i];
@@ -86,7 +100,7 @@ class _ProfileState extends State<Profile> {
 
     /*
     for (int i = 0; i < wohnungen.length; i++) {
-      print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
+      //print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
     }
     */
   }
@@ -138,6 +152,42 @@ class _ProfileState extends State<Profile> {
       });
     } catch (err) {
       //print(err.toString());
+    }
+  }
+
+  void fetchUser() async {
+    try {
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          '/api/Nutzer/' +
+          LoginInfo().userid.toString()));
+      final jsonData = jsonDecode(response.body);
+      setState(() {
+        userData.add(jsonData);
+      });
+      //print("userData[0]: " + userData[0].toString());
+      usernameCon.text = userData[0]["username"].toString();
+      nachnameCon.text = userData[0]["nachname"].toString();
+      vornameCon.text = userData[0]["vorname"].toString();
+      passRegCon.text = userData[0]["password"].toString();
+      passRegCon2.text = userData[0]["password"].toString();
+      emailRegCon.text = userData[0]["email"].toString();
+    } catch (err) {
+      print(err.toString());
+    }
+
+    try {
+      response = await http.get(Uri.parse(LoginInfo().serverIP +
+          '/api/Kreditkartendaten/' +
+          LoginInfo().userid.toString()));
+      final jsonData = jsonDecode(response.body);
+      setState(() {
+        userData.add(jsonData);
+      });
+      //print("userData[1]: " + userData[1].toString());
+      creditCon.text = userData[1]["kartennummer"].toString();
+      cvvCon.text = userData[1]["cvv"].toString();
+    } catch (err) {
+      print(err.toString());
     }
   }
 
@@ -289,7 +339,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    //print("initState() entered.\n");
+    print("initState() entered.\n");
+    fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
     super.initState();
@@ -417,6 +468,7 @@ class _ProfileState extends State<Profile> {
                   width: Textw,
                   height: Texth,
                   child: TextField(
+                    obscureText: true,
                     controller: passRegCon,
                     decoration: InputDecoration(
                       labelText: 'Passwort',
@@ -427,6 +479,7 @@ class _ProfileState extends State<Profile> {
                   width: Textw,
                   height: Texth,
                   child: TextField(
+                    obscureText: true,
                     controller: passRegCon2,
                     decoration: InputDecoration(
                       labelText: 'Passwort wiederholen',
@@ -674,52 +727,45 @@ class _ProfileState extends State<Profile> {
   }
 
   void setUserToVermieter() async {
-
     // fetch user
-    String get_user_url    = LoginInfo().serverIP + '/api/Nutzer/';
-    String put_user_url      = LoginInfo().serverIP + '/api/Nutzer';
-    String get_user_userId       = LoginInfo().userid.toString();
-    var response_get = await http.get(Uri.parse(get_user_url + get_user_userId));
+    String get_user_url = LoginInfo().serverIP + '/api/Nutzer/';
+    String put_user_url = LoginInfo().serverIP + '/api/Nutzer';
+    String get_user_userId = LoginInfo().userid.toString();
+    var response_get =
+        await http.get(Uri.parse(get_user_url + get_user_userId));
 
-
-
-    if(response.statusCode != 200)
-    {
+    if (response.statusCode != 200) {
       // http call /api/user/{id} didn't worked
-    }
-    else
-    {
+    } else {
       // http call /api/user/{id} worked
       final jsonData = jsonDecode(response_get.body);
 
       // set vermieter status
-      jsonData['vermieter'] = vermieter; 
- 
-      var response_put = await http.put(
-        Uri.parse(put_user_url),
-        headers: <String, String> 
-        {
-          'Content-Type': 'application/json; charset=UTF-8'
-        },    
-        body: jsonEncode(jsonData)
-      );      
+      jsonData['vermieter'] = vermieter;
+
+      var response_put = await http.put(Uri.parse(put_user_url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode(jsonData));
     }
   }
 
   Future<bool> getUserVermieterStatus() async {
-
     // fetch user
-    String url = LoginInfo().serverIP + '/api/Nutzer/'+LoginInfo().userid.toString();
-    
+    String url =
+        LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
+
     // run Querry
     var responseUserIDQuery = await http.get(
       Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
     );
 
     // return user vermmieter
     return jsonDecode(responseUserIDQuery.body)['vermieter'];
-
   }
 }
 

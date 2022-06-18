@@ -1,5 +1,7 @@
 import 'dart:collection';
 import 'dart:typed_data';
+import 'package:ab_in_den_urlaub/testupload.dart';
+
 import 'globals.dart';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
@@ -205,6 +207,11 @@ class _TestAPIState extends State<TestAPI> {
               ),
               ElevatedButton(
                   child: Text("LoadImage"), onPressed: () => {fetchImage()}),
+              ElevatedButton(
+                  child: Text("UploadImage"),
+                  onPressed: () => {
+                        MaterialPageRoute(builder: (context) => UploadPage()),
+                      }),
               test,
               Container(
                 height: 500,

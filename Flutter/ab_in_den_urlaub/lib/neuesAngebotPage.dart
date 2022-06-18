@@ -47,7 +47,7 @@ class _nAngebotState extends State<nAngebot> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedRBeginn) {
       setState(() {
-        print(picked.toString());
+        //print(picked.toString());
         selectedRBeginn = picked;
       });
     }
@@ -95,15 +95,15 @@ class _nAngebotState extends State<nAngebot> {
   Future<void> getUserWohnungen() async {
     try 
     {
-      print("HI Get Wohnungsname");
+      //print("HI Get Wohnungsname");
       var response = await http.get(Uri.parse(LoginInfo().serverIP +
           "/api/Ferienwohnung/" +
           LoginInfo().userid.toString() +
           "/user"));
-      print("Wohnungsname get body: " + response.body);
+      //print("Wohnungsname get body: " + response.body);
       final jsonData = jsonDecode(response.body) as List;
       wohnungen2 = ['Wähle'];
-      print('\ndict\n');
+      //print('\ndict\n');
       for (int i = 0; i < jsonData.length; i++) {
         /*print("jsonDataUserWohnungen[" +
             i.toString() +
@@ -118,7 +118,7 @@ class _nAngebotState extends State<nAngebot> {
           });
         }
       }
-      print('\nfertiiiiiiiiiiiiiig\n');
+      //print('\nfertiiiiiiiiiiiiiig\n');
     } catch (err) {
       print(err.toString());
     }
@@ -483,7 +483,7 @@ class _nAngebotState extends State<nAngebot> {
       "stornierbar"        :  offerCancellable
     });
 
-    print('\nofferPostQuery\n'+offerPostQuery+'\n');
+    //print('\nofferPostQuery\n'+offerPostQuery+'\n');
 
     return offerPostQuery;
   }

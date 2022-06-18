@@ -30,7 +30,11 @@ class _ProfileState extends State<Profile> {
   final usernameCon = TextEditingController();
   final nachnameCon = TextEditingController();
   final vornameCon = TextEditingController();
-  bool vermieter = false;
+
+  // evaluation
+  bool   vermieter   = false;
+  int    countStarts = -1;
+  String comment     = '';
 
   String dropdownValue = 'Wähle Wohnung';
 
@@ -39,22 +43,30 @@ class _ProfileState extends State<Profile> {
     vermieter = await getUserVermieterStatus();
 
     for (int i = 0; i < rechnungshistorie.length; i++) {
+      /*
       print("rechnungshistorie[" +
           i.toString() +
           "].toString(): " +
           rechnungshistorie[i].toString());
+      */
+
     }
-    print("\n");
+    //print("\n");
 
     for (int i = 0; i < rechnungshistorie.length; i++) {
       final json = rechnungshistorie[i];
+      /*
       print("i before fetchOffer: " + i.toString());
       print("json[angebotId].toString(): " + json["angebotId"].toString());
+      */
       await fetchOffer(json["angebotId"].toString());
+      /*
       print("i after fetchOffer: " + i.toString());
       print("\n");
+      */
     }
 
+    /*
     print("we got here");
 
     for (int i = 0; i < angebote.length; i++) {
@@ -62,18 +74,21 @@ class _ProfileState extends State<Profile> {
     }
 
     print("\n");
+    */
 
     for (int i = 0; i < angebote.length; i++) {
       final json = angebote[i];
-      print("json[fwId].toString(): " + json["fwId"].toString());
+      //print("json[fwId].toString(): " + json["fwId"].toString());
       await fetchApartment(json["fwId"].toString());
     }
 
-    print("\n");
+    //print("\n");
 
+    /*
     for (int i = 0; i < wohnungen.length; i++) {
       print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
     }
+    */
   }
 
   Future<void> fetchHistory() async {
@@ -88,7 +103,7 @@ class _ProfileState extends State<Profile> {
         rechnungshistorie = jsonData;
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -105,7 +120,7 @@ class _ProfileState extends State<Profile> {
       });
       //print("test3");
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -114,15 +129,15 @@ class _ProfileState extends State<Profile> {
       //print("json[fwId].toString(): " + id);
       response = await http
           .get(Uri.parse(LoginInfo().serverIP + '/api/Ferienwohnung/' + id));
-      print("response body in fetchapartment: " + response.body);
+      //print("response body in fetchapartment: " + response.body);
       final jsonData = jsonDecode(response.body);
 
-      print("wohnung hinzugefügt: " + jsonData.toString());
+      //print("wohnung hinzugefügt: " + jsonData.toString());
       setState(() {
         wohnungen.add(jsonData["wohnungsname"]);
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -251,9 +266,9 @@ class _ProfileState extends State<Profile> {
             ),
           );
         }
-        print(response.body);
+        //print(response.body);
       } catch (err) {
-        print(err.toString());
+        //print(err.toString());
       }
     } else {
       showDialog<String>(
@@ -274,11 +289,11 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    print("initState() entered.\n");
+    //print("initState() entered.\n");
     // TODO: implement initState
     fuckyouasynchron();
     super.initState();
-    print("initState() exited.\n");
+    //print("initState() exited.\n");
   }
 
   @override
@@ -657,6 +672,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+
   void setUserToVermieter() async {
 
     // fetch user
@@ -705,4 +721,25 @@ class _ProfileState extends State<Profile> {
     return jsonDecode(responseUserIDQuery.body)['vermieter'];
 
   }
+}
+
+Future<void> addEvaluation() async
+{
+  String url = LoginInfo().serverIP + '/api/Bewertung';
+
+
+
+
+}
+
+String buildEvaluationString()
+{
+  String evaluationPostQuery = jsonEncode(<String, Object>{
+    //"userId": , // user of the fw
+    //"fwId": , // id of the fw
+    "anzsterne": 0,
+    "kommentar": "string",
+  });
+
+  return evaluationPostQuery;
 }

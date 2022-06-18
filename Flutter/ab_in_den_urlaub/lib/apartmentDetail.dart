@@ -66,6 +66,7 @@ class apartmentDetail extends StatefulWidget {
 }
 
 class _apartmentDetailState extends State<apartmentDetail> {
+
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -110,6 +111,12 @@ class _apartmentDetailState extends State<apartmentDetail> {
   bool stornierbar = false;
   TextEditingController _controller = TextEditingController();
   final newBet = TextEditingController();
+
+  // review
+  // review data
+  List<String> reviewList     = [];
+  List<int>    countStarsList = [];
+  List<String> usernameList   = [];
 
   void postBet() async {
     String body = """ {
@@ -207,21 +214,21 @@ class _apartmentDetailState extends State<apartmentDetail> {
     );
   }
 
-  void fetchOffer() async {
-    print("ID: " + angebotID);
+  Future<void> fetchOffer() async {
+    //print("ID: " + angebotID);
     String urlOffer = LoginInfo().serverIP +
         '/api/Angebote/' +
         LoginInfo().currentAngebot +
         "/a";
     try {
-      print("test5");
+      //print("test5");
       response = await http.get(Uri.parse(urlOffer));
       jsonOffer = jsonDecode(response.body);
       fwID = jsonOffer[0]["fwId"].toString();
-      print("json Offer: " + jsonOffer[0].toString() + "\n");
+      //print("json Offer: " + jsonOffer[0].toString() + "\n");
       var von = jsonOffer[0]["mietzeitraumStart"];
       var bis = jsonOffer[0]["mietzeitraumEnde"];
-      print("nach");
+      //print("nach");
       von = DateTime.parse(von);
       bis = DateTime.parse(bis);
       setState(() {
@@ -247,16 +254,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }
-    fetchApartment();
   }
 
-  void fetchApartment() async {
+  Future<void> fetchApartment() async {
     String urlApart =
         LoginInfo().serverIP + "/api/Ferienwohnung/" + fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
-      print("Wohnung: " + jsonApart.toString());
+      //print("Wohnung: " + jsonApart.toString());
       setState(() {
         strasse = jsonApart["strasse"].toString();
         plz = jsonApart["plz"].toString();
@@ -278,10 +284,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }
-    fetchImage();
   }
 
-  void fetchGebot() async {
+  Future<void> fetchGebot() async {
     String urlImg = LoginInfo().serverIP +
         '/api/Gebot/' +
         LoginInfo().currentAngebot +
@@ -300,25 +305,24 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
-  void loadCookies() async {
+  Future<void> loadCookies() async {
     String userIDString = window.localStorage['userId'].toString();
     String tokenString = window.localStorage['tokenstand'].toString();
     LoginInfo().userid = int.parse(userIDString);
     LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
     angebotID = window.localStorage['angebotID'].toString();
-    print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
-    print(tokenString + userIDString);
+    //print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
+    //print(tokenString + userIDString);
     LoginInfo().tokens = int.parse(tokenString);
-    fetchOffer();
   }
 
-  void fetchImage() async {
-    print("ID:" + widget.anlagenID);
+  Future<void> fetchImage() async {
+    //print("ID:" + widget.anlagenID);
     String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + fwID;
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
-      print("lange: " + jsons.length.toString());
+      //print("lange: " + jsons.length.toString());
       setState(() {
         for (int i = 0; i < (jsons.length); i++) {
           Image image = imageFromBase64String(jsons[i]["bild"]);
@@ -331,12 +335,107 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
+  Future<void> fetchReviewsAndUsername() async 
+  {
+      
+      print('\nSTART fetchReviewsAndUsername\n');
+
+      // vars
+      String urlReviews  = LoginInfo().serverIP + '/api/Bewertung';
+      String urlUsername = LoginInfo().serverIP + '/api/Nutzer/';
+
+      // fetch reviews
+      final jsonAllReviws = await http.get(
+        Uri.parse(urlReviews),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'}
+      );
+  
+      // error message if reviews not got
+      if(jsonAllReviws.statusCode != 200)
+      {
+        showDialog<String>
+        (
+          context: context,
+          builder: (BuildContext context) => AlertDialog
+          (
+            title: const Text('Reviews nicht erfolgreich geholt.'),
+            actions: <Widget>
+            [
+              TextButton
+              (
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );     
+      }
+
+      // select reviews for this flat
+      final reviews = jsonDecode(jsonAllReviws.body);
+
+      for(dynamic review in reviews)
+      {
+        if( review['fwId'].toString() == fwID )
+        {
+          reviewList.add(review['kommentar']);
+          countStarsList.add(review['anzsterne']);
+
+          //print('\nreview');
+          //print('\nrKomm'+review['kommentar'].toString());
+          //print('\nrAnzS'+review['anzsterne'].toString());
+
+          // fetch username
+          
+          final jsonUser = await http.get
+          (
+            Uri.parse(urlUsername + review['userId'].toString()),
+            headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'}
+          );
+
+          final user = jsonDecode(jsonUser.body);
+
+          // add username
+          usernameList.add(user['username']);
+
+          // error message if usersname not gotten
+          if(jsonUser.statusCode != 200)
+          {
+            showDialog<String>
+            (
+              context: context,
+              builder: (BuildContext context) => AlertDialog
+              (
+                title: const Text('User nicht erfolgreich geholt.'),
+                actions: <Widget>
+                [
+                  TextButton
+                  (
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );     
+         }
+        }
+      }
+
+      print('\nKommentare:\n');
+      for(int i = 0; i < reviewList.length; i++)
+      {
+        print('user   :'+usernameList[i]);
+        print('comment:'+reviewList[i]);
+        print('review :'+countStarsList[i].toString()+'\n');
+      }
+
+      print('\nEND fetchReviewsAndUsername\n');
+       
+  }
+
   @override
   void initState() {
-    loadCookies();
-    //print("datum:" + widget.text + "\n");
-    //fetchApartment();
-    //fetchImage();
+    getData();
     super.initState();
   }
 
@@ -368,9 +467,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
             child: Column(
               children: [
                 Text(wName, style: TextStyle(fontSize: 50)),
+
+                // spacing
                 Container(
                   height: 10,
                 ),
+
+                // Images
                 Container(
                   child: ImageSlideshow(
                       width: 1000,
@@ -378,9 +481,116 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       initialPage: 0,
                       children: bilder),
                 ),
+
+                // spacing
                 Container(
                   height: 10,
                 ),
+
+                // reviews title
+                Container
+                (
+                  height: 1/5 * (1/3 * MediaQuery.of(context).size.height),
+                  width: MediaQuery.of(context).size.width * ContentWFactor,      
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration
+                  (
+                    border: Border.all
+                    (
+                      color: Colors.lightBlue,
+                    ),
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+                  ),
+                  child: const Text('Bewertungen'),
+                ),
+
+                // reviews
+                Container 
+                (       
+                  decoration: BoxDecoration
+                  (
+                    border: Border.all
+                    (
+                      color: Colors.lightBlue,
+                    ),
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
+                  ),
+                  height: 4/5 * (1/3 * MediaQuery.of(context).size.height),
+                  width: MediaQuery.of(context).size.width * ContentWFactor,      
+                  child: SingleChildScrollView
+                  (                  
+                    padding: const EdgeInsets.all(20),
+                    physics: const ScrollPhysics(),                     
+                    child: Column 
+                    (               
+                      children: [
+                        ListView.builder
+                        (
+                          itemBuilder: (context, index){
+                            return Card(                        
+                              child: ListTile(
+                                title: Column 
+                                (
+                                  children: 
+                                  [
+                                    RichText
+                                    ( 
+                                      text: TextSpan
+                                      (
+                                        style: DefaultTextStyle.of(context).style,
+                                        children: <TextSpan> 
+                                        [
+                                          TextSpan(text: usernameList[index], style: const TextStyle(fontWeight: FontWeight.bold)),
+                                          const TextSpan(text: ' schrieb:')
+                                        ]
+                                      ),
+                                    ),
+                                    RichText
+                                    ( 
+                                      text: TextSpan
+                                      (
+                                        style: DefaultTextStyle.of(context).style,
+                                        children: <TextSpan> 
+                                        [
+                                          TextSpan(text: '"'+reviewList[index]+'"', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                        ]
+                                      ),
+                                    ),    
+                                                                   
+                                    RichText
+                                    ( 
+                                      text: TextSpan
+                                      (
+                                        style: DefaultTextStyle.of(context).style,
+                                        children: <TextSpan> 
+                                        [
+                                          const TextSpan(text: 'und bewertete mit '),
+                                          TextSpan(text: countStarsList[index].toString()+'/5', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                          const TextSpan(text: ' Sternen')
+                                        ]
+                                      ),
+                                    ),
+                                    
+                                  ]
+                                )
+                              ),
+                            );
+                          },
+                          itemCount: reviewList.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,                       
+                        ),
+                      ]
+                    )
+                  )
+                ),
+                
+
+                // spacing
+                Container(
+                  height: 10,
+                ),
+
                 SizedBox(height: 20),
                 Container(
                   width: MediaQuery.of(context).size.width * ContentWFactor,
@@ -523,4 +733,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
       ),
     );
   }
+
+
+  Future<void> getData() async
+  {
+    await loadCookies();
+    await fetchOffer();
+    await fetchApartment();
+    await fetchReviewsAndUsername();
+    await fetchImage();
+  }
+
 }

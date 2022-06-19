@@ -13,6 +13,28 @@ import 'dart:convert';
 
 import 'appBars.dart';
 
+// wohnung deaktivieren, user deaktivieren, kommentare löschen
+class User {
+  const User(this.id, this.name);
+
+  final String name;
+  final int id;
+}
+
+class Wohnung {
+  const Wohnung(this.id, this.name);
+
+  final String name;
+  final int id;
+}
+
+class Kommentar {
+  const Kommentar(this.id, this.name);
+
+  final String name;
+  final int id;
+}
+
 class Admin extends StatefulWidget {
   Admin({Key? key}) : super(key: key);
   @override
@@ -20,6 +42,20 @@ class Admin extends StatefulWidget {
 }
 
 class _AdminState extends State<Admin> {
+  List<String> wohnungen2 = ['Wähle']; // Option 2
+  String _selectedLocation = "Wähle";
+  User selectedUser = User(0, "0");
+  User user1 = User(0, "wählen");
+  List<User> users = <User>[];
+
+  Wohnung selectedWohnung = Wohnung(0, "0");
+  Wohnung wohnung1 = Wohnung(0, "wählen");
+  List<Wohnung> wohnungen = <Wohnung>[];
+
+  Kommentar selectedKommentar = Kommentar(0, "0");
+  Kommentar kommentar1 = Kommentar(0, "wählen");
+  List<Kommentar> kommentare = <Kommentar>[];
+
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -44,6 +80,56 @@ class _AdminState extends State<Admin> {
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         jsons = jsonData;
+        for (var i = 0; i < jsons.length; i++) {
+          users.add(User(jsons[i]["userId"], jsons[i]["username"]));
+        }
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchKommentare() async {
+    try {
+      response =
+          await http.get(Uri.parse(LoginInfo.serverIP + "/api/Bewertung"));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        jsons = jsonData;
+        for (var i = 0; i < jsons.length; i++) {
+          kommentare
+              .add(Kommentar(jsons[i]["bewertungId"], jsons[i]["kommentar"]));
+        }
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void deleteComment() async {
+    try {
+      response = await http.delete(Uri.parse(LoginInfo.serverIP +
+          "/api/Bewertung?id=" +
+          selectedKommentar.id.toString()));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        jsons = jsonData;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchWohnungen() async {
+    try {
+      response =
+          await http.get(Uri.parse(LoginInfo.serverIP + "/api/Ferienwohnung"));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        jsons = jsonData;
+        for (var i = 0; i < jsons.length; i++) {
+          wohnungen.add(Wohnung(jsons[i]["fwId"], jsons[i]["wohnungsname"]));
+        }
       });
     } catch (err) {
       print(err.toString());
@@ -170,8 +256,19 @@ class _AdminState extends State<Admin> {
   @override
   void initState() {
     // TODO: implement initState
+    selectedUser = user1;
+    users.add(selectedUser);
+
+    selectedWohnung = wohnung1;
+    wohnungen.add(selectedWohnung);
+
+    selectedKommentar = kommentar1;
+    kommentare.add(selectedKommentar);
+
     super.initState();
-    fetchComment(1);
+    fetchUser();
+    fetchWohnungen();
+    fetchKommentare();
   }
 
   @override
@@ -184,56 +281,88 @@ class _AdminState extends State<Admin> {
           child: AppBarBrowser(),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ElevatedButton(
-                child: Text("TestGet"),
-                onPressed: fetchUser,
-              ),
-              ElevatedButton(
-                child: Text("TestPost"),
-                onPressed: postUser,
-              ),
-              TextField(),
-              Container(
-                height: 500,
-                child: ListView.builder(
-                  itemCount: jsons.length,
-                  itemBuilder: (context, i) {
-                    final json = jsons[i];
-                    return Text(
-                        "userid = ${json["userId"]}, username = ${json["username"]}, nachname = ${json["nachname"]}, vorname = ${json["vorname"]},  email = ${json["email"]}, tokens = ${json["tokenstand"]},");
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("User deaktiviere"),
+                DropdownButton<User>(
+                  value: selectedUser,
+                  onChanged: (User? newValue) {
+                    setState(() {
+                      selectedUser = newValue!;
+                    });
                   },
+                  items: users.map((User user) {
+                    return DropdownMenuItem<User>(
+                      value: user,
+                      child: Text(
+                        user.name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
                 ),
-              ),
-              ElevatedButton(
-                  child: Text("LoadImage"), onPressed: () => {fetchImage()}),
-              test,
-              Container(
-                height: 500,
-                //width: MediaQuery.of(context).size.width * 0.5,
-                child: ListView.builder(
-                    itemCount: jsonsComment.length,
-                    itemBuilder: (context, i) {
-                      final json = jsonsComment[i];
-                      //fetchUserById(json["userId"].toString());
-                      return Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("userID: " +
-                                " " +
-                                json["userId"].toString() +
-                                "  "),
-                            Text("Comment: " + " " + json["kommentar"])
-                          ],
-                        ),
-                      );
-                    }),
-              )
-            ],
-          ),
+                //ElevatedButton(onPressed: (), child: Text("deaktivieren"))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Wohnung deaktiviere"),
+                DropdownButton<Wohnung>(
+                  value: selectedWohnung,
+                  onChanged: (Wohnung? newValue) {
+                    setState(() {
+                      selectedWohnung = newValue!;
+                    });
+                  },
+                  items: wohnungen.map((Wohnung wohnung) {
+                    return DropdownMenuItem<Wohnung>(
+                      value: wohnung,
+                      child: Text(
+                        wohnung.name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                // ElevatedButton(onPressed: (), child: Text("deaktivieren"))
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Kommentar löschen"),
+                DropdownButton<Kommentar>(
+                  value: selectedKommentar,
+                  onChanged: (Kommentar? newValue) {
+                    setState(() {
+                      selectedKommentar = newValue!;
+                    });
+                  },
+                  items: kommentare.map((Kommentar kommentar) {
+                    return DropdownMenuItem<Kommentar>(
+                      value: kommentar,
+                      child: Text(
+                        kommentar.name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      deleteComment();
+                      kommentare = <Kommentar>[];
+                      selectedKommentar = kommentar1;
+                      kommentare.add(selectedKommentar);
+                      fetchKommentare();
+                    },
+                    child: Text("deaktivieren"))
+              ],
+            ),
+          ]),
         ),
       ),
     );

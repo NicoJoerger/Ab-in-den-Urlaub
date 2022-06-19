@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart';
@@ -18,6 +20,19 @@ class _TokenState extends State<Token> {
   var sliderval = 100.0;
   int tokenPreis() {
     return 25;
+  }
+
+  void loadCookies() async {
+    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadCookies();
+    super.initState();
   }
 
   void addTokens() async {

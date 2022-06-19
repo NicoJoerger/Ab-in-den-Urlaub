@@ -25,7 +25,7 @@ class _LoginInfoState extends State<LoginInfo> {
   void fetchTokenstand() async {
     try {
       var response = await http.get(Uri.parse(
-          LoginInfo().serverIP + '/api/Nutzer/' + widget.userid.toString()));
+          LoginInfo.serverIP + '/api/Nutzer/' + widget.userid.toString()));
 
       if (response.statusCode != 200) {
       } else {
@@ -35,16 +35,16 @@ class _LoginInfoState extends State<LoginInfo> {
         setState(() {
           var jsons = jsonData;
           var length = jsons.length;
-          LoginInfo().tokens = jsons[0]['tokenstand'];
+          LoginInfo.tokens = jsons[0]['tokenstand'];
         });
         window.localStorage.containsKey('userId');
         window.localStorage.containsKey('tokenstand');
         window.localStorage.containsKey('angebotID');
 
-        window.localStorage['userId'] = LoginInfo().userid.toString();
-        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
+        window.localStorage['userId'] = LoginInfo.userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
         window.localStorage['angebotID'] =
-            LoginInfo().currentAngebot.toString();
+            LoginInfo.currentAngebot.toString();
       }
     } catch (err) {
       print(err.toString());
@@ -60,12 +60,26 @@ class _LoginInfoState extends State<LoginInfo> {
 
 class LoginInfo {
   LoginInfo() {}
-  int userid = -1;
-  var tokens = 0;
-  var currentAngebot = "";
-  var cj = CookieJar();
-  var serverIP = "http://81.169.152.56:5000";
+  static int userid = -1;
+  static var tokens = 0;
+  static var currentAngebot = "";
+  static var cj = CookieJar();
+  static var serverIP = "http://81.169.152.56:5000";
   //var serverIP = "http://localhost:7199";
-  bool vermieter = false;
-  LoginInfo._internal();
+  static bool vermieter = false;
+  static loadToken() async {
+    try {
+      var response = await http.get(
+          Uri.parse(LoginInfo.serverIP + '/api/Nutzer/' + userid.toString()));
+
+      if (response.statusCode != 200) {
+      } else {
+        final jsonData = jsonDecode(response.body) as List;
+        print(jsonData);
+        var jsons = jsonData;
+        var length = jsons.length;
+        LoginInfo.tokens = jsons[0]['tokenstand'];
+      }
+    } catch (e) {}
+  }
 }

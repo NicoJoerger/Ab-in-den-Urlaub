@@ -60,7 +60,7 @@ class _nWohnungState extends State<nWohnung> {
     try {
       for (var i = 0; i < Bilder.length; i++) {
         response = await http.post(
-            Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"),
+            Uri.parse(LoginInfo.serverIP + "/api/Wohnungsbilder"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
@@ -103,7 +103,7 @@ class _nWohnungState extends State<nWohnung> {
         
         List<int> selectedFile = _bytesData;
         var req = http.MultipartRequest(
-            'PUT', Uri.parse(LoginInfo().serverIP + "/api/Wohnungsbilder"));
+            'PUT', Uri.parse(LoginInfo.serverIP + "/api/Wohnungsbilder"));
         //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
         req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
         req.send().then((response));
@@ -124,7 +124,7 @@ class _nWohnungState extends State<nWohnung> {
             ],
           ),
         );
-        //LoginInfo().tokens = startToken;
+        //LoginInfo.tokens = startToken;
         //Navigator.pushNamed(context, '/Profile');
       } /*else if (response.statusCode == 400) {
         showDialog<String>(
@@ -165,7 +165,7 @@ class _nWohnungState extends State<nWohnung> {
   void postWohnung() async {
     String body = """ {
     "userId": """ +
-        LoginInfo().userid.toString() +
+        LoginInfo.userid.toString() +
         """,
     "strasse": \"""" +
         _address_street.text +
@@ -215,7 +215,7 @@ class _nWohnungState extends State<nWohnung> {
   }""";
     try {
       response = await http.post(
-          Uri.parse(LoginInfo().serverIP + "/api/Ferienwohnung"),
+          Uri.parse(LoginInfo.serverIP + "/api/Ferienwohnung"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           },
@@ -237,7 +237,7 @@ class _nWohnungState extends State<nWohnung> {
             ],
           ),
         );
-        //LoginInfo().tokens = startToken;
+        //LoginInfo.tokens = startToken;
         //Navigator.pushNamed(context, '/Profile');
       } /*else if (response.statusCode == 400) {
         showDialog<String>(
@@ -290,11 +290,9 @@ class _nWohnungState extends State<nWohnung> {
     });*/
 
   void loadCookies() async {
-    LoginInfo().userid =
-        int.parse(html.window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot =
-        html.window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
+    LoginInfo.userid = int.parse(html.window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = html.window.localStorage['angebotID'].toString();
+    LoginInfo.tokens =
         int.parse(html.window.localStorage['tokenstand'].toString());
   }
 

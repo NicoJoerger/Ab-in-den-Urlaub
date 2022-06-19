@@ -5,10 +5,10 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(100);
   Widget getCoinsWidget() {
-    if (LoginInfo().tokens == 0) {
+    if (LoginInfo.tokens == 0) {
       return Text("Buy Coins");
     } else {
-      return Text(LoginInfo().tokens.toString());
+      return Text(LoginInfo.tokens.toString());
     }
   }
 
@@ -37,7 +37,7 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             child: Text("Mein Profil"),
             onTap: () {
-              if (LoginInfo().userid != -1) {
+              if (LoginInfo.userid != -1) {
                 Navigator.pushNamed(context, '/Profile');
               } else {
                 Navigator.pushNamed(context, '/registrierung');

@@ -25,7 +25,7 @@ class _nAngebotState extends State<nAngebot> {
   DateTime selectedREnde = DateTime.now();
   DateTime selectedAEnde = DateTime.now();
 
-  bool landLordStatus   = LoginInfo().vermieter;
+  bool landLordStatus = LoginInfo.vermieter;
   bool offerCancellable = false;
   final tokenPriceController = TextEditingController();
   final rentalPriceController = TextEditingController();
@@ -33,10 +33,9 @@ class _nAngebotState extends State<nAngebot> {
   Map<String, int> dictionaryFeriwnwohnungNameID = {};
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
   }
 
   Future<void> selectRBeginn(BuildContext context) async {
@@ -93,12 +92,11 @@ class _nAngebotState extends State<nAngebot> {
   }
 
   Future<void> getUserWohnungen() async {
-    try 
-    {
+    try {
       //print("HI Get Wohnungsname");
-      var response = await http.get(Uri.parse(LoginInfo().serverIP +
+      var response = await http.get(Uri.parse(LoginInfo.serverIP +
           "/api/Ferienwohnung/" +
-          LoginInfo().userid.toString() +
+          LoginInfo.userid.toString() +
           "/user"));
       //print("Wohnungsname get body: " + response.body);
       final jsonData = jsonDecode(response.body) as List;
@@ -147,19 +145,18 @@ class _nAngebotState extends State<nAngebot> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
                 // spacing
                 SizedBox(
-                  height: 1/10 * MediaQuery.of(context).size.height,
+                  height: 1 / 10 * MediaQuery.of(context).size.height,
                 ),
 
                 Container(),
-                
+
                 const Text(
                   "Wohnung",
                   style: TextStyle(fontSize: 30),
                 ),
-                
+
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SizedBox(
                     width: containerWidth,
@@ -187,12 +184,12 @@ class _nAngebotState extends State<nAngebot> {
                     ),
                   )
                 ]),
-                
+
                 const Text(
                   "Reise",
                   style: TextStyle(fontSize: 30),
                 ),
-                
+
                 SizedBox(
                   height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
@@ -215,7 +212,7 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                
+
                 SizedBox(
                   height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
@@ -238,12 +235,12 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                
+
                 const Text(
                   "Auktion",
                   style: TextStyle(fontSize: 30),
                 ),
-                
+
                 SizedBox(
                   height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
@@ -266,7 +263,7 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                
+
                 SizedBox(
                   height: containerHight,
                   //width: MediaQuery.of(context).size.width * ContentWFactor,
@@ -289,7 +286,7 @@ class _nAngebotState extends State<nAngebot> {
                     ],
                   ),
                 ),
-                
+
                 // Text
                 const Text(
                   'Preise/Storno',
@@ -297,11 +294,9 @@ class _nAngebotState extends State<nAngebot> {
                 ),
 
                 // TextFormField token price
-                SizedBox
-                (
+                SizedBox(
                   width: 1.5 * containerWidth,
-                  child: TextFormField
-                  (
+                  child: TextFormField(
                     controller: tokenPriceController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -312,11 +307,9 @@ class _nAngebotState extends State<nAngebot> {
                 ),
 
                 // TextFormField rental price
-                SizedBox
-                (
+                SizedBox(
                   width: 1.5 * containerWidth,
-                  child: TextFormField
-                  (
+                  child: TextFormField(
                     controller: rentalPriceController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -325,42 +318,33 @@ class _nAngebotState extends State<nAngebot> {
                     ),
                   ),
                 ),
-  
+
                 // Checkbox cancellable
-                SizedBox
-                (
-                  width: 1.5 * containerWidth,
-                  child: Row
-                  (
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: 
-                    [
-                      const Text("stonierbar"),
-                      Checkbox
-                      (
-                        activeColor: Colors.orange,
-                        checkColor: Colors.green,
-                        value: offerCancellable,
-                        onChanged: (value) 
-                        {
-                          setState(() 
-                          {
-                            offerCancellable = value!;
-                          });
-                        },
-                      ),
-                    ]
-                  )
-                ),
-              
+                SizedBox(
+                    width: 1.5 * containerWidth,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("stonierbar"),
+                          Checkbox(
+                            activeColor: Colors.orange,
+                            checkColor: Colors.green,
+                            value: offerCancellable,
+                            onChanged: (value) {
+                              setState(() {
+                                offerCancellable = value!;
+                              });
+                            },
+                          ),
+                        ])),
+
                 // spacing
                 SizedBox(
-                  height: 1/30 * MediaQuery.of(context).size.height,
+                  height: 1 / 30 * MediaQuery.of(context).size.height,
                 ),
 
                 // Button post Offer
-                SizedBox
-                (
+                SizedBox(
                   width: 1.5 * containerWidth,
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -369,8 +353,7 @@ class _nAngebotState extends State<nAngebot> {
                       child: const Text('Wohnung registrieren',
                           style: TextStyle(color: Colors.black)),
                       onPressed: () {
-                        if(offerFormIsFilled())
-                        {
+                        if (offerFormIsFilled()) {
                           postOffer();
                         }
                       },
@@ -380,9 +363,8 @@ class _nAngebotState extends State<nAngebot> {
 
                 // spacing
                 SizedBox(
-                  height: 1/10 * MediaQuery.of(context).size.height,
-                )              
-                
+                  height: 1 / 10 * MediaQuery.of(context).size.height,
+                )
               ],
             ),
           ),
@@ -392,29 +374,46 @@ class _nAngebotState extends State<nAngebot> {
   }
 
   void postOffer() async {
-
     // url for post offer
-    String url = LoginInfo().serverIP + '/api/Angebote';
+    String url = LoginInfo.serverIP + '/api/Angebote';
 
     // post Angebot
-    final postOfferResponse = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-      body: await buildPostOfferJSON()
-    );
+    final postOfferResponse = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: await buildPostOfferJSON());
 
-    if( postOfferResponse.statusCode == 200 ) // post Offer succeded
+    if (postOfferResponse.statusCode == 200) // post Offer succeded
     {
-      showDialog<String>
-      (
+      showDialog<String>(
         context: context,
-        builder: (BuildContext context) => AlertDialog
-        (
+        builder: (BuildContext context) => AlertDialog(
           title: const Text('Angebot erfolgreich abgegeben.'),
-          actions: <Widget>
-          [
-            TextButton
-            (
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else // post Offer didnt succeded
+    {
+      String errorMessage = '';
+
+      // Error checking.
+      if (LoginInfo.userid == -1) {
+        errorMessage = 'Sie sind nicht eingeloggt.';
+      }
+
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Angebot nicht erfolgreich abgegeben.'),
+          content: Text(errorMessage),
+          actions: <Widget>[
+            TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),
             ),
@@ -422,65 +421,38 @@ class _nAngebotState extends State<nAngebot> {
         ),
       );
     }
-    else // post Offer didnt succeded
-    {
-      String errorMessage = '';
-
-      // Error checking.
-      if(LoginInfo().userid == -1)
-      {
-        errorMessage = 'Sie sind nicht eingeloggt.';
-      }
-
-      showDialog<String>
-      (
-        context: context,
-        builder: (BuildContext context) => AlertDialog
-        (
-          title: const Text('Angebot nicht erfolgreich abgegeben.'),
-          content: Text(errorMessage),
-          actions: <Widget>
-          [
-            TextButton
-            (
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );     
-    }
 
     // check if offer is in DB
-    
   }
 
-  Future<String> buildPostOfferJSON() async 
-  {
-  
+  Future<String> buildPostOfferJSON() async {
     // vars
-    String startOfJourney = selectedRBeginn.year.toString() + '-' + 
-                            selectedRBeginn.month.toString().padLeft(2, '0')  + '-' + 
-                            selectedRBeginn.day.toString().padLeft(2, '0');
-                            
+    String startOfJourney = selectedRBeginn.year.toString() +
+        '-' +
+        selectedRBeginn.month.toString().padLeft(2, '0') +
+        '-' +
+        selectedRBeginn.day.toString().padLeft(2, '0');
 
-    String endOfJourney   = selectedREnde.year.toString() + '-' + 
-                            selectedREnde.month.toString().padLeft(2, '0') + '-' +
-                            selectedREnde.day.toString().padLeft(2, '0');
+    String endOfJourney = selectedREnde.year.toString() +
+        '-' +
+        selectedREnde.month.toString().padLeft(2, '0') +
+        '-' +
+        selectedREnde.day.toString().padLeft(2, '0');
 
-    String endOfAuction   = selectedAEnde.year.toString()   + '-' + 
-                            selectedAEnde.month.toString().padLeft(2, '0') + '-' + 
-                            selectedAEnde.day.toString().padLeft(2, '0');
-                            
+    String endOfAuction = selectedAEnde.year.toString() +
+        '-' +
+        selectedAEnde.month.toString().padLeft(2, '0') +
+        '-' +
+        selectedAEnde.day.toString().padLeft(2, '0');
 
     String offerPostQuery = jsonEncode(<String, Object>{
-      "fwId"               : dict[_selectedLocation]!,
-      "mietzeitraumStart"  : startOfJourney,
-      "mietzeitraumEnde"   : endOfJourney,
-      "auktionEnddatum"    : endOfAuction,
+      "fwId": dict[_selectedLocation]!,
+      "mietzeitraumStart": startOfJourney,
+      "mietzeitraumEnde": endOfJourney,
+      "auktionEnddatum": endOfAuction,
       "aktuellerTokenpreis": tokenPriceController.text,
-      "mietpreis"          : rentalPriceController.text,
-      "stornierbar"        :  offerCancellable
+      "mietpreis": rentalPriceController.text,
+      "stornierbar": offerCancellable
     });
 
     //print('\nofferPostQuery\n'+offerPostQuery+'\n');
@@ -488,29 +460,20 @@ class _nAngebotState extends State<nAngebot> {
     return offerPostQuery;
   }
 
-  bool offerFormIsFilled()
-  {
+  bool offerFormIsFilled() {
     bool offerFormIsFilled = false;
 
-    if(
-            tokenPriceController.text.isNotEmpty
-        &&  rentalPriceController.text.isNotEmpty
-        &&  _selectedLocation != 'Wähle') 
-    {
+    if (tokenPriceController.text.isNotEmpty &&
+        rentalPriceController.text.isNotEmpty &&
+        _selectedLocation != 'Wähle') {
       offerFormIsFilled = true;
-    }
-    else
-    {
-      showDialog<String>
-      (
+    } else {
+      showDialog<String>(
         context: context,
-        builder: (BuildContext context) => AlertDialog
-        (
+        builder: (BuildContext context) => AlertDialog(
           title: const Text('Formular ist nicht ausgefüllt.'),
-          actions: <Widget>
-          [
-            TextButton
-            (
+          actions: <Widget>[
+            TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),
               child: const Text('OK'),
             ),
@@ -521,5 +484,4 @@ class _nAngebotState extends State<nAngebot> {
 
     return offerFormIsFilled;
   }
-  
 }

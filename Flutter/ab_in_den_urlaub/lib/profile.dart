@@ -15,7 +15,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String url = LoginInfo().serverIP + '/api/Nutzer';
+  String url = LoginInfo.serverIP + '/api/Nutzer';
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
@@ -33,9 +33,9 @@ class _ProfileState extends State<Profile> {
   final vornameCon = TextEditingController();
 
   // evaluation
-  bool   vermieter   = false;
-  int    countStarts = -1;
-  String comment     = '';
+  bool vermieter = false;
+  int countStarts = -1;
+  String comment = '';
 
   String dropdownValue = 'Wähle Wohnung';
 
@@ -87,9 +87,9 @@ class _ProfileState extends State<Profile> {
     angebote = [];
     wohnungen = [];
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           "/api/Rechnungshistorieeintrag/" +
-          LoginInfo().userid.toString()));
+          LoginInfo.userid.toString()));
       final jsonData = jsonDecode(response.body) as List;
       setState(() {
         rechnungshistorie = jsonData;
@@ -100,10 +100,10 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> fetchOffer(String id) async {
-    //print(LoginInfo().serverIP + "/api/Angebote/" + id + "/a");
+    //print(LoginInfo.serverIP + "/api/Angebote/" + id + "/a");
     try {
       response = await http
-          .get(Uri.parse(LoginInfo().serverIP + "/api/Angebote/" + id + "/a"));
+          .get(Uri.parse(LoginInfo.serverIP + "/api/Angebote/" + id + "/a"));
       //print("test1");
       final jsonData = jsonDecode(response.body) as List;
       //print("test2");
@@ -120,7 +120,7 @@ class _ProfileState extends State<Profile> {
     try {
       //print("json[fwId].toString(): " + id);
       response = await http
-          .get(Uri.parse(LoginInfo().serverIP + '/api/Ferienwohnung/' + id));
+          .get(Uri.parse(LoginInfo.serverIP + '/api/Ferienwohnung/' + id));
       //print("response body in fetchapartment: " + response.body);
       final jsonData = jsonDecode(response.body);
 
@@ -135,9 +135,8 @@ class _ProfileState extends State<Profile> {
 
   void fetchUser() async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
-          '/api/Nutzer/' +
-          LoginInfo().userid.toString()));
+      response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
       final jsonData = jsonDecode(response.body);
       setState(() {
         userData.add(jsonData);
@@ -154,9 +153,9 @@ class _ProfileState extends State<Profile> {
     }
 
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/api/Kreditkartendaten/' +
-          LoginInfo().userid.toString()));
+          LoginInfo.userid.toString()));
       final jsonData = jsonDecode(response.body);
       setState(() {
         userData.add(jsonData);
@@ -214,18 +213,24 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+  void cookies() async {
+    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
+    window.localStorage.containsKey('userId');
+    window.localStorage.containsKey('tokenstand');
+    window.localStorage.containsKey('angebotID');
+
+    window.localStorage['userId'] = LoginInfo.userid.toString();
+    LoginInfo.loadToken();
+    window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
   }
 
   void postUser() async {
     if (passRegCon.text == passRegCon2.text) {
       try {
         response = await http.post(
-            Uri.parse(LoginInfo().serverIP + "/api/Nutzer"),
+            Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
@@ -246,7 +251,7 @@ class _ProfileState extends State<Profile> {
                 emailRegCon.text +
                 """\",
     "tokenstand": """ +
-                LoginInfo().tokens.toString() +
+                LoginInfo.tokens.toString() +
                 """,
                  "kreditkartendatens": [
       {
@@ -263,7 +268,7 @@ class _ProfileState extends State<Profile> {
     
   }""");
         if (response.statusCode == 200) {
-          //LoginInfo().tokens = startToken;
+          //LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(
@@ -509,7 +514,7 @@ class _ProfileState extends State<Profile> {
                         value: vermieter,
                         onChanged: (val) {
                           setState(() {
-                            LoginInfo().vermieter = val!;
+                            LoginInfo.vermieter = val!;
                             vermieter = val;
                             setUserToVermieter();
                           });
@@ -524,9 +529,9 @@ class _ProfileState extends State<Profile> {
                           window.localStorage.containsKey('angebotID'),
                           window.localStorage['userId'] = "-1",
                           window.localStorage['tokenstand'] = "0",
-                          LoginInfo().userid = -1,
-                          LoginInfo().currentAngebot = "0",
-                          LoginInfo().tokens = 0,
+                          LoginInfo.userid = -1,
+                          LoginInfo.currentAngebot = "0",
+                          LoginInfo.tokens = 0,
                           Navigator.pushNamed(context, '/registrierung')
                         },
                     child: Text("Logout")),
@@ -653,7 +658,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 const SizedBox(height: 10),
                 Visibility(
-                  visible: LoginInfo().vermieter,
+                  visible: LoginInfo.vermieter,
                   child: Column(
                     children: [
                       Text(
@@ -706,9 +711,9 @@ class _ProfileState extends State<Profile> {
 
   void setUserToVermieter() async {
     // fetch user
-    String get_user_url = LoginInfo().serverIP + '/api/Nutzer/';
-    String put_user_url = LoginInfo().serverIP + '/api/Nutzer';
-    String get_user_userId = LoginInfo().userid.toString();
+    String get_user_url = LoginInfo.serverIP + '/api/Nutzer/';
+    String put_user_url = LoginInfo.serverIP + '/api/Nutzer';
+    String get_user_userId = LoginInfo.userid.toString();
     var response_get =
         await http.get(Uri.parse(get_user_url + get_user_userId));
 
@@ -732,7 +737,7 @@ class _ProfileState extends State<Profile> {
   Future<bool> getUserVermieterStatus() async {
     // fetch user
     String url =
-        LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
+        LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString();
 
     // run Querry
     var responseUserIDQuery = await http.get(
@@ -747,17 +752,11 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-Future<void> addEvaluation() async
-{
-  String url = LoginInfo().serverIP + '/api/Bewertung';
-
-
-
-
+Future<void> addEvaluation() async {
+  String url = LoginInfo.serverIP + '/api/Bewertung';
 }
 
-String buildEvaluationString()
-{
+String buildEvaluationString() {
   String evaluationPostQuery = jsonEncode(<String, Object>{
     //"userId": , // user of the fw
     //"fwId": , // id of the fw

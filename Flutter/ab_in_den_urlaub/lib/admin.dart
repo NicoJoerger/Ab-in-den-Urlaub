@@ -33,7 +33,7 @@ class _AdminState extends State<Admin> {
   }
 
   Image test = Image(image: AssetImage("images/hallstatt.jpg"));
-  String url = LoginInfo().serverIP + '/api/Nutzer';
+  String url = LoginInfo.serverIP + '/api/Nutzer';
   var jsons = [];
   var response;
   var jsonsComment = [];
@@ -51,7 +51,7 @@ class _AdminState extends State<Admin> {
   }
 
   void fetchImage() async {
-    String urlImg = LoginInfo().serverIP + '/api/Bilder';
+    String urlImg = LoginInfo.serverIP + '/api/Bilder';
     try {
       response = await http.get(Uri.parse(urlImg));
       final jsonData = jsonDecode(response.body) as List;
@@ -66,7 +66,7 @@ class _AdminState extends State<Admin> {
   }
 
   void fetchUserById(String id) async {
-    /*  String urlUsr = LoginInfo().serverIP + "/api/Nutzer/" + id;
+    /*  String urlUsr = LoginInfo.serverIP + "/api/Nutzer/" + id;
     try {
       response = await http.get(Uri.parse(urlUsr));
       final jsonData = jsonDecode(response.body) as List;
@@ -80,7 +80,7 @@ class _AdminState extends State<Admin> {
 
   void fetchComment(var fwID) async {
     String urlComment =
-        LoginInfo().serverIP + '/api/Bewertung/' + fwID.toString() + '/fw';
+        LoginInfo.serverIP + '/api/Bewertung/' + fwID.toString() + '/fw';
     try {
       response = await http.get(Uri.parse(urlComment));
       final jsonData = jsonDecode(response.body) as List;

@@ -21,7 +21,7 @@ class _TokenState extends State<Token> {
   }
 
   void addTokens() async {
-    if (LoginInfo().userid == -1) {
+    if (LoginInfo.userid == -1) {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -38,7 +38,7 @@ class _TokenState extends State<Token> {
     } else {
       var response;
       String urlUsr =
-          LoginInfo().serverIP + '/api/Nutzer/' + LoginInfo().userid.toString();
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString();
       try {
         response = await http.get(Uri.parse(urlUsr));
         print(response.body + "\n");
@@ -47,7 +47,7 @@ class _TokenState extends State<Token> {
         jsonData["tokenstand"] =
             (jsonData["tokenstand"].toInt() + sliderval.toInt());
         print(jsonData["tokenstand"].toString() + "\n");
-        String urlToken = LoginInfo().serverIP + '/api/Nutzer';
+        String urlToken = LoginInfo.serverIP + '/api/Nutzer';
         final body = jsonEncode(jsonData);
         response = await http.put(Uri.parse(urlToken),
             headers: <String, String>{
@@ -58,7 +58,7 @@ class _TokenState extends State<Token> {
         print(code + "\n");
         if (response.statusCode == 200) {
           setState(() {
-            LoginInfo().tokens += sliderval.toInt();
+            LoginInfo.tokens += sliderval.toInt();
           });
         }
       } catch (err) {

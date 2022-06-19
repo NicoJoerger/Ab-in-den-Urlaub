@@ -35,7 +35,7 @@ class _RegistrierungState extends State<Registrierung> {
     if (passRegCon.text == passRegCon2.text) {
       try {
         response = await http.post(
-            Uri.parse(LoginInfo().serverIP + "/api/Nutzer"),
+            Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
@@ -73,7 +73,7 @@ class _RegistrierungState extends State<Registrierung> {
     
   }""");
         if (response.statusCode == 200) {
-          LoginInfo().tokens = startToken;
+          LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(
@@ -127,7 +127,7 @@ class _RegistrierungState extends State<Registrierung> {
 
   void fetchUser() async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/login?email=' +
           usernameLoginController.text +
           '&password=' +
@@ -154,15 +154,15 @@ class _RegistrierungState extends State<Registrierung> {
         setState(() {
           jsons = jsonData;
           var length = jsons.length;
-          LoginInfo().userid = jsons[0]['userId'];
-          LoginInfo().tokens = jsons[0]['tokenstand'];
+          LoginInfo.userid = jsons[0]['userId'];
+          LoginInfo.tokens = jsons[0]['tokenstand'];
         });
         window.localStorage.containsKey('userId');
         window.localStorage.containsKey('tokenstand');
         window.localStorage.containsKey('angebotID');
 
-        window.localStorage['userId'] = LoginInfo().userid.toString();
-        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
+        window.localStorage['userId'] = LoginInfo.userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
         print('New added Message ${window.localStorage['userId']}');
         Navigator.pushNamed(context, '/Profile');
       }

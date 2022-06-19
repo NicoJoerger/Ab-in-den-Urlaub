@@ -116,10 +116,9 @@ class _sApartmentsState extends State<sApartments> {
   }
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void fetchAngebot() async {
@@ -131,7 +130,7 @@ class _sApartmentsState extends State<sApartments> {
     var tokenPreisVal = tokenPreis.text;
 
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/filtered?MietzeitraumStart=' +
           start +
           '&MietzeitraumEnde=' +

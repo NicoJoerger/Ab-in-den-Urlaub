@@ -120,10 +120,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
   void postBet() async {
     String body = """ {
     "angebotId": """ +
-        LoginInfo().currentAngebot +
+        LoginInfo.currentAngebot +
         """,
     "userId": """ +
-        LoginInfo().userid.toString() +
+        LoginInfo.userid.toString() +
         """,
     "preis": """ +
         newBet.text +
@@ -133,7 +133,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       //if (int.parse(tokenpreis) > 100) {
       //if (int.parse(newBet.text) > int.parse(tokenpreis)) {
-      response = await http.post(Uri.parse(LoginInfo().serverIP + "/api/Gebot"),
+      response = await http.post(Uri.parse(LoginInfo.serverIP + "/api/Gebot"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           },
@@ -229,10 +229,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   Future<void> fetchOffer() async {
     //print("ID: " + angebotID);
-    String urlOffer = LoginInfo().serverIP +
-        '/api/Angebote/' +
-        LoginInfo().currentAngebot +
-        "/a";
+    String urlOffer =
+        LoginInfo.serverIP + '/api/Angebote/' + LoginInfo.currentAngebot + "/a";
     try {
       //print("test5");
       response = await http.get(Uri.parse(urlOffer));
@@ -271,7 +269,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   Future<void> fetchApartment() async {
     String urlApart =
-        LoginInfo().serverIP + "/api/Ferienwohnung/" + fwID.toString();
+        LoginInfo.serverIP + "/api/Ferienwohnung/" + fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
@@ -300,15 +298,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   Future<void> fetchGebot() async {
-    String urlImg = LoginInfo().serverIP +
-        '/api/Gebot/' +
-        LoginInfo().currentAngebot +
-        '/a';
+    String urlImg =
+        LoginInfo.serverIP + '/api/Gebot/' + LoginInfo.currentAngebot + '/a';
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body);
       String userId = jsons[0]["userId"].toString();
-      if (userId == LoginInfo().userid.toString()) {
+      if (userId == LoginInfo.userid.toString()) {
         setState(() {
           hochstbietender = "Sie sind aktuell Höchstbietender";
         });
@@ -321,17 +317,17 @@ class _apartmentDetailState extends State<apartmentDetail> {
   Future<void> loadCookies() async {
     String userIDString = window.localStorage['userId'].toString();
     String tokenString = window.localStorage['tokenstand'].toString();
-    LoginInfo().userid = int.parse(userIDString);
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.userid = int.parse(userIDString);
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
     angebotID = window.localStorage['angebotID'].toString();
-    //print("\n\nAngebotID = " + LoginInfo().currentAngebot.toString());
+    //print("\n\nAngebotID = " + LoginInfo.currentAngebot.toString());
     //print(tokenString + userIDString);
-    LoginInfo().tokens = int.parse(tokenString);
+    LoginInfo.tokens = int.parse(tokenString);
   }
 
   Future<void> fetchImage() async {
     //print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo().serverIP + '/api/Wohnungsbilder/' + fwID;
+    String urlImg = LoginInfo.serverIP + '/api/Wohnungsbilder/' + fwID;
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
@@ -352,8 +348,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
     print('\nSTART fetchReviewsAndUsername\n');
 
     // vars
-    String urlReviews = LoginInfo().serverIP + '/api/Bewertung';
-    String urlUsername = LoginInfo().serverIP + '/api/Nutzer/';
+    String urlReviews = LoginInfo.serverIP + '/api/Bewertung';
+    String urlUsername = LoginInfo.serverIP + '/api/Nutzer/';
 
     // fetch reviews
     final jsonAllReviws = await http.get(Uri.parse(urlReviews),

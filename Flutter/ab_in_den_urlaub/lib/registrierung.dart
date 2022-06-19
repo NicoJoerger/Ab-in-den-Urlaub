@@ -74,7 +74,50 @@ class _RegistrierungState extends State<Registrierung> {
   }""");
         if (response.statusCode == 200) {
           LoginInfo.tokens = startToken;
-          Navigator.pushNamed(context, '/Profile');
+          try {
+            response = await http.get(Uri.parse(LoginInfo.serverIP +
+                '/login?email=' +
+                emailRegCon.text +
+                '&password=' +
+                passRegCon.text));
+
+            if (response.statusCode != 200) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Login Fehlgeschlagen'),
+                  content: const Text('Username oder Passwort falsch'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              final jsonData = jsonDecode(response.body) as List;
+              print(jsonData);
+
+              setState(() {
+                jsons = jsonData;
+                var length = jsons.length;
+                LoginInfo.userid = jsons[0]['userId'];
+                LoginInfo.tokens = jsons[0]['tokenstand'];
+              });
+              window.localStorage.containsKey('userId');
+              window.localStorage.containsKey('tokenstand');
+              window.localStorage.containsKey('angebotID');
+
+              window.localStorage['userId'] = LoginInfo.userid.toString();
+              window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
+              print('New added Message ${window.localStorage['userId']}');
+              Navigator.pushNamed(context, '/Profile');
+            }
+          } catch (err) {
+            print(err.toString());
+          }
+          //Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(
             context: context,

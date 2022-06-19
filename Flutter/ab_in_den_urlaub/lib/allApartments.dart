@@ -37,6 +37,8 @@ class _AllApartmentsState extends State<AllApartments> {
   var jsonGriechenland = [];
   var jsonDeutschland = [];
   var response;
+  var wohnungen = [];
+  var wohnungenById;
   Map<int, Widget> Bilder = Map();
 
   void loadCookies() async {
@@ -45,80 +47,108 @@ class _AllApartmentsState extends State<AllApartments> {
     LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
   }
 
-  void fetchImage() async {
-    for (int i = 0; i < jsonItalien.length; i++) {
-      int fwId = jsonItalien[i]["fwId"];
-      String urlImg = LoginInfo.serverIP +
-          '/api/Wohnungsbilder/' +
-          jsonItalien[i]["fwId"].toString();
-      try {
-        response = await http.get(Uri.parse(urlImg));
-        jsons = jsonDecode(response.body) as List;
-        if (jsons.length > 0) {
-          print("imageItalien\n");
-          Image image = imageFromBase64String(jsons[0]["bild"]);
-          setState(() {
-            Bilder[fwId] = image;
-          });
-        }
-      } catch (err) {
-        print(err.toString());
+  void getWohnungByID(int id) {
+            print("NEIN");
+            print("lala:" + wohnungen[45].toString());
+    for (int i = 0; i < wohnungen.length; i++) {
+      
+      if (wohnungen[i]["fwId"].toString() == id.toString()) {
+        wohnungenById = wohnungen[i];
+        print("JAWOHL");
       }
     }
-    for (int i = 0; i < jsonSpanien.length; i++) {
-      int fwId = jsonSpanien[i]["fwId"];
-      String urlImg = LoginInfo.serverIP +
-          '/api/Wohnungsbilder/' +
-          jsonSpanien[i]["fwId"].toString();
-      try {
-        response = await http.get(Uri.parse(urlImg));
-        jsons = jsonDecode(response.body) as List;
-        if (jsons.length > 0) {
-          Image image = imageFromBase64String(jsons[0]["bild"]);
+    print("lulul");
+  }
+
+  //wohnungenById
+
+  Future<void> getWohnungen() async {
+    try {
+      response =
+          await http.get(Uri.parse(LoginInfo.serverIP + "/api/Ferienwohnung/"));
+      final jsonData = jsonDecode(response.body) as List;
+      for (int i = 0; i < jsonData.length; i++) {
+        if (!jsonData[i]["deaktiviert"]) {
           setState(() {
-            Bilder[fwId] = image;
+            wohnungen.add(jsonData[i]);
           });
         }
-      } catch (err) {
-        print(err.toString());
       }
+      
+      for (int i = 0; i < wohnungen.length; i++) {
+        print("Wohnungen[" +
+            i.toString() +
+            "]: " +
+            wohnungen[i].toString());
+      }
+      
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchImage() async {
+    await getWohnungen();
+    for (int i = 0; i < jsonItalien.length; i++) {
+      int fwID = jsonItalien[i]["fwId"];
+      
+      getWohnungByID(fwID);
+      String urls = wohnungenById["bilderLinks"].toString();
+      List<String> links = [];
+      Image nBild;
+
+      links = urls.split(";");
+      links[0] = links[0].replaceAll(";", "");
+      nBild = Image.network(links[0]);
+      setState(() {
+        Bilder[fwID] = nBild;
+      });
+    }
+
+    for (int i = 0; i < jsonSpanien.length; i++) {
+      int fwID = jsonSpanien[i]["fwId"];
+      
+      getWohnungByID(fwID);
+      String urls = wohnungenById["bilderLinks"].toString();
+      List<String> links = [];
+      Image nBild;
+
+      links = urls.split(";");
+      links[0] = links[0].replaceAll(";", "");
+      nBild = Image.network(links[0]);
+      setState(() {
+        Bilder[fwID] = nBild;
+      });
     }
     for (int i = 0; i < jsonDeutschland.length; i++) {
-      int fwId = jsonDeutschland[i]["fwId"];
-      String urlImg = LoginInfo.serverIP +
-          '/api/Wohnungsbilder/' +
-          jsonDeutschland[i]["fwId"].toString();
-      try {
-        response = await http.get(Uri.parse(urlImg));
-        jsons = jsonDecode(response.body) as List;
-        if (jsons.length > 0) {
-          print("imageDeutschland\n");
-          Image image = imageFromBase64String(jsons[0]["bild"]);
-          setState(() {
-            Bilder[fwId] = image;
-          });
-        }
-      } catch (err) {
-        print(err.toString());
-      }
+      int fwID = jsonDeutschland[i]["fwId"];
+      
+      getWohnungByID(fwID);
+      String urls = wohnungenById["bilderLinks"].toString();
+      List<String> links = [];
+      Image nBild;
+
+      links = urls.split(";");
+      links[0] = links[0].replaceAll(";", "");
+      nBild = Image.network(links[0]);
+      setState(() {
+        Bilder[fwID] = nBild;
+      });
     }
     for (int i = 0; i < jsonGriechenland.length; i++) {
-      int fwId = jsonGriechenland[i]["fwId"];
-      String urlImg = LoginInfo.serverIP +
-          '/api/Wohnungsbilder/' +
-          jsonGriechenland[i]["fwId"].toString();
-      try {
-        response = await http.get(Uri.parse(urlImg));
-        jsons = jsonDecode(response.body) as List;
-        if (jsons.length > 0) {
-          Image image = imageFromBase64String(jsons[0]["bild"]);
-          setState(() {
-            Bilder[fwId] = image;
-          });
-        }
-      } catch (err) {
-        print(err.toString());
-      }
+      int fwID = jsonGriechenland[i]["fwId"];
+      
+      getWohnungByID(fwID);
+      String urls = wohnungenById["bilderLinks"].toString();
+      List<String> links = [];
+      Image nBild;
+
+      links = urls.split(";");
+      links[0] = links[0].replaceAll(";", "");
+      nBild = Image.network(links[0]);
+      setState(() {
+        Bilder[fwID] = nBild;
+      });
     }
   }
 
@@ -131,7 +161,7 @@ class _AllApartmentsState extends State<AllApartments> {
         jsons = jsonData;
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -159,7 +189,7 @@ class _AllApartmentsState extends State<AllApartments> {
         jsons = jsonData;
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -173,10 +203,10 @@ class _AllApartmentsState extends State<AllApartments> {
 
       setState(() {
         jsonDeutschland = jsonData;
-        print(jsonDeutschland.toString());
+        //print(jsonDeutschland.toString());
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 
@@ -189,10 +219,10 @@ class _AllApartmentsState extends State<AllApartments> {
       // print(jsonData);
       setState(() {
         jsonSpanien = jsonData;
-        print(jsonSpanien.toString());
+        //print(jsonSpanien.toString());
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
     fetchImage();
   }
@@ -206,10 +236,10 @@ class _AllApartmentsState extends State<AllApartments> {
       //  print(jsonData);
       setState(() {
         jsonItalien = jsonData;
-        print(jsonItalien.toString());
+        //print(jsonItalien.toString());
       });
     } catch (err) {
-      print(err.toString());
+      // print(err.toString());
     }
   }
 
@@ -222,10 +252,10 @@ class _AllApartmentsState extends State<AllApartments> {
       //  print(jsonData);
       setState(() {
         jsonGriechenland = jsonData;
-        print(jsonGriechenland.toString());
+        //print(jsonGriechenland.toString());
       });
     } catch (err) {
-      print(err.toString());
+      //print(err.toString());
     }
   }
 

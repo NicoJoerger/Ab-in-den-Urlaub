@@ -98,6 +98,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
   String plz = "";
   String hausnummer = "";
   String ort = "";
+  String URL = "";
+  List<String> urls = [];
   String land = "";
   String anzBetten = "";
   String anzZimmer = "";
@@ -229,8 +231,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   Future<void> fetchOffer() async {
     //print("ID: " + angebotID);
-    String urlOffer =
-        LoginInfo.serverIP + '/api/Angebote/' + LoginInfo.currentAngebot + "/a";
+    String urlOffer = LoginInfo.serverIP +
+        '/api/Angebote/' +
+        LoginInfo.currentAngebot +
+        "/a";
     try {
       //print("test5");
       response = await http.get(Uri.parse(urlOffer));
@@ -289,6 +293,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
         balkon = jsonApart["balkon"];
         beschreibung = jsonApart["beschreibung"].toString();
         wName = jsonApart["wohnungsname"].toString();
+        URL = jsonApart["bilderLinks"].toString();
       });
       beschreibung = jsonApart["beschreibung"].toString();
       _controller = TextEditingController(text: beschreibung);
@@ -298,8 +303,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   Future<void> fetchGebot() async {
-    String urlImg =
-        LoginInfo.serverIP + '/api/Gebot/' + LoginInfo.currentAngebot + '/a';
+    String urlImg = LoginInfo.serverIP +
+        '/api/Gebot/' +
+        LoginInfo.currentAngebot +
+        '/a';
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body);
@@ -326,8 +333,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   Future<void> fetchImage() async {
+    print("HOLE BILD");
     //print("ID:" + widget.anlagenID);
-    String urlImg = LoginInfo.serverIP + '/api/Wohnungsbilder/' + fwID;
+    /*String urlImg = LoginInfo.serverIP + '/api/Wohnungsbilder/' + fwID;
     try {
       response = await http.get(Uri.parse(urlImg));
       jsons = jsonDecode(response.body) as List;
@@ -341,15 +349,29 @@ class _apartmentDetailState extends State<apartmentDetail> {
       });
     } catch (err) {
       print(err.toString());
+    }*/
+    Image nBild;
+    print("url:" + URL);
+    urls = URL.split(";");
+    for (int i = 0; i < urls.length - 1;i++) {
+      urls[i] = urls[i].replaceAll(";", "");
+      print("element: " +urls[i] );
+      nBild = Image.network(urls[i]);
+      bilder.add(nBild);
     }
+    print("BILD GEHOLT");
+
+    setState(() {
+      
+    });
   }
 
   Future<void> fetchReviewsAndUsername() async {
     print('\nSTART fetchReviewsAndUsername\n');
 
-    // vars
-    String urlReviews = LoginInfo.serverIP + '/api/Bewertung';
-    String urlUsername = LoginInfo.serverIP + '/api/Nutzer/';
+      // vars
+      String urlReviews  = LoginInfo.serverIP + '/api/Bewertung';
+      String urlUsername = LoginInfo.serverIP + '/api/Nutzer/';
 
     // fetch reviews
     final jsonAllReviws = await http.get(Uri.parse(urlReviews),
@@ -423,7 +445,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
       print('review :' + countStarsList[i].toString() + '\n');
     }
 
-    // check if works tomorrow
+    // works
     if (usernameList.isNotEmpty) {
       setState(() {});
     }
@@ -434,6 +456,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   @override
   void initState() {
     getData();
+    //cookies();
     super.initState();
   }
 
@@ -518,7 +541,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                         child: Column(children: [
                           ListView.builder(
                             itemBuilder: (context, index) {
-                              return Card(
+                              return Card(                               
                                 child: ListTile(
                                     title: Column(children: [
                                   RichText(

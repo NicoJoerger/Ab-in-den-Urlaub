@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'package:image_picker_web/image_picker_web.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:uuid/uuid.dart';
 import 'dart:typed_data';
-import 'package:cross_file_image/cross_file_image.dart';
+//import 'package:cross_file_image/cross_file_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+//import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'globals.dart';
+import 'dart:io';
+import 'dart:io' show File;
 import 'dart:html' as html;
 import 'appBars.dart';
 
@@ -18,6 +22,15 @@ class nWohnung extends StatefulWidget {
   @override
   _nWohnungState createState() => _nWohnungState();
 }
+
+final ImagePicker _picker = ImagePicker();
+List<XFile> itemImagesList = <XFile>[];
+String URLs = "";
+List<String> downloadUrl = <String>[];
+List<XFile>? photo = <XFile>[];
+List<Widget> itemPhotosWidgetList = <Widget>[];
+File? file;
+bool uploading = false;
 
 Image image = Image(image: AssetImage("/images/Empty.png"));
 List<Image> Bilder = [];
@@ -56,113 +69,9 @@ class _nWohnungState extends State<nWohnung> {
     return header + base64String;
   }
 
-  void postWohnungsBilder() async {
-    try {
-      for (var i = 0; i < Bilder.length; i++) {
-        response = await http.post(
-            Uri.parse(LoginInfo.serverIP + "/api/Wohnungsbilder"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8'
-            },
-            body: """ {
-    "fwId": """ +
-                fwId.toString() +
-                """ } """);
-/*
-                """, + "bild\":\"""" +
-                uint8ListTob64(bytesFromPicker[i]) +
-                """\"} """
-*/
-        print(response.statusCode);
-        final jsonData = jsonDecode(response.body);
-
-        print("basti");
-
-        print(jsonData);
-        wgbId.add(jsonData["wgbId"]);
-        print("mazze");
-        //bytesFromPicker[0]
-        print("Imagedata :" + bytesFromPicker[i].toString());
-      }
-      /*
-      print(Bilder.length.toString());
-      for (var i = 0; i < Bilder.length; i++) {
-        print("try leude");
-        Image bild = Bilder[i];
-        print("mazze stinkt");
-        bild.image
-            //print("\n" + Bilder[i] +"\n");
-            //final bytes = Io.File(bil).readAsBytesSync();
-            ;
-        print("bild string" + bild.image.toString());
-
-        //String img64 = base64Encode(bytes);
-        Uint8List _bytesData =
-            Base64Decoder().convert(bild.toString().split(",").last);
-        print("mazze stinkt ziemlich");
-        
-        List<int> selectedFile = _bytesData;
-        var req = http.MultipartRequest(
-            'PUT', Uri.parse(LoginInfo.serverIP + "/api/Wohnungsbilder"));
-        //req.files.add(http.MultipartFile.fromBytes("i",selectedFile, contentType: new MediaType('application', 'octet-stream'), filename: "image"));
-        req.files.add(await http.MultipartFile.fromPath("i", xImages[i].path));
-        req.send().then((response));
-        print("moinmacs hier");
-      }
-*/
-      if (response.statusCode == 200) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Registrierung Erfolgreich'),
-            content: Text('Danke für das Registrieren Ihrer Wohnung.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-        //LoginInfo.tokens = startToken;
-        //Navigator.pushNamed(context, '/Profile');
-      } /*else if (response.statusCode == 400) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Registrierung Fehlgeschlagen'),
-            content: Text(response.body),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      }*/
-      else {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text('Registrierung Fehlgeschlagen'),
-            content: Text('Fehler'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
-      }
-      print(response.body);
-    } catch (err) {
-      print(err.toString());
-    }
-  }
-
   void postWohnung() async {
+    print("POST WOHNUNG");
+    print("id: " + LoginInfo.userid.toString());
     String body = """ {
     "userId": """ +
         LoginInfo.userid.toString() +
@@ -209,21 +118,25 @@ class _nWohnungState extends State<nWohnung> {
     "land": \"""" +
         _selected_country +
         """\",
+    "BilderLinks": \"""" + 
+        URLs +
+        """\",
     "deaktiviert": """ +
         "false" +
         """  
   }""";
     try {
+      print("try post");
       response = await http.post(
           Uri.parse(LoginInfo.serverIP + "/api/Ferienwohnung"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           },
           body: body);
+      print("response: " + response.statusCode.toString());
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         fwId = jsonData["fwId"];
-        postWohnungsBilder();
         showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -296,44 +209,6 @@ class _nWohnungState extends State<nWohnung> {
         int.parse(html.window.localStorage['tokenstand'].toString());
   }
 
-  void pickImage2() async {
-//    List<Uint8List>? bytesFromPicker = await ImagePickerWeb.getMultiImagesAsBytes();
-
-    //List<Image> fromPicker = (await ImagePickerWeb.getMultiImagesAsWidget())!;
-    bytesFromPicker = (await ImagePickerWeb.getMultiImagesAsBytes())!;
-    for (int i = 0; i < bytesFromPicker.length; i++) {
-      ByteData byteData = bytesFromPicker[i].buffer.asByteData();
-      int32bytesFromPicker.add(byteData.buffer.asInt32List());
-      tempBilder.add(Image(
-        image: MemoryImage(bytesFromPicker[i]),
-      ));
-
-      //List<int> int32List = [
-      //  for (var offset = 0; offset < bytesFromPicker[i].length; offset += 4)
-      //    byteData.getInt32(offset, Endian.big),
-      //];
-      //byteData.buffer.asInt32List();
-      //print("Int32List: " + byteData.buffer.asInt32List().toString());
-    }
-
-    setState(() {
-      Bilder = tempBilder;
-    });
-  }
-
-  void pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? Ximage = await _picker.pickImage(source: ImageSource.gallery);
-    if (Ximage != null) {
-      image = Image(image: XFileImage(Ximage));
-      Bilder.add(image);
-      xImages.add(Ximage);
-      //final File? imageFile = File(Ximage!.path);
-    }
-
-    setState(() {});
-  }
-
   final List<String> _address_countries_list = [
     'Deutschland',
     'Frankreich',
@@ -350,13 +225,15 @@ class _nWohnungState extends State<nWohnung> {
 
   @override
   void initState() {
-    tempBilder = [];
 // TODO: implement initState
+    loadCookies();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    double _screenwidth = MediaQuery.of(context).size.width,
+        _screenheight = MediaQuery.of(context).size.height;
     return Material(
       type: MaterialType.transparency,
       child: Scaffold(
@@ -446,6 +323,7 @@ class _nWohnungState extends State<nWohnung> {
                   Container(height: 12), // vertical spacing
 
                   // pictures
+
                   Container(
                     width: MediaQuery.of(context).size.width * 0.5,
                     decoration: BoxDecoration(
@@ -456,7 +334,35 @@ class _nWohnungState extends State<nWohnung> {
                     ),
                     child: Column(
                       children: [
-                        Container(
+                        Center(
+                          child: itemPhotosWidgetList.isEmpty
+                              ? Center(
+                                  child: MaterialButton(
+                                    onPressed: pickPhotoFromGallery,
+                                    child: Container(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Center(
+                                        child: Image.network(
+                                          "https://static.thenounproject.com/png/3322766-200.png",
+                                          height: 100.0,
+                                          width: 100.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Wrap(
+                                    spacing: 5.0,
+                                    direction: Axis.horizontal,
+                                    children: itemPhotosWidgetList,
+                                    alignment: WrapAlignment.spaceEvenly,
+                                    runSpacing: 10.0,
+                                  ),
+                                ),
+                        ),
+                        /*Container(
                           child: ImageSlideshow(
                               width: 1000,
                               height: 500,
@@ -473,7 +379,7 @@ class _nWohnungState extends State<nWohnung> {
                             },
                             child: Text("Neues Bild hochladen"),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -632,7 +538,7 @@ class _nWohnungState extends State<nWohnung> {
                       child: const Text('Wohnung registrieren',
                           style: TextStyle(color: Colors.black)),
                       onPressed: () {
-                        postWohnung();
+                        upload();
 
                         // when button is pressed
                       },
@@ -660,4 +566,164 @@ class _nWohnungState extends State<nWohnung> {
     //post
     // registrierungseite kopieren
   }*/
+
+  displayWebUploadFormScreen(_screenwidth, _screenheight) {
+    return OKToast(
+        child: Scaffold(
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 100.0,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+                color: Colors.white70,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: const Offset(0.0, 0.5),
+                    blurRadius: 30.0,
+                  )
+                ]),
+            width: _screenwidth * 0.7,
+            height: 300.0,
+            child: Center(
+              child: itemPhotosWidgetList.isEmpty
+                  ? Center(
+                      child: MaterialButton(
+                        onPressed: pickPhotoFromGallery,
+                        child: Container(
+                          alignment: Alignment.bottomCenter,
+                          child: Center(
+                            child: Image.network(
+                              "https://static.thenounproject.com/png/3322766-200.png",
+                              height: 100.0,
+                              width: 100.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Wrap(
+                        spacing: 5.0,
+                        direction: Axis.horizontal,
+                        children: itemPhotosWidgetList,
+                        alignment: WrapAlignment.spaceEvenly,
+                        runSpacing: 10.0,
+                      ),
+                    ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 50.0,
+                  left: 100.0,
+                  right: 100.0,
+                ),
+                child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 15.0),
+                    color: const Color.fromRGBO(0, 35, 102, 1),
+                    onPressed: uploading ? null : () => upload(),
+                    child: uploading
+                        ? const SizedBox(
+                            child: CircularProgressIndicator(),
+                            height: 15.0,
+                          )
+                        : const Text(
+                            "Add",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ));
+  }
+
+  addImage() {
+    for (var bytes in photo!) {
+      itemPhotosWidgetList.add(Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: Container(
+          height: 90.0,
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              child: kIsWeb
+                  ? Image.network(File(bytes.path).path)
+                  : Image.file(
+                      File(bytes.path),
+                    ),
+            ),
+          ),
+        ),
+      ));
+    }
+  }
+
+  pickPhotoFromGallery() async {
+    photo = await _picker.pickMultiImage();
+    if (photo != null) {
+      setState(() {
+        itemImagesList = itemImagesList + photo!;
+        addImage();
+        photo!.clear();
+      });
+    }
+  }
+
+  upload() async {
+    String productId = await uplaodImageAndSaveItemInfo();
+    setState(() {
+      uploading = false;
+    });
+    for(int i = 0; i < downloadUrl.length;i++)
+    {
+      URLs = URLs + downloadUrl[i] + ";";
+    }
+    postWohnung();
+  }
+
+  Future<String> uplaodImageAndSaveItemInfo() async {
+    setState(() {
+      uploading = true;
+    });
+    PickedFile? pickedFile;
+    String? productId = const Uuid().v4();
+    for (int i = 0; i < itemImagesList.length; i++) {
+      file = File(itemImagesList[i].path);
+      pickedFile = PickedFile(file!.path);
+
+      await uploadImageToStorage(pickedFile, productId);
+    }
+    return productId;
+  }
+
+  uploadImageToStorage(PickedFile? pickedFile, String productId) async {
+    String? pId = const Uuid().v4();
+    Reference reference =
+        FirebaseStorage.instance.ref().child('Items/$productId/product_$pId');
+    await reference.putData(
+      await pickedFile!.readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+    String value = await reference.getDownloadURL();
+    downloadUrl.add(value);
+    print(value.toString());
+  }
 }

@@ -360,6 +360,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
       bilder.add(nBild);
     }
     print("BILD GEHOLT");
+
+    setState(() {
+      
+    });
   }
 
   Future<void> fetchReviewsAndUsername() async {
@@ -441,7 +445,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
       print('review :' + countStarsList[i].toString() + '\n');
     }
 
-    // check if works tomorrow
+    // works
     if (usernameList.isNotEmpty) {
       setState(() {});
     }
@@ -537,7 +541,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                         child: Column(children: [
                           ListView.builder(
                             itemBuilder: (context, index) {
-                              return Card(
+                              return Card(                               
                                 child: ListTile(
                                     title: Column(children: [
                                   RichText(

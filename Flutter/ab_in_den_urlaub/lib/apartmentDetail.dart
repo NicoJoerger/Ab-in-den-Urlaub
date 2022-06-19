@@ -647,10 +647,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
                     [
                       ElevatedButton
                       (
-                        style: ElevatedButton.styleFrom
-                        (
-                          minimumSize: Size.fromHeight(MediaQuery.of(context).size.width * ContentWFactor), 
-                        ),
                         onPressed: () => showDialog<String>
                         (
                           context: context,

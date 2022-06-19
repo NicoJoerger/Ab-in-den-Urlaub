@@ -517,10 +517,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(
-              children: [
+              children: 
+              [
+
+                const SizedBox(height: 100,),  // spacing
 
                 // wohnungsname
                 Text(wName, style: const TextStyle(fontSize: 50)),
+
+                const SizedBox(height: 10,),  // spacing
 
                 // Images
                 SizedBox
@@ -533,9 +538,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       children: bilder
                   ),
                 ),
-                const SizedBox(
-                            height: 50,
-                          ),
+
+                const SizedBox(height: 10,),  // spacing
+
                 // beschreibung title
                 Container
                 (
@@ -661,12 +666,12 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   ),
                 ),
 
+                const SizedBox(height: 30,),  // spacing
+
                 // bieten
-                Container
+                SizedBox
                 (
                   width: MediaQuery.of(context).size.width * ContentWFactor,
-                  //alignment: Alignment.center,
-                  margin: const EdgeInsets.all(20),
                   child: Row
                   (
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -719,9 +724,13 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   )
                 ),
 
+                const SizedBox(height: 10,),  // spacing
+
                 Text(hochstbietender),
-              
-                 // reviews title
+
+                const SizedBox(height: 10,),  // spacing
+
+                // reviews title
                 Container
                 (
                   height: 1 / 5 * (1 / 3 * MediaQuery.of(context).size.height),
@@ -737,8 +746,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   child: const Text('Bewertungen'),
                 ),
 
-                // reviews
-                Container(
+                // reviews data
+                Container
+                (
                     decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.lightBlue,
@@ -807,8 +817,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                           ),
                         ]))),
 
-                // spacing
-                const SizedBox(height: 100,)
+                const SizedBox(height: 100,),  // spacing
 
               ],
             ),

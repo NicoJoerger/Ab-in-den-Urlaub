@@ -1,6 +1,6 @@
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'appBars.dart';
 import 'globals.dart';
 import 'dart:html';
@@ -19,6 +19,8 @@ class _ProfileState extends State<Profile> {
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
+  List<String> wohnungen2 = ['Wähle']; // Option 2
+  String _selectedLocation = "Wähle";
   var userData = [];
   var response;
   var Texth = 40.0;
@@ -33,11 +35,9 @@ class _ProfileState extends State<Profile> {
   final vornameCon = TextEditingController();
 
   // evaluation
-  bool  vermieter   = false;
-  int   countStarts = -1;
-  final countStarsController = TextEditingController();
-  final commentController    = TextEditingController();
-
+  bool vermieter = false;
+  int countStarts = -1;
+  String comment = '';
 
   String dropdownValue = 'Wähle Wohnung';
 
@@ -78,11 +78,44 @@ class _ProfileState extends State<Profile> {
 
     //print("\n");
 
-    /*
     for (int i = 0; i < wohnungen.length; i++) {
       //print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
+      
     }
-    */
+  }
+
+  Future<void> getUserWohnungen() async {
+    try {
+      //print("HI Get Wohnungsname");
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
+          "/api/Ferienwohnung/" +
+          LoginInfo.userid.toString() +
+          "/user"));
+      //print("Wohnungsname get body: " + response.body);
+      final jsonData = jsonDecode(response.body) as List;
+      wohnungen2 = ['Wähle'];
+      for (int i = 0; i < jsonData.length; i++) {
+        //print("jsonDataUserWohnungen[" +
+        //    i.toString() +
+        //    "].toString(): " +
+        //    jsonData[i].toString());
+        //print(jsonData[i]["deaktiviert"]);
+        if (!jsonData[i]["deaktiviert"]) {
+          setState(() {
+            wohnungen2.add(jsonData[i]["wohnungsname"]);
+          });
+        }
+      }
+      
+      for (int i = 0; i < jsonData.length; i++) {
+        print("jsonDataUserWohnungen[" +
+            i.toString() +
+            "].toString(): " +
+            jsonData[i].toString());
+      }
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   Future<void> fetchHistory() async {
@@ -102,7 +135,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> fetchOffer(String id) async {
-    //print(LoginInfo().serverIP + "/api/Angebote/" + id + "/a");
+    //print(LoginInfo.serverIP + "/api/Angebote/" + id + "/a");
     try {
       response = await http
           .get(Uri.parse(LoginInfo.serverIP + "/api/Angebote/" + id + "/a"));
@@ -179,30 +212,26 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: const Text('Maximale Tokenkosten'),
           content: SingleChildScrollView(
+              
             child: DropdownButton<String>(
               dropdownColor: Colors.blue,
-              value: dropdownValue,
+              value: _selectedLocation,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
               style: const TextStyle(color: Colors.white, fontSize: 15),
               onChanged: (String? newValue) {
                 setState(() {
-                  dropdownValue = newValue!;
+                  _selectedLocation = newValue!;
                 });
               },
-              items: <String>[
-                'Wähle Wohnung',
-                'Deutschland',
-                'Frankreich',
-                'Spanien'
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+              items: wohnungen2.map((location) {
+                return DropdownMenuItem(
+                  child: Text(location),
+                  value: location,
                 );
               }).toList(),
             ),
-          ),
+              ),
           actions: <Widget>[
             TextButton(
               child: const Text('Bestätigen'),
@@ -216,11 +245,17 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void loadCookies() async {
+  void cookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo.tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
+    window.localStorage.containsKey('userId');
+    window.localStorage.containsKey('tokenstand');
+    window.localStorage.containsKey('angebotID');
+
+    window.localStorage['userId'] = LoginInfo.userid.toString();
+    LoginInfo.loadToken();
+    window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
   }
 
   void postUser() async {
@@ -265,7 +300,7 @@ class _ProfileState extends State<Profile> {
     
   }""");
         if (response.statusCode == 200) {
-          //LoginInfo().tokens = startToken;
+          //LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
         } else if (response.statusCode == 400) {
           showDialog<String>(
@@ -320,9 +355,11 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     print("initState() entered.\n");
+    getUserWohnungen();
     fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
+    
     super.initState();
     //print("initState() exited.\n");
   }
@@ -362,25 +399,20 @@ class _ProfileState extends State<Profile> {
                         Row(children: [
                           DropdownButton<String>(
                             dropdownColor: Colors.blue,
-                            value: dropdownValue,
+                            value: _selectedLocation,
                             icon: const Icon(Icons.arrow_downward),
                             elevation: 16,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 15),
                             onChanged: (String? newValue) {
                               setState(() {
-                                dropdownValue = newValue!;
+                                _selectedLocation = newValue!;
                               });
                             },
-                            items: <String>[
-                              'Wähle Wohnung',
-                              'Deutschland',
-                              'Frankreich',
-                              'Spanien'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
+                            items: wohnungen2.map((location) {
+                              return DropdownMenuItem(
+                                child: Text(location),
+                                value: location,
                               );
                             }).toList(),
                           ),
@@ -567,10 +599,6 @@ class _ProfileState extends State<Profile> {
                         width: 150,
                         child: Text("Tokenpreis"),
                       ),
-                      Container(
-                        width: 150,
-                        child: Text('Bewerteng'),
-                      )
                     ],
                   ),
                 ),
@@ -649,18 +677,9 @@ class _ProfileState extends State<Profile> {
                                   child: Text(
                                       json["aktuellerTokenpreis"].toString()),
                                 ),
-                                Container
-                                (
-                                  width: 150,
-                                  child: ElevatedButton(
-                                    
-                                    onPressed: () => evaluationDialog(context, json['fwId']),
-                                    child: const Text('Bewerten'),
-                                  ),
-                                )
                               ]),
-                            );
-                          } else {
+                        );
+                      } else {
                         return GestureDetector();
                       }
                     },
@@ -760,108 +779,19 @@ class _ProfileState extends State<Profile> {
     // return user vermmieter
     return jsonDecode(responseUserIDQuery.body)['vermieter'];
   }
+}
 
-  void evaluationDialog(context, int fwId) 
-  {
-    showDialog<String>
-    (
-      context: context,
-      builder: (BuildContext context) => AlertDialog
-      (
-        title: const Center(child: Text('neue Bewertung abgeben')),
-        actions: <Widget>
-        [
-          Container
-          (
-            //width: MediaQuery.of(context).size.width * 0.3,   // fix later oleg
-            //height: MediaQuery.of(context).size.height * 0.3, // fix later oleg
+Future<void> addEvaluation() async {
+  String url = LoginInfo.serverIP + '/api/Bewertung';
+}
 
-            alignment: Alignment.center,
-            child: Column(
-              children: 
-              [
-                const Text('Geben sie ihren Kommentar ein.:'),
-                Container(height: 5),
-                TextField
-                (
-                  controller: commentController,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  minLines: 3,
-                  maxLines: 8,
-                ),     
-                Container(height: 10),
-                const Text('Anz Sterne (0-5) eingben:'),
-                Container(height: 5),
-                TextField
-                (
-                  controller:  countStarsController,
+String buildEvaluationString() {
+  String evaluationPostQuery = jsonEncode(<String, Object>{
+    //"userId": , // user of the fw
+    //"fwId": , // id of the fw
+    "anzsterne": 0,
+    "kommentar": "string",
+  });
 
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(1),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-5]'))
-                  ], // Only numbers can be e
-
-                ),
-                Container(height: 10),
-                Row
-                (
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: 
-                  [
-                    TextButton
-                    ( // 
-                      onPressed: () => addReview(fwId),
-                      child: const Text('Abgeben'),
-                    ),
-                    TextButton 
-                    ( // send Comment
-                      onPressed: () => Navigator.pop(context, 'Nicht Abgeben'),
-                      child: const Text('Nicht Abgeben'),
-                    )
-                  ],
-                )               
-              ],
-            ),
-          )
-        ],
-      ),
-    );     
-  }
-
-  Future<void> addReview(int fwId) async
-  {
-
-    Navigator.pop(context, 'Abgeben'); // close Dialog
-    
-    //print('\nADD Review\n');           // check
-
-    String url = LoginInfo.serverIP + '/api/Bewertung';
-
-    // post review
-    final postOfferResponse = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-      body: buildEvaluationString(fwId)
-    );
-
-    if(postOfferResponse.statusCode == 200)
-    {
-      print('\nReview posted succesfilly\n');
-    }
-
-  }
-
-  String buildEvaluationString(int fwId)
-  {
-    String evaluationPostQuery = jsonEncode(<String, Object>{
-      "userId"   : LoginInfo.userid, // user id 
-      "fwId"     : fwId,             // id of the fw
-      "anzsterne": int.parse(countStarsController.text),
-      "kommentar": commentController.text,
-    });
-
-    return evaluationPostQuery;
-  }
-
+  return evaluationPostQuery;
 }

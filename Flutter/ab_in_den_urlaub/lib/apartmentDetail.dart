@@ -741,7 +741,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     await loadCookies();
     await fetchOffer();
     await fetchApartment();
-    //await fetchReviewsAndUsername();
+    await fetchReviewsAndUsername();
     await fetchImage();
   }
 }

@@ -88,7 +88,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var jsonOffer;
   var jsonApart;
   var fwID = "";
-  String hochstbietender = "Basti stinkt";
+  String hochstbietender = "";
   String mietzeitraumStart = "";
   String mietzeitraumEnde = "";
   String beschreibung = "";

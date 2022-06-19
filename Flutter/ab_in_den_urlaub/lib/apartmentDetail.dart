@@ -13,6 +13,8 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'appBars.dart';
 import 'dart:html';
 
+bool besitzer = false;
+
 class apartmentDetail extends StatefulWidget {
   String anlagenName = "";
   String angebotID = "";
@@ -63,6 +65,28 @@ class apartmentDetail extends StatefulWidget {
       : super(key: key);
   @override
   _apartmentDetailState createState() => _apartmentDetailState();
+}
+
+class deleteButton extends StatelessWidget {
+  const deleteButton({Key? key}) : super(key: key);
+
+Future<void> deleteAngebot() async {
+  var response;
+      response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Angebot/" + LoginInfo.currentAngebot));
+      print(response.toString());
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if (besitzer == true) {
+      return TextButton(
+          onPressed: deleteAngebot, 
+          child: Text("Angebot löschen"));
+    } else {
+      return Container();
+    }
+  }
 }
 
 class _apartmentDetailState extends State<apartmentDetail> {
@@ -366,6 +390,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     });
   }
 
+  
   Future<void> fetchReviewsAndUsername() async {
     print('\nSTART fetchReviewsAndUsername\n');
 
@@ -508,7 +533,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                       children: bilder
                   ),
                 ),
-
+                const SizedBox(
+                            height: 50,
+                          ),
                 // beschreibung title
                 Container
                 (
@@ -683,6 +710,10 @@ class _apartmentDetailState extends State<apartmentDetail> {
                         ),
                           child: const Text('Bieten'),
                       ),
+                      const SizedBox(
+                            width: 50,
+                          ),
+                       deleteButton(),
                        
                     ],
                   )

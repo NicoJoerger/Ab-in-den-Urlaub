@@ -13,6 +13,8 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'appBars.dart';
 import 'dart:html';
 
+bool besitzer = false;
+
 class apartmentDetail extends StatefulWidget {
   String anlagenName = "";
   String angebotID = "";
@@ -65,6 +67,28 @@ class apartmentDetail extends StatefulWidget {
   _apartmentDetailState createState() => _apartmentDetailState();
 }
 
+class deleteButton extends StatelessWidget {
+  const deleteButton({Key? key}) : super(key: key);
+
+Future<void> deleteAngebot() async {
+  var response;
+      response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Angebot/" + LoginInfo.currentAngebot));
+      print(response.toString());
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if (besitzer == true) {
+      return TextButton(
+          onPressed: deleteAngebot, 
+          child: Text("Angebot löschen"));
+    } else {
+      return Container();
+    }
+  }
+}
+
 class _apartmentDetailState extends State<apartmentDetail> {
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
@@ -88,7 +112,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   var jsonOffer;
   var jsonApart;
   var fwID = "";
-  String hochstbietender = "Basti stinkt";
+  String hochstbietender = "";
   String mietzeitraumStart = "";
   String mietzeitraumEnde = "";
   String beschreibung = "";
@@ -366,6 +390,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     });
   }
 
+  
   Future<void> fetchReviewsAndUsername() async {
     print('\nSTART fetchReviewsAndUsername\n');
 
@@ -461,9 +486,11 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
+    <String, dynamic>{}) as Map;
+
     if (arguments["text"] != null) {
       widget.text = arguments["text"];
       widget.von = arguments["von"];
@@ -475,41 +502,237 @@ class _apartmentDetailState extends State<apartmentDetail> {
       widget.hausNr = arguments["hausNr"];
       widget.anlagenID = arguments["anlangenID"];
     }
-    return Material(
+
+    return Material
+    (
       type: MaterialType.transparency,
-      child: Scaffold(
-        appBar: PreferredSize(
+      child: Scaffold
+      (
+        appBar: PreferredSize
+        (
           preferredSize: AppBar().preferredSize,
           child: AppBarBrowser(),
         ),
-        body: Container(
+        body: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(
-              children: [
-                Text(wName, style: TextStyle(fontSize: 50)),
+              children: 
+              [
 
-                // spacing
-                Container(
-                  height: 10,
-                ),
+                const SizedBox(height: 100,),  // spacing
+
+                // wohnungsname
+                Text(wName, style: const TextStyle(fontSize: 50)),
+
+                const SizedBox(height: 10,),  // spacing
 
                 // Images
-                Container(
-                  child: ImageSlideshow(
-                      width: 1000,
+                SizedBox
+                (
+                  child: ImageSlideshow
+                  (
+                      width: MediaQuery.of(context).size.width * ContentWFactor,
                       height: 500,
                       initialPage: 0,
-                      children: bilder),
+                      children: bilder
+                  ),
                 ),
 
-                // spacing
-                Container(
-                  height: 10,
+                const SizedBox(height: 10,),  // spacing
+
+                // beschreibung title
+                Container
+                (
+                  height: 1 / 5 * (1 / 3 * MediaQuery.of(context).size.height),
+                  width: MediaQuery.of(context).size.width * ContentWFactor,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration
+                  (
+                    border: Border.all
+                    (
+                      color: Colors.lightBlue,
+                    ),
+                    borderRadius: const BorderRadius.only
+                    (
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))
+                  ),
+                  child: const Center(child: Text('Wohnungsinformationen'))
                 ),
+
+                // beschreibung data
+                Container
+                (
+                  decoration: BoxDecoration
+                  (
+                    border: Border.all
+                    (
+                      color: Colors.lightBlue,
+                    ),
+                    borderRadius: const BorderRadius.only
+                    (
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20)
+                    )
+                  ),           
+                  width: MediaQuery.of(context).size.width * ContentWFactor,
+                  child:  Column
+                  (
+                    children: 
+                    [
+                      const Center(child: Text("Beschreibung")),
+                      Container
+                      (
+                        padding: const EdgeInsets.all(20),
+                        child: Center(child: Text(beschreibung)),
+                      ),
+                      Row
+                      (
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: 
+                        [
+                          Text("Adresse: " +
+                              strasse +
+                              " " +
+                              hausnummer +
+                              ", " +
+                              plz +
+                              " " +
+                              ort +
+                              " " +
+                              land),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Mietzeitraum: " +
+                              mietzeitraumStart +
+                              " bis: " +
+                              mietzeitraumEnde)
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Aktueller Tokenpreis: " + tokenpreis + " Tokens")
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Text("Mietpreis: " + mietpreis + "€")],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Wohnfläche: " + flaeche + "m²"),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          Text("Anzahl Zimmer: " + anzZimmer),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          Text("Anzahl Betten: " + anzBetten),
+                          const SizedBox(
+                            width: 50,
+                          ),
+                          Text("Anzahl Bäder: " + anzbaeder),
+                          const SizedBox(
+                            width: 50,
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Checkbox(value: wifi, onChanged: null),
+                          const Text("Wifi"),
+                          Checkbox(value: garten, onChanged: null),
+                          const Text("Garten"),
+                          Checkbox(value: balkon, onChanged: null),
+                          const Text("Balkon"),
+                          Checkbox(value: stornierbar, onChanged: null),
+                          const Text("Stornierbar")
+                        ],
+                    ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30,),  // spacing
+
+                // bieten
+                SizedBox
+                (
+                  width: MediaQuery.of(context).size.width * ContentWFactor,
+                  child: Row
+                  (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: 
+                    [
+                      ElevatedButton
+                      (
+                        onPressed: () => showDialog<String>
+                        (
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog
+                          (
+                            title: const Center(child: Text('Bieten')),
+                            content: const Text('Wieviele Tokens wollen Sie bieten?'),
+                            actions: <Widget>
+                            [
+                              TextFormField
+                              (
+                                controller: newBet,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                ],
+                              ),
+                              TextButton
+                              (
+                                onPressed: () => 
+                                {
+                                  postBet(),
+
+                                  /*setState(() {
+                                    //tokenpreis = newBet.text;
+                                  }),*/
+                                  Navigator.pop(context, 'Bieten'),
+                                },
+                                child: const Text('Bieten'),
+                              ),
+                            ],
+                          ),
+                        ),
+                          child: const Text('Bieten'),
+                      ),
+                      const SizedBox(
+                            width: 50,
+                          ),
+                       deleteButton(),
+                       
+                    ],
+                  )
+                ),
+
+                const SizedBox(height: 10,),  // spacing
+
+                Text(hochstbietender),
+
+                const SizedBox(height: 10,),  // spacing
 
                 // reviews title
-                Container(
+                Container
+                (
                   height: 1 / 5 * (1 / 3 * MediaQuery.of(context).size.height),
                   width: MediaQuery.of(context).size.width * ContentWFactor,
                   alignment: Alignment.center,
@@ -523,8 +746,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
                   child: const Text('Bewertungen'),
                 ),
 
-                // reviews
-                Container(
+                // reviews data
+                Container
+                (
                     decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.lightBlue,
@@ -593,146 +817,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
                           ),
                         ]))),
 
-                // spacing
-                Container(
-                  height: 10,
-                ),
+                const SizedBox(height: 100,),  // spacing
 
-                SizedBox(height: 20),
-                Container(
-                  width: MediaQuery.of(context).size.width * ContentWFactor,
-                  child: Text("Beschreibung:\n\n" + beschreibung),
-                ),
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(""),
-                      ],
-                    ),
-                    //Column(
-                    //children: [Checkbox(value: false, onChanged: () => {})],
-                    //),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Adresse: " +
-                            strasse +
-                            " " +
-                            hausnummer +
-                            ", " +
-                            plz +
-                            " " +
-                            ort +
-                            " " +
-                            land),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Mietzeitraum: " +
-                            mietzeitraumStart +
-                            " bis: " +
-                            mietzeitraumEnde)
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Aktueller Tokenpreis: " + tokenpreis + " Tokens")
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text("Mietpreis: " + mietpreis + "€")],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Wohnfläche: " + flaeche + "m²"),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Text("Anzahl Zimmer: " + anzZimmer),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Text("Anzahl Betten: " + anzBetten),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Text("Anzahl Bäder: " + anzbaeder),
-                        SizedBox(
-                          width: 50,
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Checkbox(value: wifi, onChanged: null),
-                        Text("Wifi"),
-                        Checkbox(value: garten, onChanged: null),
-                        Text("Garten"),
-                        Checkbox(value: balkon, onChanged: null),
-                        Text("Balkon"),
-                        Checkbox(value: stornierbar, onChanged: null),
-                        Text("Stornierbar")
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Bieten'),
-                              content: const Text(
-                                  'Wieviele Tokens wollen Sie bieten?'),
-                              actions: <Widget>[
-                                TextFormField(
-                                  controller: newBet,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]')),
-                                  ],
-                                ),
-                                TextButton(
-                                  onPressed: () => {
-                                    postBet(),
-
-                                    /*setState(() {
-                                      //tokenpreis = newBet.text;
-                                    }),*/
-                                    Navigator.pop(context, 'Bieten'),
-                                  },
-                                  child: const Text('Bieten'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          child: const Text('Bieten'),
-                        ),
-                        Text(hochstbietender)
-                      ],
-                    )),
               ],
             ),
           ),
@@ -748,4 +834,5 @@ class _apartmentDetailState extends State<apartmentDetail> {
     await fetchReviewsAndUsername();
     await fetchImage();
   }
+
 }

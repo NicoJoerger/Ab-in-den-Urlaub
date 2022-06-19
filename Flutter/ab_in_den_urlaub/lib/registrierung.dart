@@ -30,114 +30,158 @@ class _RegistrierungState extends State<Registrierung> {
   final vornameCon = TextEditingController();
   var response;
   var jsons = [];
+  RegExp regexEmail = RegExp(
+      r'[a-zA-Z0-9.!#$%&’*+=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)');
+  RegExp regexVisa = RegExp(r'4[0-9]{12}(?:[0-9]{3})?');
+  RegExp regexMasterCard = RegExp(
+      r'(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}');
 
   void postUser() async {
-    if (passRegCon.text == passRegCon2.text) {
-      try {
-        response = await http.post(
-            Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8'
-            },
-            body: """ {
+    if (regexEmail.hasMatch(emailRegCon.text)) {
+      if (regexVisa.hasMatch(creditCon.text) ||
+          regexMasterCard.hasMatch(creditCon.text)) {
+        if (cvvCon.text.length == 3) {
+          if (passRegCon.text == passRegCon2.text) {
+            try {
+              response = await http.post(
+                  Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8'
+                  },
+                  body: """ {
     "username": \"""" +
-                usernameCon.text +
-                """\",
+                      usernameCon.text +
+                      """\",
     "nachname": \"""" +
-                nachnameCon.text +
-                """\",
+                      nachnameCon.text +
+                      """\",
     "vorname": \"""" +
-                vornameCon.text +
-                """\",
+                      vornameCon.text +
+                      """\",
     "password": \"""" +
-                passRegCon.text +
-                """\",
+                      passRegCon.text +
+                      """\",
     "email": \"""" +
-                emailRegCon.text +
-                """\",
+                      emailRegCon.text +
+                      """\",
     "tokenstand": """ +
-                startToken.toString() +
-                """,
+                      startToken.toString() +
+                      """,
                  "kreditkartendatens": [
       {
         
         "kartennummer": """ +
-                creditCon.text +
-                """,
+                      creditCon.text +
+                      """,
         "cvv": """ +
-                cvvCon.text +
-                """
+                      cvvCon.text +
+                      """
       }
     ]
     
     
   }""");
-        if (response.statusCode == 200) {
-          LoginInfo.tokens = startToken;
-          try {
-            response = await http.get(Uri.parse(LoginInfo.serverIP +
-                '/login?email=' +
-                emailRegCon.text +
-                '&password=' +
-                passRegCon.text));
+              if (response.statusCode == 200) {
+                LoginInfo.tokens = startToken;
+                try {
+                  response = await http.get(Uri.parse(LoginInfo.serverIP +
+                      '/login?email=' +
+                      emailRegCon.text +
+                      '&password=' +
+                      passRegCon.text));
 
-            if (response.statusCode != 200) {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Fehlgeschlagen'),
-                  content: const Text('Username oder Passwort falsch'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              final jsonData = jsonDecode(response.body) as List;
-              print(jsonData);
+                  if (response.statusCode != 200) {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Login Fehlgeschlagen'),
+                        content: const Text('Username oder Passwort falsch'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    final jsonData = jsonDecode(response.body) as List;
+                    print(jsonData);
 
-              setState(() {
-                jsons = jsonData;
-                var length = jsons.length;
-                LoginInfo.userid = jsons[0]['userId'];
-                LoginInfo.tokens = jsons[0]['tokenstand'];
-              });
-              window.localStorage.containsKey('userId');
-              window.localStorage.containsKey('tokenstand');
-              window.localStorage.containsKey('angebotID');
+                    setState(() {
+                      jsons = jsonData;
+                      var length = jsons.length;
+                      LoginInfo.userid = jsons[0]['userId'];
+                      LoginInfo.tokens = jsons[0]['tokenstand'];
+                    });
+                    window.localStorage.containsKey('userId');
+                    window.localStorage.containsKey('tokenstand');
+                    window.localStorage.containsKey('angebotID');
 
-              window.localStorage['userId'] = LoginInfo.userid.toString();
-              window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
-              print('New added Message ${window.localStorage['userId']}');
-              Navigator.pushNamed(context, '/Profile');
+                    window.localStorage['userId'] = LoginInfo.userid.toString();
+                    window.localStorage['tokenstand'] =
+                        LoginInfo.tokens.toString();
+                    print('New added Message ${window.localStorage['userId']}');
+                    Navigator.pushNamed(context, '/Profile');
+                  }
+                } catch (err) {
+                  print(err.toString());
+                }
+                //Navigator.pushNamed(context, '/Profile');
+              } else if (response.statusCode == 400) {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Registrierung Fehlgeschlagen'),
+                    content: Text(response.body),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Registrierung Fehlgeschlagen'),
+                    content: Text('Fehler'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              print(response.body);
+            } catch (err) {
+              print(err.toString());
             }
-          } catch (err) {
-            print(err.toString());
+          } else {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Registrierung Fehlgeschlagen'),
+                content: Text('Passwörter stimmen nicht überein.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
           }
-          //Navigator.pushNamed(context, '/Profile');
-        } else if (response.statusCode == 400) {
-          showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Registrierung Fehlgeschlagen'),
-              content: Text(response.body),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
-                ),
-              ],
-            ),
-          );
         } else {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Registrierung Fehlgeschlagen'),
-              content: Text('Fehler'),
+              content: Text('CVV ist ungültig.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context, 'OK'),
@@ -147,16 +191,28 @@ class _RegistrierungState extends State<Registrierung> {
             ),
           );
         }
-        print(response.body);
-      } catch (err) {
-        print(err.toString());
+      } else {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Registrierung Fehlgeschlagen'),
+            content: Text(
+                'Ungültige Kreditkartennummer (Es wird nur MasterCard und Visa akzeptiert).'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       }
     } else {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
           title: const Text('Registrierung Fehlgeschlagen'),
-          content: Text('Passwörter stimmen nicht überein.'),
+          content: Text('Ungültige E-Mail Adresse.'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'OK'),

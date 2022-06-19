@@ -37,7 +37,6 @@ class apartmentDetail extends StatefulWidget {
   bool balkon = false;
   int tokenP = 0;
 
-
   apartmentDetail(
       {Key? key,
       this.anlagenName = "",
@@ -113,7 +112,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
   bool stornierbar = false;
   TextEditingController _controller = TextEditingController();
   final newBet = TextEditingController();
-  var wohnungen = [];
 
   // review
   // review data
@@ -335,7 +333,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
   }
 
   Future<void> fetchImage() async {
-    getUserWohnungen();
     print("HOLE BILD");
     //print("ID:" + widget.anlagenID);
     /*String urlImg = LoginInfo.serverIP + '/api/Wohnungsbilder/' + fwID;
@@ -363,31 +360,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
       bilder.add(nBild);
     }
     print("BILD GEHOLT");
-  }
-
-
-  Future<void> getUserWohnungen() async {
-    try {
-      response = await http.get(Uri.parse(LoginInfo.serverIP +
-          "/api/Ferienwohnung/"));
-      final jsonData = jsonDecode(response.body) as List;
-      for (int i = 0; i < jsonData.length; i++) {
-
-        if (!jsonData[i]["deaktiviert"]) {
-          setState(() {
-            wohnungen.add(jsonData[i]["wohnungsname"]);
-          });
-        }
-      }
-      for (int i = 0; i < jsonData.length; i++) {
-        print("jsonDataUserWohnungen[" +
-            i.toString() +
-            "].toString(): " +
-            jsonData[i].toString());
-      }
-    } catch (err) {
-      print(err.toString());
-    }
   }
 
   Future<void> fetchReviewsAndUsername() async {

@@ -19,6 +19,8 @@ class _ProfileState extends State<Profile> {
   var rechnungshistorie = [];
   var angebote = [];
   var wohnungen = [];
+  List<String> wohnungen2 = ['Wähle']; // Option 2
+  String _selectedLocation = "Wähle";
   var userData = [];
   var response;
   var Texth = 40.0;
@@ -76,11 +78,40 @@ class _ProfileState extends State<Profile> {
 
     //print("\n");
 
-    /*
+    wohnungen2 = ['Wähle'];
     for (int i = 0; i < wohnungen.length; i++) {
       //print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
+      setState(() {
+        wohnungen2.add(wohnungen[i].toString());
+      });
     }
-    */
+  }
+
+  Future<void> getUserWohnungen() async {
+    try {
+      print("HI Get Wohnungsname");
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
+          "/api/Ferienwohnung/" +
+          LoginInfo.userid.toString() +
+          "/user"));
+      print("Wohnungsname get body: " + response.body);
+      final jsonData = jsonDecode(response.body) as List;
+      wohnungen2 = ['Wähle'];
+      for (int i = 0; i < jsonData.length; i++) {
+        print("jsonDataUserWohnungen[" +
+            i.toString() +
+            "].toString(): " +
+            jsonData[i].toString());
+        print(jsonData[i]["deaktiviert"]);
+        if (!jsonData[i]["deaktiviert"]) {
+          setState(() {
+            wohnungen2.add(jsonData[i]["wohnungsname"]);
+          });
+        }
+      }
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   Future<void> fetchHistory() async {
@@ -135,8 +166,9 @@ class _ProfileState extends State<Profile> {
 
   void fetchUser() async {
     try {
-      response = await http.get(Uri.parse(
-          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
+          '/api/Nutzer/' +
+          LoginInfo.userid.toString()));
       final jsonData = jsonDecode(response.body);
       setState(() {
         userData.add(jsonData);
@@ -176,30 +208,26 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: const Text('Maximale Tokenkosten'),
           content: SingleChildScrollView(
+              /*
             child: DropdownButton<String>(
               dropdownColor: Colors.blue,
-              value: dropdownValue,
+              value: _selectedLocation,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
               style: const TextStyle(color: Colors.white, fontSize: 15),
               onChanged: (String? newValue) {
                 setState(() {
-                  dropdownValue = newValue!;
+                  _selectedLocation = newValue!;
                 });
               },
-              items: <String>[
-                'Wähle Wohnung',
-                'Deutschland',
-                'Frankreich',
-                'Spanien'
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+              items: wohnungen2.map((location) {
+                return DropdownMenuItem(
+                  child: Text(location),
+                  value: location,
                 );
               }).toList(),
-            ),
-          ),
+            ),*/
+              ),
           actions: <Widget>[
             TextButton(
               child: const Text('Bestätigen'),
@@ -326,6 +354,7 @@ class _ProfileState extends State<Profile> {
     fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
+    getUserWohnungen();
     super.initState();
     //print("initState() exited.\n");
   }
@@ -365,25 +394,20 @@ class _ProfileState extends State<Profile> {
                         Row(children: [
                           DropdownButton<String>(
                             dropdownColor: Colors.blue,
-                            value: dropdownValue,
+                            value: _selectedLocation,
                             icon: const Icon(Icons.arrow_downward),
                             elevation: 16,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 15),
                             onChanged: (String? newValue) {
                               setState(() {
-                                dropdownValue = newValue!;
+                                _selectedLocation = newValue!;
                               });
                             },
-                            items: <String>[
-                              'Wähle Wohnung',
-                              'Deutschland',
-                              'Frankreich',
-                              'Spanien'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
+                            items: wohnungen2.map((location) {
+                              return DropdownMenuItem(
+                                child: Text(location),
+                                value: location,
                               );
                             }).toList(),
                           ),

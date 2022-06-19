@@ -29,7 +29,7 @@ class _AllApartmentsState extends State<AllApartments> {
     return base64Encode(data);
   }
 
-  String url = LoginInfo().serverIP + '/api/Ferienwohnung';
+  String url = LoginInfo.serverIP + '/api/Ferienwohnung';
   var jsons = [];
 
   var jsonItalien = [];
@@ -40,16 +40,15 @@ class _AllApartmentsState extends State<AllApartments> {
   Map<int, Widget> Bilder = Map();
 
   void loadCookies() async {
-    LoginInfo().userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo().currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo().tokens =
-        int.parse(window.localStorage['tokenstand'].toString());
+    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
   }
 
   void fetchImage() async {
     for (int i = 0; i < jsonItalien.length; i++) {
       int fwId = jsonItalien[i]["fwId"];
-      String urlImg = LoginInfo().serverIP +
+      String urlImg = LoginInfo.serverIP +
           '/api/Wohnungsbilder/' +
           jsonItalien[i]["fwId"].toString();
       try {
@@ -68,7 +67,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonSpanien.length; i++) {
       int fwId = jsonSpanien[i]["fwId"];
-      String urlImg = LoginInfo().serverIP +
+      String urlImg = LoginInfo.serverIP +
           '/api/Wohnungsbilder/' +
           jsonSpanien[i]["fwId"].toString();
       try {
@@ -76,7 +75,7 @@ class _AllApartmentsState extends State<AllApartments> {
         jsons = jsonDecode(response.body) as List;
         if (jsons.length > 0) {
           Image image = imageFromBase64String(jsons[0]["bild"]);
-            setState(() {
+          setState(() {
             Bilder[fwId] = image;
           });
         }
@@ -86,7 +85,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonDeutschland.length; i++) {
       int fwId = jsonDeutschland[i]["fwId"];
-      String urlImg = LoginInfo().serverIP +
+      String urlImg = LoginInfo.serverIP +
           '/api/Wohnungsbilder/' +
           jsonDeutschland[i]["fwId"].toString();
       try {
@@ -105,7 +104,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonGriechenland.length; i++) {
       int fwId = jsonGriechenland[i]["fwId"];
-      String urlImg = LoginInfo().serverIP +
+      String urlImg = LoginInfo.serverIP +
           '/api/Wohnungsbilder/' +
           jsonGriechenland[i]["fwId"].toString();
       try {
@@ -113,7 +112,7 @@ class _AllApartmentsState extends State<AllApartments> {
         jsons = jsonDecode(response.body) as List;
         if (jsons.length > 0) {
           Image image = imageFromBase64String(jsons[0]["bild"]);
-            setState(() {
+          setState(() {
             Bilder[fwId] = image;
           });
         }
@@ -139,7 +138,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchAngebot() async {
     try {
       response =
-          await http.get(Uri.parse(LoginInfo().serverIP + '/api/Angebote'));
+          await http.get(Uri.parse(LoginInfo.serverIP + '/api/Angebote'));
       final jsonData = jsonDecode(response.body) as List;
       //print(jsonData);
       setState(() {
@@ -153,7 +152,7 @@ class _AllApartmentsState extends State<AllApartments> {
   void fetchFerienwohnungByID(var id) async {
     try {
       response = await http.get(Uri.parse(
-          LoginInfo().serverIP + '/api/Ferienwohnung/' + id.toString()));
+          LoginInfo.serverIP + '/api/Ferienwohnung/' + id.toString()));
       final jsonData = jsonDecode(response.body) as List;
       // print(jsonData);
       setState(() {
@@ -166,12 +165,12 @@ class _AllApartmentsState extends State<AllApartments> {
 
   void fetchAngebotDeutschland(var land) async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
       // print(jsonData);
-      
+
       setState(() {
         jsonDeutschland = jsonData;
         print(jsonDeutschland.toString());
@@ -183,7 +182,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
   void fetchAngebotSpanien(var land) async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
@@ -200,7 +199,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
   void fetchAngebotItalien(var land) async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
@@ -216,7 +215,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
   void fetchAngebotGriechenland(var land) async {
     try {
-      response = await http.get(Uri.parse(LoginInfo().serverIP +
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
           '/filtered?MietzeitraumStart=2010-05-25%2000%3A00%3A00.000&MietzeitraumEnde=2077-05-25%2000%3A00%3A00.000&Mietpreis=1000000&Tokenpreis=999999&Land=' +
           land.toString()));
       final jsonData = jsonDecode(response.body) as List;
@@ -391,8 +390,8 @@ class _AllApartmentsState extends State<AllApartments> {
                             strasse: wohnung["strasse"],
                             hausNr: wohnung["hausnummer"].toString(),
                             angebotID: json["angebotId"].toString(),
-                            image: Bilder[json["fwId"]]!,                          
-                            );
+                            image: Bilder[json["fwId"]]!,
+                          );
                         },
                       ),
                     ),

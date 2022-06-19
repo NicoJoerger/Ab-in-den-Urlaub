@@ -66,7 +66,6 @@ class apartmentDetail extends StatefulWidget {
 }
 
 class _apartmentDetailState extends State<apartmentDetail> {
-
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -114,9 +113,9 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   // review
   // review data
-  List<String> reviewList     = [];
-  List<int>    countStarsList = [];
-  List<String> usernameList   = [];
+  List<String> reviewList = [];
+  List<int> countStarsList = [];
+  List<String> usernameList = [];
 
   void postBet() async {
     String body = """ {
@@ -158,6 +157,20 @@ class _apartmentDetailState extends State<apartmentDetail> {
         setState(() {
           tokenpreis = newBet.text;
         });
+      } else if (response.body == "User hat nicht genug Token") {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Bieten Fehlgeschlagen'),
+            content: Text('Sie haben nicht genug Tokens.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       } else {
         showDialog<String>(
           context: context,
@@ -258,7 +271,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   Future<void> fetchApartment() async {
     String urlApart =
-        LoginInfo.serverIP  + "/api/Ferienwohnung/" + fwID.toString();
+        LoginInfo.serverIP + "/api/Ferienwohnung/" + fwID.toString();
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
@@ -305,18 +318,16 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
-  /*void cookies() async {
-    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+  Future<void> loadCookies() async {
+    String userIDString = window.localStorage['userId'].toString();
+    String tokenString = window.localStorage['tokenstand'].toString();
+    LoginInfo.userid = int.parse(userIDString);
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
-    window.localStorage.containsKey('userId');
-    window.localStorage.containsKey('tokenstand');
-    window.localStorage.containsKey('angebotID');
-
-    window.localStorage['userId'] = LoginInfo.userid.toString();
-    LoginInfo.loadToken();
-    window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
-  }*/
+    angebotID = window.localStorage['angebotID'].toString();
+    //print("\n\nAngebotID = " + LoginInfo.currentAngebot.toString());
+    //print(tokenString + userIDString);
+    LoginInfo.tokens = int.parse(tokenString);
+  }
 
   Future<void> fetchImage() async {
     print("HOLE BILD");
@@ -341,107 +352,91 @@ class _apartmentDetailState extends State<apartmentDetail> {
     print("BILD GEHOLT");
   }
 
-  Future<void> fetchReviewsAndUsername() async 
-  {
-      
-      print('\nSTART fetchReviewsAndUsername\n');
+  Future<void> fetchReviewsAndUsername() async {
+    print('\nSTART fetchReviewsAndUsername\n');
 
       // vars
       String urlReviews  = LoginInfo.serverIP + '/api/Bewertung';
       String urlUsername = LoginInfo.serverIP + '/api/Nutzer/';
 
-      // fetch reviews
-      final jsonAllReviws = await http.get(
-        Uri.parse(urlReviews),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'}
+    // fetch reviews
+    final jsonAllReviws = await http.get(Uri.parse(urlReviews),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        });
+
+    // error message if reviews not got
+    if (jsonAllReviws.statusCode != 200) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Reviews nicht erfolgreich geholt.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       );
-  
-      // error message if reviews not got
-      if(jsonAllReviws.statusCode != 200)
-      {
-        showDialog<String>
-        (
-          context: context,
-          builder: (BuildContext context) => AlertDialog
-          (
-            title: const Text('Reviews nicht erfolgreich geholt.'),
-            actions: <Widget>
-            [
-              TextButton
-              (
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );     
-      }
+    }
 
-      // select reviews for this flat
-      final reviews = jsonDecode(jsonAllReviws.body);
+    // select reviews for this flat
+    final reviews = jsonDecode(jsonAllReviws.body);
 
-      for(dynamic review in reviews)
-      {
-        if( review['fwId'].toString() == fwID )
-        {
-          reviewList.add(review['kommentar']);
-          countStarsList.add(review['anzsterne']);
+    for (dynamic review in reviews) {
+      if (review['fwId'].toString() == fwID) {
+        reviewList.add(review['kommentar']);
+        countStarsList.add(review['anzsterne']);
 
-          //print('\nreview');
-          //print('\nrKomm'+review['kommentar'].toString());
-          //print('\nrAnzS'+review['anzsterne'].toString());
+        //print('\nreview');
+        //print('\nrKomm'+review['kommentar'].toString());
+        //print('\nrAnzS'+review['anzsterne'].toString());
 
-          // fetch username
-          
-          final jsonUser = await http.get
-          (
+        // fetch username
+
+        final jsonUser = await http.get(
             Uri.parse(urlUsername + review['userId'].toString()),
-            headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'}
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8'
+            });
+
+        final user = jsonDecode(jsonUser.body);
+
+        // add username
+        usernameList.add(user['username']);
+
+        // error message if usersname not gotten
+        if (jsonUser.statusCode != 200) {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('User nicht erfolgreich geholt.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
           );
-
-          final user = jsonDecode(jsonUser.body);
-
-          // add username
-          usernameList.add(user['username']);
-
-          // error message if usersname not gotten
-          if(jsonUser.statusCode != 200)
-          {
-            showDialog<String>
-            (
-              context: context,
-              builder: (BuildContext context) => AlertDialog
-              (
-                title: const Text('User nicht erfolgreich geholt.'),
-                actions: <Widget>
-                [
-                  TextButton
-                  (
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );     
-         }
         }
       }
+    }
 
-      print('\nKommentare:\n');
-      for(int i = 0; i < reviewList.length; i++)
-      {
-        print('user   :'+usernameList[i]);
-        print('comment:'+reviewList[i]);
-        print('review :'+countStarsList[i].toString()+'\n');
-      }
+    print('\nKommentare:\n');
+    for (int i = 0; i < reviewList.length; i++) {
+      print('user   :' + usernameList[i]);
+      print('comment:' + reviewList[i]);
+      print('review :' + countStarsList[i].toString() + '\n');
+    }
 
-      // check if works tomorrow
-      if(usernameList.isNotEmpty) 
-      { 
-        setState(() {});
-      }
+    // check if works tomorrow
+    if (usernameList.isNotEmpty) {
+      setState(() {});
+    }
 
-      print('\nEND fetchReviewsAndUsername\n');
+    print('\nEND fetchReviewsAndUsername\n');
   }
 
   @override
@@ -500,103 +495,89 @@ class _apartmentDetailState extends State<apartmentDetail> {
                 ),
 
                 // reviews title
-                Container
-                (
-                  height: 1/5 * (1/3 * MediaQuery.of(context).size.height),
-                  width: MediaQuery.of(context).size.width * ContentWFactor,      
+                Container(
+                  height: 1 / 5 * (1 / 3 * MediaQuery.of(context).size.height),
+                  width: MediaQuery.of(context).size.width * ContentWFactor,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration
-                  (
-                    border: Border.all
-                    (
-                      color: Colors.lightBlue,
-                    ),
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
-                  ),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.lightBlue,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20))),
                   child: const Text('Bewertungen'),
                 ),
 
                 // reviews
-                Container 
-                (       
-                  decoration: BoxDecoration
-                  (
-                    border: Border.all
-                    (
-                      color: Colors.lightBlue,
-                    ),
-                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
-                  ),
-                  height: 4/5 * (1/3 * MediaQuery.of(context).size.height),
-                  width: MediaQuery.of(context).size.width * ContentWFactor,      
-                  child: SingleChildScrollView
-                  (                  
-                    padding: const EdgeInsets.all(20),
-                    physics: const ScrollPhysics(),                     
-                    child: Column 
-                    (               
-                      children: [
-                        ListView.builder
-                        (
-                          itemBuilder: (context, index){
-                            return Card(                        
-                              child: ListTile(
-                                title: Column 
-                                (
-                                  children: 
-                                  [
-                                    RichText
-                                    ( 
-                                      text: TextSpan
-                                      (
-                                        style: DefaultTextStyle.of(context).style,
-                                        children: <TextSpan> 
-                                        [
-                                          TextSpan(text: usernameList[index], style: const TextStyle(fontWeight: FontWeight.bold)),
-                                          const TextSpan(text: ' schrieb:')
-                                        ]
-                                      ),
-                                    ),
-                                    RichText
-                                    ( 
-                                      text: TextSpan
-                                      (
-                                        style: DefaultTextStyle.of(context).style,
-                                        children: <TextSpan> 
-                                        [
-                                          TextSpan(text: '"'+reviewList[index]+'"', style: const TextStyle(fontWeight: FontWeight.bold)),
-                                        ]
-                                      ),
-                                    ),    
-                                                                   
-                                    RichText
-                                    ( 
-                                      text: TextSpan
-                                      (
-                                        style: DefaultTextStyle.of(context).style,
-                                        children: <TextSpan> 
-                                        [
-                                          const TextSpan(text: 'und bewertete mit '),
-                                          TextSpan(text: countStarsList[index].toString()+'/5', style: const TextStyle(fontWeight: FontWeight.bold)),
-                                          const TextSpan(text: ' Sternen')
-                                        ]
-                                      ),
-                                    ),
-                                    
-                                  ]
-                                )
-                              ),
-                            );
-                          },
-                          itemCount: reviewList.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,                       
+                Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.lightBlue,
                         ),
-                      ]
-                    )
-                  )
-                ),
-                
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20))),
+                    height:
+                        4 / 5 * (1 / 3 * MediaQuery.of(context).size.height),
+                    width: MediaQuery.of(context).size.width * ContentWFactor,
+                    child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(20),
+                        physics: const ScrollPhysics(),
+                        child: Column(children: [
+                          ListView.builder(
+                            itemBuilder: (context, index) {
+                              return Card(
+                                child: ListTile(
+                                    title: Column(children: [
+                                  RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: usernameList[index],
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          const TextSpan(text: ' schrieb:')
+                                        ]),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text:
+                                                  '"' + reviewList[index] + '"',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                        ]),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          const TextSpan(
+                                              text: 'und bewertete mit '),
+                                          TextSpan(
+                                              text: countStarsList[index]
+                                                      .toString() +
+                                                  '/5',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          const TextSpan(text: ' Sternen')
+                                        ]),
+                                  ),
+                                ])),
+                              );
+                            },
+                            itemCount: reviewList.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                          ),
+                        ]))),
 
                 // spacing
                 Container(
@@ -746,14 +727,11 @@ class _apartmentDetailState extends State<apartmentDetail> {
     );
   }
 
-
-  Future<void> getData() async
-  {
-    //await loadCookies();
+  Future<void> getData() async {
+    await loadCookies();
     await fetchOffer();
     await fetchApartment();
     await fetchReviewsAndUsername();
     await fetchImage();
   }
-
 }

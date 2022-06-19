@@ -1,14 +1,32 @@
 import 'package:flutter/material.dart';
 import 'globals.dart';
+import 'dart:html';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(100);
   Widget getCoinsWidget() {
-    if (LoginInfo().tokens == 0) {
+    if (LoginInfo.tokens == 0) {
       return Text("Buy Coins");
     } else {
-      return Text(LoginInfo().tokens.toString());
+      return Text(LoginInfo.tokens.toString());
+    }
+  }
+
+  void fetchtoken() async {
+    try {
+      var response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+      final userData = jsonDecode(response.body);
+
+      //print("userData[0]: " + userData[0].toString());
+      LoginInfo.tokens = userData[0]["tokenstand"];
+      print("Tokenstand appBar = " + LoginInfo.tokens.toString());
+    } catch (err) {
+      print(err.toString());
     }
   }
 
@@ -37,7 +55,7 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             child: Text("Mein Profil"),
             onTap: () {
-              if (LoginInfo().userid != -1) {
+              if (LoginInfo.userid != -1) {
                 Navigator.pushNamed(context, '/Profile');
               } else {
                 Navigator.pushNamed(context, '/registrierung');

@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/admin.dart';
 import 'package:ab_in_den_urlaub/apartmentDetail.dart';
 import 'package:ab_in_den_urlaub/neueWohnungPage.dart';
 import 'package:ab_in_den_urlaub/neuesAngebotPage.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       '/Profile': (context) => Profile(),
       '/apartmentDetail': (context) => apartmentDetail(),
       '/upload': (context) => UploadPage(),
+      '/admin': (context) => Admin(),
     });
   }
 }

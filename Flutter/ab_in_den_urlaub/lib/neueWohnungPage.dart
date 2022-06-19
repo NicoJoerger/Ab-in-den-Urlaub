@@ -74,8 +74,7 @@ class _nWohnungState extends State<nWohnung> {
     print("id: " + LoginInfo.userid.toString());
     String body = """ {
     "userId": """ +
-        //LoginInfo.userid.toString() +
-        "1" +
+        LoginInfo.userid.toString() +
         """,
     "strasse": \"""" +
         _address_street.text +
@@ -204,10 +203,8 @@ class _nWohnungState extends State<nWohnung> {
     });*/
 
   void loadCookies() async {
-    LoginInfo.userid =
-        int.parse(html.window.localStorage['userId'].toString());
-    LoginInfo.currentAngebot =
-        html.window.localStorage['angebotID'].toString();
+    LoginInfo.userid = int.parse(html.window.localStorage['userId'].toString());
+    LoginInfo.currentAngebot = html.window.localStorage['angebotID'].toString();
     LoginInfo.tokens =
         int.parse(html.window.localStorage['tokenstand'].toString());
   }

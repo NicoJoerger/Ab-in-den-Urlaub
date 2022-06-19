@@ -285,81 +285,108 @@ class _AdminState extends State<Admin> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text("User deaktiviere"),
-                DropdownButton<User>(
-                  value: selectedUser,
-                  onChanged: (User? newValue) {
-                    setState(() {
-                      selectedUser = newValue!;
-                    });
-                  },
-                  items: users.map((User user) {
-                    return DropdownMenuItem<User>(
-                      value: user,
-                      child: Text(
-                        user.name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
+                Container(
+                  width: 300,
+                  child: Text("User deaktiviere"),
                 ),
-                //ElevatedButton(onPressed: (), child: Text("deaktivieren"))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Wohnung deaktiviere"),
-                DropdownButton<Wohnung>(
-                  value: selectedWohnung,
-                  onChanged: (Wohnung? newValue) {
-                    setState(() {
-                      selectedWohnung = newValue!;
-                    });
-                  },
-                  items: wohnungen.map((Wohnung wohnung) {
-                    return DropdownMenuItem<Wohnung>(
-                      value: wohnung,
-                      child: Text(
-                        wohnung.name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                // ElevatedButton(onPressed: (), child: Text("deaktivieren"))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Kommentar löschen"),
-                DropdownButton<Kommentar>(
-                  value: selectedKommentar,
-                  onChanged: (Kommentar? newValue) {
-                    setState(() {
-                      selectedKommentar = newValue!;
-                    });
-                  },
-                  items: kommentare.map((Kommentar kommentar) {
-                    return DropdownMenuItem<Kommentar>(
-                      value: kommentar,
-                      child: Text(
-                        kommentar.name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      deleteComment();
-                      kommentare = <Kommentar>[];
-                      selectedKommentar = kommentar1;
-                      kommentare.add(selectedKommentar);
-                      fetchKommentare();
+                Container(
+                  width: 300,
+                  child: DropdownButton<User>(
+                    value: selectedUser,
+                    onChanged: (User? newValue) {
+                      setState(() {
+                        selectedUser = newValue!;
+                      });
                     },
-                    child: Text("deaktivieren"))
+                    items: users.map((User user) {
+                      return DropdownMenuItem<User>(
+                        value: user,
+                        child: Text(
+                          user.name,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Container(
+                  width: 300,
+                  child: ElevatedButton(
+                      onPressed: () {}, child: Text("deaktivieren")),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(width: 300, child: Text("Wohnung deaktiviere:")),
+                Container(
+                  width: 300,
+                  child: DropdownButton<Wohnung>(
+                    value: selectedWohnung,
+                    onChanged: (Wohnung? newValue) {
+                      setState(() {
+                        selectedWohnung = newValue!;
+                      });
+                    },
+                    items: wohnungen.map((Wohnung wohnung) {
+                      return DropdownMenuItem<Wohnung>(
+                        value: wohnung,
+                        child: Text(
+                          wohnung.name,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Container(
+                    width: 300,
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Text("deaktivieren"))),
+                //
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 300,
+                  child: Text("Kommentar löschen:"),
+                ),
+                Container(
+                  width: 300,
+                  child: DropdownButton<Kommentar>(
+                    value: selectedKommentar,
+                    onChanged: (Kommentar? newValue) {
+                      setState(() {
+                        selectedKommentar = newValue!;
+                      });
+                    },
+                    items: kommentare.map((Kommentar kommentar) {
+                      return DropdownMenuItem<Kommentar>(
+                        value: kommentar,
+                        child: Text(
+                          kommentar.name,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Container(
+                    width: 300,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          deleteComment();
+                          setState(() {
+                            kommentare = <Kommentar>[];
+                            selectedKommentar = kommentar1;
+                            kommentare.add(selectedKommentar);
+                            fetchKommentare();
+                          });
+                        },
+                        child: Text("deaktivieren")))
               ],
             ),
           ]),

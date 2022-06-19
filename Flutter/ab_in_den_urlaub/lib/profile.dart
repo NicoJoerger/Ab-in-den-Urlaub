@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/admin.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,30 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
+bool admin = false;
+
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
   @override
   _ProfileState createState() => _ProfileState();
+}
+
+class adminButton extends StatelessWidget {
+  const adminButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (admin == true) {
+      return TextButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Admin()));
+          },
+          child: Text("Admin"));
+    } else {
+      return Container();
+    }
+  }
 }
 
 class _ProfileState extends State<Profile> {
@@ -80,7 +101,7 @@ class _ProfileState extends State<Profile> {
 
     for (int i = 0; i < wohnungen.length; i++) {
       //print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
-      
+
     }
   }
 
@@ -106,7 +127,7 @@ class _ProfileState extends State<Profile> {
           });
         }
       }
-      
+
       for (int i = 0; i < jsonData.length; i++) {
         print("jsonDataUserWohnungen[" +
             i.toString() +
@@ -170,9 +191,8 @@ class _ProfileState extends State<Profile> {
 
   void fetchUser() async {
     try {
-      response = await http.get(Uri.parse(LoginInfo.serverIP +
-          '/api/Nutzer/' +
-          LoginInfo.userid.toString()));
+      response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
       final jsonData = jsonDecode(response.body);
       setState(() {
         userData.add(jsonData);
@@ -184,6 +204,7 @@ class _ProfileState extends State<Profile> {
       passRegCon.text = userData[0]["password"].toString();
       passRegCon2.text = userData[0]["password"].toString();
       emailRegCon.text = userData[0]["email"].toString();
+      admin = userData[0]["admin"];
     } catch (err) {
       print(err.toString());
     }
@@ -212,7 +233,6 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: const Text('Maximale Tokenkosten'),
           content: SingleChildScrollView(
-              
             child: DropdownButton<String>(
               dropdownColor: Colors.blue,
               value: _selectedLocation,
@@ -231,7 +251,7 @@ class _ProfileState extends State<Profile> {
                 );
               }).toList(),
             ),
-              ),
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text('Bestätigen'),
@@ -359,7 +379,7 @@ class _ProfileState extends State<Profile> {
     fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
-    
+
     super.initState();
     //print("initState() exited.\n");
   }
@@ -551,6 +571,7 @@ class _ProfileState extends State<Profile> {
                     Text("Ich möchte Wohnungen vermieten.")
                   ],
                 ),
+                adminButton(),
                 TextButton(
                     onPressed: () => {
                           window.localStorage.containsKey('userId'),

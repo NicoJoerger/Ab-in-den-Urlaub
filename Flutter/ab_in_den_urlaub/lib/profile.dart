@@ -78,36 +78,39 @@ class _ProfileState extends State<Profile> {
 
     //print("\n");
 
-    wohnungen2 = ['Wähle'];
     for (int i = 0; i < wohnungen.length; i++) {
       //print("wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
-      setState(() {
-        wohnungen2.add(wohnungen[i].toString());
-      });
+      
     }
   }
 
   Future<void> getUserWohnungen() async {
     try {
-      print("HI Get Wohnungsname");
+      //print("HI Get Wohnungsname");
       response = await http.get(Uri.parse(LoginInfo.serverIP +
           "/api/Ferienwohnung/" +
           LoginInfo.userid.toString() +
           "/user"));
-      print("Wohnungsname get body: " + response.body);
+      //print("Wohnungsname get body: " + response.body);
       final jsonData = jsonDecode(response.body) as List;
       wohnungen2 = ['Wähle'];
       for (int i = 0; i < jsonData.length; i++) {
-        print("jsonDataUserWohnungen[" +
-            i.toString() +
-            "].toString(): " +
-            jsonData[i].toString());
-        print(jsonData[i]["deaktiviert"]);
+        //print("jsonDataUserWohnungen[" +
+        //    i.toString() +
+        //    "].toString(): " +
+        //    jsonData[i].toString());
+        //print(jsonData[i]["deaktiviert"]);
         if (!jsonData[i]["deaktiviert"]) {
           setState(() {
             wohnungen2.add(jsonData[i]["wohnungsname"]);
           });
         }
+      }
+      for (int i = 0; i < jsonData.length; i++) {
+        print("jsonDataUserWohnungen[" +
+            i.toString() +
+            "].toString(): " +
+            jsonData[i].toString());
       }
     } catch (err) {
       print(err.toString());
@@ -208,7 +211,7 @@ class _ProfileState extends State<Profile> {
         return AlertDialog(
           title: const Text('Maximale Tokenkosten'),
           content: SingleChildScrollView(
-              /*
+              
             child: DropdownButton<String>(
               dropdownColor: Colors.blue,
               value: _selectedLocation,
@@ -226,7 +229,7 @@ class _ProfileState extends State<Profile> {
                   value: location,
                 );
               }).toList(),
-            ),*/
+            ),
               ),
           actions: <Widget>[
             TextButton(
@@ -351,10 +354,11 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     print("initState() entered.\n");
+    getUserWohnungen();
     fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
-    getUserWohnungen();
+    
     super.initState();
     //print("initState() exited.\n");
   }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'globals.dart';
+import 'dart:html';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -9,6 +13,20 @@ class AppBarBrowser extends StatelessWidget implements PreferredSizeWidget {
       return Text("Buy Coins");
     } else {
       return Text(LoginInfo.tokens.toString());
+    }
+  }
+
+  void fetchtoken() async {
+    try {
+      var response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+      final userData = jsonDecode(response.body);
+
+      //print("userData[0]: " + userData[0].toString());
+      LoginInfo.tokens = userData[0]["tokenstand"];
+      print("Tokenstand appBar = " + LoginInfo.tokens.toString());
+    } catch (err) {
+      print(err.toString());
     }
   }
 

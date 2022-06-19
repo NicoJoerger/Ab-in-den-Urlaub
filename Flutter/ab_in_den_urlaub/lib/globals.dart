@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+/*
 class LoginInfo extends StatefulWidget {
   int userid = -1;
   var tokens = 0;
@@ -55,11 +56,10 @@ class _LoginInfoState extends State<LoginInfo> {
     return Container();
   }
 }
-
-/*
+*/
 
 class LoginInfo {
-
+  LoginInfo() {}
   int userid = -1;
   var tokens = 0;
   var currentAngebot = "";
@@ -67,38 +67,5 @@ class LoginInfo {
   var serverIP = "http://81.169.152.56:5000";
   //var serverIP = "http://localhost:7199";
   bool vermieter = false;
-  factory LoginInfo() {
-    return _singleton;
-  }
-
-
-
   LoginInfo._internal();
-
-  void fetchUser() async {
-    try {
-      var response = await http.get(
-          Uri.parse(LoginInfo().serverIP + '/api/Nutzer/' + userid.toString()));
-
-      if (response.statusCode != 200) {
-      } else {
-
-          jsons = jsonData;
-          var length = jsons.length;
-
-          LoginInfo().userid = jsons[0]['userId'];
-          LoginInfo().tokens = jsons[0]['tokenstand'];
-        });
-        window.localStorage.containsKey('userId');
-        window.localStorage.containsKey('tokenstand');
-        window.localStorage.containsKey('angebotID');
-
-        window.localStorage['userId'] = LoginInfo().userid.toString();
-        window.localStorage['tokenstand'] = LoginInfo().tokens.toString();
-      }
-    } catch (err) {
-      print(err.toString());
-    }
-  }
 }
-*/

@@ -1,4 +1,3 @@
-
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -155,7 +154,6 @@ class _RegistrierungState extends State<Registrierung> {
         setState(() {
           jsons = jsonData;
           var length = jsons.length;
-
           LoginInfo().userid = jsons[0]['userId'];
           LoginInfo().tokens = jsons[0]['tokenstand'];
         });

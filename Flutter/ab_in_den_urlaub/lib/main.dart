@@ -30,8 +30,7 @@ class MyApp extends StatelessWidget {
       '/Suche': (context) => sApartments(),
       '/Profile': (context) => Profile(),
       '/apartmentDetail': (context) => apartmentDetail(),
-      '/upload': (context) => UploadPage(),
-      '/admin': (context) => Admin(),
+      '/upload': (context) => UploadPage()
     });
   }
 }

@@ -98,6 +98,8 @@ class _apartmentDetailState extends State<apartmentDetail> {
   String plz = "";
   String hausnummer = "";
   String ort = "";
+  String URL = "";
+  List<String> urls = [];
   String land = "";
   String anzBetten = "";
   String anzZimmer = "";
@@ -291,6 +293,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
         balkon = jsonApart["balkon"];
         beschreibung = jsonApart["beschreibung"].toString();
         wName = jsonApart["wohnungsname"].toString();
+        URL = jsonApart["bilderLinks"].toString();
       });
       beschreibung = jsonApart["beschreibung"].toString();
       _controller = TextEditingController(text: beschreibung);
@@ -347,8 +350,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
     } catch (err) {
       print(err.toString());
     }*/
-    Image nBild = Image.network("https://firebasestorage.googleapis.com/v0/b/abindenurlaub-374f5.appspot.com/o/Items%2F2a1f3b02-375a-4e9d-9513-9bff1e953dfd%2Fproduct_23817066-bef8-47a5-8344-c3f66190f2b6?alt=media&token=9aed6b51-c41d-4917-a075-9a9e209b8a6b");
-    bilder.add(nBild);
+    Image nBild;
+    print("url:" + URL);
+    urls = URL.split(";");
+    for (int i = 0; i < urls.length - 1;i++) {
+      urls[i] = urls[i].replaceAll(";", "");
+      print("element: " +urls[i] );
+      nBild = Image.network(urls[i]);
+      bilder.add(nBild);
+    }
     print("BILD GEHOLT");
   }
 
@@ -731,7 +741,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     await loadCookies();
     await fetchOffer();
     await fetchApartment();
-    await fetchReviewsAndUsername();
+    //await fetchReviewsAndUsername();
     await fetchImage();
   }
 }

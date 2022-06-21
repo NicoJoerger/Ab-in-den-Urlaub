@@ -281,46 +281,24 @@ class _ProfileState extends State<Profile> {
   }
 
   void postUser() async {
+    print("userData: " + userData[0].toString());
+
     if (passRegCon.text == passRegCon2.text) {
       try {
-        response = await http.post(
-            Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
+        userData[0]["username"] = usernameCon.text;
+        userData[0]["nachname"] = nachnameCon.text;
+        userData[0]["vorname"] = vornameCon.text;
+        userData[0]["password"] = passRegCon.text;
+        userData[0]["email"] = emailRegCon.text;
+        userData[0]["tokenstand"] = LoginInfo.tokens.toString();
+        userData[0]["kartennummer"] = creditCon.text;
+        userData[0]["cvv"] = cvvCon.text;
+        print("New userData: " + userData[0].toString());
+        response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
-            body: """ {
-    "username": \"""" +
-                usernameCon.text +
-                """\",
-    "nachname": \"""" +
-                nachnameCon.text +
-                """\",
-    "vorname": \"""" +
-                vornameCon.text +
-                """\",
-    "password": \"""" +
-                passRegCon.text +
-                """\",
-    "email": \"""" +
-                emailRegCon.text +
-                """\",
-    "tokenstand": """ +
-                LoginInfo.tokens.toString() +
-                """,
-                 "kreditkartendatens": [
-      {
-        
-        "kartennummer": """ +
-                creditCon.text +
-                """,
-        "cvv": """ +
-                cvvCon.text +
-                """
-      }
-    ]
-    
-    
-  }""");
+            body: userData[0].toString());
         if (response.statusCode == 200) {
           //LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
@@ -328,7 +306,7 @@ class _ProfileState extends State<Profile> {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
-              title: const Text('Registrierung Fehlgeschlagen'),
+              title: const Text('Registrierung Fehlgeschlagen1'),
               content: Text(response.body),
               actions: <Widget>[
                 TextButton(

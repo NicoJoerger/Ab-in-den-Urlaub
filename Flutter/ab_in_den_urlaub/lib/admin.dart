@@ -2,6 +2,7 @@
 //wohnungen und Angebote sperren
 //Bewertungen löschen
 import 'dart:collection';
+import 'dart:html';
 import 'dart:typed_data';
 import 'globals.dart';
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
@@ -185,6 +186,22 @@ class _AdminState extends State<Admin> {
     }
   }
 
+  void deleteUser() async {
+    try {
+      response = await http.put(
+          Uri.parse(LoginInfo.serverIP +
+              '/deactivate/admin/' +
+              selectedUser.id.toString()),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          });
+      print("response: \n" + response.body);
+      print("statusCode: \n" + response.statusCode.toString());
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   void postUser() async {
     try {
       response = await http.post(Uri.parse(url), headers: <String, String>{
@@ -312,7 +329,16 @@ class _AdminState extends State<Admin> {
                 Container(
                   width: 300,
                   child: ElevatedButton(
-                      onPressed: () {}, child: Text("deaktivieren")),
+                      onPressed: () {
+                        deleteUser();
+                        setState(() {
+                          users = <User>[];
+                          selectedUser = user1;
+                          users.add(selectedUser);
+                          fetchUser();
+                        });
+                      },
+                      child: Text("löschen")),
                 ),
               ],
             ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'appBars.dart';
 
 class Impressum extends StatefulWidget {
-  Impressum({Key? key}) : super(key: key);
+  const Impressum({Key? key}) : super(key: key);
   @override
   _ImpressumState createState() => _ImpressumState();
 }
@@ -18,12 +18,13 @@ class _ImpressumState extends State<Impressum> {
           preferredSize: AppBar().preferredSize,
           child: AppBarBrowser(),
         ),
-        body: Container(
+        body: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(
-              children: [
-                const SizedBox(height: 10),
+              children: const 
+              [
+                SizedBox(height: 10),
               ],
             ),
           ),

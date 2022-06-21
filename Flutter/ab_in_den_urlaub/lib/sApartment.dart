@@ -16,8 +16,11 @@ class sApartments extends StatefulWidget {
 
 class _sApartmentsState extends State<sApartments> {
   var jsons = [];
+  Map<int, Widget> Bilder = Map();
+  var wohnungen = [];
   var jsonLand = [];
   var response;
+  var wohnungenById;
   final mietPreis = TextEditingController();
   final tokenPreis = TextEditingController();
 
@@ -115,6 +118,63 @@ class _sApartmentsState extends State<sApartments> {
     );
   }
 
+  void getWohnungByID(int id) {
+            //print("NEIN");
+           // print("lala:" + wohnungen[45].toString());
+    for (int i = 0; i < wohnungen.length; i++) {
+      
+      if (wohnungen[i]["fwId"].toString() == id.toString()) {
+        wohnungenById = wohnungen[i];
+        //print("JAWOHL");
+      }
+    }
+    //print("lulul");
+  }
+
+  Future<void> getWohnungen() async {
+    try {
+      response =
+          await http.get(Uri.parse(LoginInfo.serverIP + "/api/Ferienwohnung/"));
+      final jsonData = jsonDecode(response.body) as List;
+      for (int i = 0; i < jsonData.length; i++) {
+        if (!jsonData[i]["deaktiviert"]) {
+          setState(() {
+            wohnungen.add(jsonData[i]);
+          });
+        }
+      }
+      
+      for (int i = 0; i < wohnungen.length; i++) {
+        print("Wohnungen[" +
+            i.toString() +
+            "]: " +
+            wohnungen[i].toString());
+      }
+      
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void fetchImage() async {
+    await getWohnungen();
+    for (int i = 0; i < jsonLand.length; i++) {
+      int fwID = jsonLand[i]["fwId"];
+      
+      getWohnungByID(fwID);
+      String urls = wohnungenById["bilderLinks"].toString();
+      List<String> links = [];
+      Image nBild;
+
+      links = urls.split(";");
+      links[0] = links[0].replaceAll(";", "");
+      nBild = Image.network(links[0]);
+      setState(() {
+        Bilder[fwID] = nBild;
+      });
+    }
+  }
+
   void loadCookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
@@ -151,6 +211,7 @@ class _sApartmentsState extends State<sApartments> {
     } catch (err) {
       print(err.toString());
     }
+    fetchImage();
   }
 
   @override
@@ -295,6 +356,7 @@ class _sApartmentsState extends State<sApartments> {
                           strasse: wohnung["strasse"].toString(),
                           hausNr: wohnung["hausnummer"].toString(),
                           angebotID: json["angebotId"].toString(),
+                          image: Bilder[json["fwId"]]!,
                         );
                       }),
                 ),

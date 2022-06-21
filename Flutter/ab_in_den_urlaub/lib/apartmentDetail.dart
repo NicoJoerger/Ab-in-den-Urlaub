@@ -163,7 +163,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
             'Content-Type': 'application/json; charset=UTF-8'
           },
           body: body);
-      // print(response.body);
+      print(response.body);
 
       if (response.statusCode == 200) {
         showDialog<String>(
@@ -328,9 +328,14 @@ class _apartmentDetailState extends State<apartmentDetail> {
         LoginInfo.serverIP + '/api/Gebot/' + LoginInfo.currentAngebot + '/a';
     try {
       response = await http.get(Uri.parse(urlImg));
-      jsons = jsonDecode(response.body);
+      print("1");
+      print("Response: " + response.body.toString());
+      jsons = jsonDecode(response.body) as List;
+      print("2");
       String userId = jsons[0]["userId"].toString();
+
       if (userId == LoginInfo.userid.toString()) {
+        print("3");
         setState(() {
           hochstbietender = "Sie sind aktuell Höchstbietender";
         });
@@ -340,6 +345,20 @@ class _apartmentDetailState extends State<apartmentDetail> {
     }
   }
 
+/*
+    Future<void> fetchOffer(String id) async {
+    try {
+      response = await http
+          .get(Uri.parse(LoginInfo.serverIP + "/api/Angebote/" + id + "/a"));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        angebote.add(jsonData[0]);
+      });
+    } catch (err) {
+      //print(err.toString());
+    }
+  }
+*/
   Future<void> loadCookies() async {
     String userIDString = window.localStorage['userId'].toString();
     String tokenString = window.localStorage['tokenstand'].toString();

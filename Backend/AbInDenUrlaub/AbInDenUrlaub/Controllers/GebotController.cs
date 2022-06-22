@@ -77,17 +77,52 @@ namespace AbInDenUrlaub.Controllers
         [HttpPut]
         public async Task<ActionResult<List<Gebot>>> UpdateGebot(Gebot updatedGebot)
         {
-            var dbGebot = await context.Gebots.FindAsync(updatedGebot.GebotId);
-            if (dbGebot == null)
+            List<Gebot> gebote = await context.Gebots.ToListAsync();
+            Gebot emptyGebot = new Gebot();
+            Gebot dbGebot = emptyGebot;
+
+            foreach (Gebot item in gebote)
             {
-                return BadRequest("Gebot not found");
+                if (item.AngebotId == updatedGebot.AngebotId)
+                {
+                    dbGebot = item;
+                }
+            }
+
+            Nutzer user = await context.Nutzers.FindAsync(updatedGebot.UserId);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+            if (user.Tokenstand < updatedGebot.Preis)
+            {
+                return BadRequest("User hat nicht genug Token");
+            }
+
+
+            if (dbGebot.Equals(emptyGebot))
+            {
+                var dbAngebot = await context.Angebotes.FindAsync(updatedGebot.AngebotId);
+                if (dbAngebot == null)
+                {
+                    return BadRequest("Angebot not found");
+                }
+                if (updatedGebot.Preis > dbAngebot.AktuellerTokenpreis)
+                {
+
+                    context.Gebots.Add(updatedGebot);
+                    await context.SaveChangesAsync();
+                    return Ok(updatedGebot);
+                }
             }
 
             if (updatedGebot.Preis > dbGebot.Preis)
             {
-                dbGebot.Angebot = updatedGebot.Angebot;
-                dbGebot.User = updatedGebot.User;
+                //dbGebot.Angebot = updatedGebot.Angebot;
+                //dbGebot.User = updatedGebot.User;
                 dbGebot.Preis = updatedGebot.Preis;
+                //dbGebot.AngebotId = updatedGebot.AngebotId;
+                dbGebot.UserId = updatedGebot.UserId;
 
                 var dbAngebot = await context.Angebotes.FindAsync(updatedGebot.AngebotId);
                 if (dbAngebot == null)

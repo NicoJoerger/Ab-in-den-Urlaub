@@ -6,7 +6,6 @@
         {
             Angebotes = new HashSet<Angebote>();
             Bewertungs = new HashSet<Bewertung>();
-            Wohnungsbilders = new HashSet<Wohnungsbilder>();
         }
 
         public int FwId { get; set; }
@@ -26,10 +25,10 @@
         public string wohnungsname { get; set; }
         public string land { get; set; }
         public bool deaktiviert { get; set; }
+        public string? BilderLinks { get; set; }
 
         public virtual Nutzer? User { get; set; }
         public virtual ICollection<Angebote> Angebotes { get; set; }
         public virtual ICollection<Bewertung> Bewertungs { get; set; }
-        public virtual ICollection<Wohnungsbilder> Wohnungsbilders { get; set; }
     }
 }

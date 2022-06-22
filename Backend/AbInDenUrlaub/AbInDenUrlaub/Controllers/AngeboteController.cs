@@ -122,6 +122,50 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Angebotes.ToListAsync());
         }
 
+        [HttpPut("{angebotID}")]
+        public async Task<ActionResult<List<Angebote>>> deactivateAngebot(int angebotID)
+        {
+            var ag = await context.Angebotes.FindAsync(angebotID);
+            List<Gebot> gebote = await context.Gebots.ToListAsync();
+
+
+            if (ag.MietzeitraumEnde > DateTime.Now)
+            {
+                foreach (var gebot in gebote)
+                {
+                    if (gebot.AngebotId == ag.AngebotId)
+                    {
+                        Nutzer user = await context.Nutzers.FindAsync(gebot.UserId);
+                        if (user != null)
+                        {
+                            user.Tokenstand = gebot.Preis + user.Tokenstand;
+                        }
+                        context.Gebots.Remove(gebot);
+                    }
+
+                }
+                context.Angebotes.Remove(ag);
+            }
+
+            return Ok(ag);
+        }
+
+        [HttpGet("aktuell")]
+        public async Task<ActionResult<List<Angebote>>> GetAktuelle()
+        {
+            List<Angebote> angebote = await context.Angebotes.ToListAsync();
+
+            foreach (var angebot in angebote)
+            {
+                if (angebot.AuktionEnddatum < DateTime.Now)
+                {
+                    angebote.Remove(angebot);
+                }
+            }
+
+            return Ok(angebote);
+        }
+
 
     }
 }

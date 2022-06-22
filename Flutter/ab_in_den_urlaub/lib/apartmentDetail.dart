@@ -145,7 +145,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
   void postBet() async {
     String body = """ {
     "angebotId": """ +
-        LoginInfo.currentAngebot +
+        LoginInfo.currentAngebot.toString() +
         """,
     "userId": """ +
         LoginInfo.userid.toString() +
@@ -158,12 +158,14 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       //if (int.parse(tokenpreis) > 100) {
       //if (int.parse(newBet.text) > int.parse(tokenpreis)) {
-      response = await http.post(Uri.parse(LoginInfo.serverIP + "/api/Gebot"),
+      response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Gebot"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           },
           body: body);
+      print(body);
       print(response.body);
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         showDialog<String>(
@@ -181,6 +183,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
         );
         setState(() {
           tokenpreis = newBet.text;
+          LoginInfo.tokens -= int.parse(newBet.text);
         });
       } else if (response.body == "User hat nicht genug Token") {
         showDialog<String>(
@@ -328,18 +331,15 @@ class _apartmentDetailState extends State<apartmentDetail> {
         LoginInfo.serverIP + '/api/Gebot/' + LoginInfo.currentAngebot + '/a';
     try {
       response = await http.get(Uri.parse(urlImg));
-      print("1");
-      print("Response: " + response.body.toString());
-      jsons = jsonDecode(response.body) as List;
-      print("2");
+      jsons.add(jsonDecode(response.body));
       String userId = jsons[0]["userId"].toString();
 
       if (userId == LoginInfo.userid.toString()) {
-        print("3");
         setState(() {
           hochstbietender = "Sie sind aktuell Höchstbietender";
         });
       }
+      jsons = [];
     } catch (err) {
       print(err.toString());
     }
@@ -494,6 +494,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     getData();
     //cookies();
     super.initState();
+    fetchGebot();
   }
 
   @override

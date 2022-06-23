@@ -57,6 +57,22 @@ namespace AbInDenUrlaub.Controllers
             return Ok(list);
         }
 
+        [HttpGet("{angebotId}/a")]
+        public async Task<ActionResult<List<Gebot>>> GetGeboteByAngID(int angebotId)
+        {
+            List<Gebot> gebote = await context.Gebots.ToListAsync();
+
+            foreach (Gebot gebot in gebote)
+            {
+                if (gebot.AngebotId == angebotId)
+                {
+                    return Ok(gebot);
+                }
+            }
+
+            return BadRequest("Noch kein Gebot");
+        }
+
         [HttpPost]
         public async Task<ActionResult<List<Gebot>>> AddGebot(Gebot newGebot)
         {
@@ -109,7 +125,8 @@ namespace AbInDenUrlaub.Controllers
                 }
                 if (updatedGebot.Preis > dbAngebot.AktuellerTokenpreis)
                 {
-
+                    dbAngebot.AktuellerTokenpreis = updatedGebot.Preis;
+                    user.Tokenstand = user.Tokenstand - updatedGebot.Preis;
                     context.Gebots.Add(updatedGebot);
                     await context.SaveChangesAsync();
                     return Ok(updatedGebot);
@@ -118,11 +135,14 @@ namespace AbInDenUrlaub.Controllers
 
             if (updatedGebot.Preis > dbGebot.Preis)
             {
+                Nutzer alterUser = await context.Nutzers.FindAsync(dbGebot.UserId);
+                alterUser.Tokenstand = alterUser.Tokenstand + dbGebot.Preis;
                 //dbGebot.Angebot = updatedGebot.Angebot;
                 //dbGebot.User = updatedGebot.User;
                 dbGebot.Preis = updatedGebot.Preis;
                 //dbGebot.AngebotId = updatedGebot.AngebotId;
                 dbGebot.UserId = updatedGebot.UserId;
+                user.Tokenstand = user.Tokenstand - updatedGebot.Preis;
 
                 var dbAngebot = await context.Angebotes.FindAsync(updatedGebot.AngebotId);
                 if (dbAngebot == null)

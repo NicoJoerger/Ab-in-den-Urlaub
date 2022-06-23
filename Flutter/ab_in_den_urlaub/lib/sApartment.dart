@@ -119,10 +119,9 @@ class _sApartmentsState extends State<sApartments> {
   }
 
   void getWohnungByID(int id) {
-            print("NEIN");
-           // print("lala:" + wohnungen[45].toString());
+    print("NEIN");
+    // print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
-      
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
         print("JAWOHL");
@@ -143,14 +142,10 @@ class _sApartmentsState extends State<sApartments> {
           });
         }
       }
-      
+
       for (int i = 0; i < wohnungen.length; i++) {
-        print("Wohnungen[" +
-            i.toString() +
-            "]: " +
-            wohnungen[i].toString());
+        print("Wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
       }
-      
     } catch (err) {
       print(err.toString());
     }
@@ -160,7 +155,7 @@ class _sApartmentsState extends State<sApartments> {
     await getWohnungen();
     for (int i = 0; i < jsonLand.length; i++) {
       int fwID = jsonLand[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       print("WOHNUNG ID:" + wohnungenById.toString());
       String urls = wohnungenById["bilderLinks"].toString();
@@ -204,7 +199,7 @@ class _sApartmentsState extends State<sApartments> {
           land));
       //    print(response.body);
       final jsonData = jsonDecode(response.body);
-      //    print(jsonData);
+      print("JsonData Angebot\n\n\n\n" + jsonData.toString());
       setState(() {
         jsonLand = jsonData;
         print("\n jsonland: " + jsonLand.toString() + "\n");

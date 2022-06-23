@@ -506,8 +506,10 @@ class _nAngebotState extends State<nAngebot> {
   Future<bool> flatOfferALreadyExistsForGivenTimeframe() async 
   {
    
-    String        url             = LoginInfo.serverIP + '/api/Angebote';
+    String        url             = LoginInfo.serverIP + '/api/Angebote/'+ dict[_selectedLocation]!.toString()+'/fw';
     bool          inUse           = false;
+    bool          b1              = false;
+    bool          b2              = false;
     http.Response offers;
     dynamic       offersDecoded;
     dynamic       offerDecoded;
@@ -522,17 +524,18 @@ class _nAngebotState extends State<nAngebot> {
 
     for(offerDecoded in offersDecoded)
     {
-     
-      if(offerDecoded['fwId'] == dict[_selectedLocation]!)
-      {
-        if( endOfJourney.compareTo(offerDecoded['mietzeitraumStart'])  <= 0   )
-        {
-          inUse = true;
-          alert('');
-        }
-      }
-    }
 
+      print('(endofJourney.compareTo(offerDecoded[mietzeitraumStart]) >= 0     >> '+((endOfJourney.compareTo(offerDecoded['mietzeitraumStart']) >= 0 && (endOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) <= 0))).toString());
+      print('(startofJourney.compareTo(offerDecoded[mietzeitraumEnd]) <= 0     >> '+(startOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) <= 0).toString());
+
+
+      /*
+      if( (endOfJourney.compareTo(offerDecoded['mietzeitraumStart']) > 0) && (endOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) < 0)  ||  ((startOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) < 0  && startOfJourney.compareTo(offerDecoded['mietzeitraumStart'] >= 0)) )
+      {
+        inUse = true;
+      }
+      */
+    }
 
     print('\n flatOfferALreadyExistsForGivenTimeframe() >> '+inUse.toString());
 

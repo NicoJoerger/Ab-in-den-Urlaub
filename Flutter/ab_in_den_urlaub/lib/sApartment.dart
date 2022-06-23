@@ -119,15 +119,15 @@ class _sApartmentsState extends State<sApartments> {
   }
 
   void getWohnungByID(int id) {
-    print("NEIN");
+    //print("NEIN");
     // print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
-        print("JAWOHL");
+        // print("JAWOHL");
       }
     }
-    print("lulul");
+    //print("lulul");
   }
 
   Future<void> getWohnungen() async {
@@ -144,7 +144,7 @@ class _sApartmentsState extends State<sApartments> {
       }
 
       for (int i = 0; i < wohnungen.length; i++) {
-        print("Wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
+        //print("Wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
       }
     } catch (err) {
       print(err.toString());
@@ -157,7 +157,7 @@ class _sApartmentsState extends State<sApartments> {
       int fwID = jsonLand[i]["fwId"];
 
       getWohnungByID(fwID);
-      print("WOHNUNG ID:" + wohnungenById.toString());
+      //print("WOHNUNG ID:" + wohnungenById.toString());
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
       Image nBild;
@@ -199,10 +199,11 @@ class _sApartmentsState extends State<sApartments> {
           land));
       //    print(response.body);
       final jsonData = jsonDecode(response.body);
-      print("JsonData Angebot\n\n\n\n" + jsonData.toString());
+      //print("JsonData Angebot\n\n\n\n" + jsonData.toString());
+
       setState(() {
         jsonLand = jsonData;
-        print("\n jsonland: " + jsonLand.toString() + "\n");
+        //print("\n jsonland: " + jsonLand.toString() + "\n");
       });
     } catch (err) {
       print(err.toString());

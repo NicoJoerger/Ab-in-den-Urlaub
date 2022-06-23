@@ -23,21 +23,21 @@ class nWohnung extends StatefulWidget {
   _nWohnungState createState() => _nWohnungState();
 }
 
-final ImagePicker _picker = ImagePicker();
-List<XFile> itemImagesList = <XFile>[];
-String URLs = "";
-List<String> downloadUrl = <String>[];
-List<XFile>? photo = <XFile>[];
-List<Widget> itemPhotosWidgetList = <Widget>[];
-File? file;
-bool uploading = false;
-
-Image image = Image(image: AssetImage("/images/Empty.png"));
-List<Image> Bilder = [];
-//List<File> images = [];
-List<XFile> xImages = [];
-
 class _nWohnungState extends State<nWohnung> {
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> itemImagesList = <XFile>[];
+  String URLs = "";
+  List<String> downloadUrl = <String>[];
+  List<XFile>? photo = <XFile>[];
+  List<Widget> itemPhotosWidgetList = <Widget>[];
+  File? file;
+  bool uploading = false;
+
+  Image image = Image(image: AssetImage("/images/Empty.png"));
+  List<Image> Bilder = [];
+//List<File> images = [];
+  List<XFile> xImages = [];
+
   // vars
   var response;
   bool _checkbox_garden = false;
@@ -118,7 +118,7 @@ class _nWohnungState extends State<nWohnung> {
     "land": \"""" +
         _selected_country +
         """\",
-    "BilderLinks": \"""" + 
+    "BilderLinks": \"""" +
         URLs +
         """\",
     "deaktiviert": """ +
@@ -692,8 +692,7 @@ class _nWohnungState extends State<nWohnung> {
     setState(() {
       uploading = false;
     });
-    for(int i = 0; i < downloadUrl.length;i++)
-    {
+    for (int i = 0; i < downloadUrl.length; i++) {
       URLs = URLs + downloadUrl[i] + ";";
     }
     postWohnung();

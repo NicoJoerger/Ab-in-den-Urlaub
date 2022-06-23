@@ -358,22 +358,6 @@ class _apartmentDetailState extends State<apartmentDetail> {
 
   Future<void> fetchImage() async {
     print("HOLE BILD");
-    //print("ID:" + widget.anlagenID);
-    /*String urlImg = LoginInfo.serverIP + '/api/Wohnungsbilder/' + fwID;
-    try {
-      response = await http.get(Uri.parse(urlImg));
-      jsons = jsonDecode(response.body) as List;
-      //print("lange: " + jsons.length.toString());
-      setState(() {
-        for (int i = 0; i < (jsons.length); i++) {
-          Image image = imageFromBase64String(jsons[i]["bild"]);
-          print("test");
-          bilder.add(image);
-        }
-      });
-    } catch (err) {
-      print(err.toString());
-    }*/
     Image nBild;
     print("url:" + URL);
     urls = URL.split(";");

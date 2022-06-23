@@ -41,6 +41,7 @@ class _AllApartmentsState extends State<AllApartments> {
   var wohnungenById;
   Map<int, Widget> Bilder = Map();
 
+
   void loadCookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
@@ -48,16 +49,16 @@ class _AllApartmentsState extends State<AllApartments> {
   }
 
   void getWohnungByID(int id) {
-            print("NEIN");
-            print("lala:" + wohnungen[45].toString());
+            //print("NEIN");
+            //print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
       
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
-        print("JAWOHL");
+        //print("JAWOHL");
       }
     }
-    print("lulul");
+   // print("lulul");
   }
 
   //wohnungenById

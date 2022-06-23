@@ -119,16 +119,16 @@ class _sApartmentsState extends State<sApartments> {
   }
 
   void getWohnungByID(int id) {
-            //print("NEIN");
+            print("NEIN");
            // print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
       
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
-        //print("JAWOHL");
+        print("JAWOHL");
       }
     }
-    //print("lulul");
+    print("lulul");
   }
 
   Future<void> getWohnungen() async {
@@ -162,6 +162,7 @@ class _sApartmentsState extends State<sApartments> {
       int fwID = jsonLand[i]["fwId"];
       
       getWohnungByID(fwID);
+      print("WOHNUNG ID:" + wohnungenById.toString());
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
       Image nBild;

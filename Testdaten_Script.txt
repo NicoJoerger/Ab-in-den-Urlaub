@@ -64,7 +64,8 @@ CREATE TABLE IF NOT EXISTS angebote (
 	auktion_EndDatum timestamp NOT NULL,
 	aktueller_Tokenpreis INT NOT NULL,
 	mietpreis INT NOT NULL,
-	stornierbar boolean NOT NULL
+	stornierbar boolean NOT NULL,
+	deaktiviert boolean
 );
 
 CREATE TABLE IF NOT EXISTS gebot (
@@ -348,146 +349,146 @@ VALUES ('10', 'Garisenda', 'Via Domenico Zampieri', '4', 'Italien', 'Bologna', '
 -- Angebote
 
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('1', '01.01.2020', '08.01.2020', '01.12.2020', '100', '3548', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('1', '01.01.2020', '08.01.2020', '01.12.2020', '100', '3548', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('1', '09.01.2020', '16.01.2020', '01.12.2020', '100', '3526', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('1', '09.01.2020', '16.01.2020', '01.12.2020', '100', '3526', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('2', '01.01.2023', '08.01.2023', '01.12.2021', '100', '1829', 'true');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('2', '01.01.2023', '08.01.2023', '01.12.2021', '100', '1829', 'true', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('3', '01.03.2023', '31.03.2023', '01.2.2023', '100', '268', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('3', '01.03.2023', '31.03.2023', '01.2.2023', '100', '268', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('4', '01.03.2023', '31.03.2023', '01.2.2023', '100', '3445', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('4', '01.03.2023', '31.03.2023', '01.2.2023', '100', '3445', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.01.2023', '31.01.2023', '01.12.2022', '100', '4033', 'true');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('5', '01.01.2023', '31.01.2023', '01.12.2022', '100', '4033', 'true', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.02.2023', '28.02.2023', '01.12.2022', '100', '954', 'true');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('5', '01.02.2023', '28.02.2023', '01.12.2022', '100', '954', 'true', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '400', '3265', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('5', '01.01.2020', '08.01.2020', '01.12.2022', '400', '3265', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('6', '01.03.2023', '31.03.2023', '01.2.2023', '100', '2588', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('6', '01.03.2023', '31.03.2023', '01.2.2023', '100', '2588', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('7', '01.02.2022', '08.02.2022', '01.12.2022', '100', '4867', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('7', '01.02.2022', '08.02.2022', '01.12.2022', '100', '4867', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('8', '01.04.2020', '16.04.2020', '01.3.2020', '100', '779', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('8', '01.04.2020', '16.04.2020', '01.3.2020', '100', '779', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('9', '24.01.2023', '30.01.2023', '01.12.2022', '100', '3473', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('9', '24.01.2023', '30.01.2023', '01.12.2022', '100', '3473', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('10', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3274', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('10', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3274', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('11', '03.01.2023', '08.01.2023', '01.12.2022', '100', '579', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('11', '03.01.2023', '08.01.2023', '01.12.2022', '100', '579', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('12', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2688', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('12', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2688', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('13', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3899', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('13', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3899', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('14', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2147', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('14', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2147', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('15', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4825', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('15', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4825', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('16', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2118', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('16', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2118', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('17', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3840', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('17', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3840', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('18', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3984', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('18', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3984', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('19', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2950', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('19', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2950', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('20', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1571', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('20', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1571', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('21', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2811', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('21', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2811', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('22', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2929', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('22', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2929', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('23', '03.01.2023', '08.01.2023', '01.12.2022', '100', '495', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('23', '03.01.2023', '08.01.2023', '01.12.2022', '100', '495', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('24', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4616', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('24', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4616', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('25', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4655', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('25', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4655', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('26', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2158', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('26', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2158', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('27', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2933', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('27', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2933', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('28', '03.01.2023', '08.01.2023', '01.12.2022', '100', '363', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('28', '03.01.2023', '08.01.2023', '01.12.2022', '100', '363', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('29', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2927', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('29', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2927', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('30', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1349', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('30', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1349', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('31', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2438', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('31', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2438', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('32', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2071', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('32', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2071', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('33', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3598', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('33', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3598', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('34', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1425', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('34', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1425', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('35', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1120', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('35', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1120', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('36', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4895', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('36', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4895', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('37', '03.01.2023', '08.01.2023', '01.12.2022', '100', '490', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('37', '03.01.2023', '08.01.2023', '01.12.2022', '100', '490', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('38', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1726', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('38', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1726', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('39', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4051', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('39', '03.01.2023', '08.01.2023', '01.12.2022', '100', '4051', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('40', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3469', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('40', '03.01.2023', '08.01.2023', '01.12.2022', '100', '3469', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('41', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2593', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('41', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2593', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('42', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2008', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('42', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2008', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('43', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2094', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('43', '03.01.2023', '08.01.2023', '01.12.2022', '100', '2094', 'false', 'false');
 
-INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar)
-VALUES ('44', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1394', 'false');
+INSERT INTO angebote (fw_id, mietzeitraum_start, mietzeitraum_ende, auktion_enddatum, aktueller_tokenpreis, mietpreis, stornierbar, deaktiviert)
+VALUES ('44', '03.01.2023', '08.01.2023', '01.12.2022', '100', '1394', 'false', 'false');
 
 
 -- Gebote

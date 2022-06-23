@@ -58,7 +58,7 @@ namespace AbInDenUrlaub.Controllers
 
             await context.SaveChangesAsync();
 
-            return Ok(await context.Ferienwohnungs.ToListAsync());
+            return Ok(wohnung);
         }
 
 
@@ -92,7 +92,7 @@ namespace AbInDenUrlaub.Controllers
             return Ok(await context.Ferienwohnungs.ToListAsync());
         }
 
-        [HttpPut("deactivate")]
+        [HttpPut("deactivate/{WohnungID}")]
         public async Task<ActionResult<List<Ferienwohnung>>> deactivateWohnung(int WohnungID)
         {
             var toDeactivate = await context.Ferienwohnungs.FindAsync(WohnungID);
@@ -103,6 +103,7 @@ namespace AbInDenUrlaub.Controllers
 
             List<Ferienwohnung> wohnungen = await context.Ferienwohnungs.ToListAsync();
             List<Angebote> angebote = await context.Angebotes.ToListAsync();
+            List<Gebot> gebote = await context.Gebots.ToListAsync();
 
             foreach (Ferienwohnung fw in wohnungen)
             {
@@ -112,7 +113,20 @@ namespace AbInDenUrlaub.Controllers
                     {
                         if (ag.MietzeitraumEnde > DateTime.Now)
                         {
-                            return BadRequest("Wohnung hat aktive Angebote");
+                            foreach (var gebot in gebote)
+                            {
+                                if (gebot.AngebotId == ag.AngebotId)
+                                {
+                                    Nutzer user = await context.Nutzers.FindAsync(gebot.UserId);
+                                    if (user != null)
+                                    {
+                                        user.Tokenstand = gebot.Preis + user.Tokenstand;
+                                    }
+                                    context.Gebots.Remove(gebot);
+                                }
+
+                            }
+                            //context.Angebotes.Remove(ag);
                         }
                     }
                 }
@@ -125,5 +139,7 @@ namespace AbInDenUrlaub.Controllers
 
             return Ok(toDeactivate);
         }
+
+
     }
 }

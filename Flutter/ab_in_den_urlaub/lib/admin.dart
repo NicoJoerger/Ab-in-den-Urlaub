@@ -195,6 +195,22 @@ class _AdminState extends State<Admin> {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8'
           });
+      //  print("response: \n" + response.body);
+      //  print("statusCode: \n" + response.statusCode.toString());
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void deleteFerienwohnung() async {
+    try {
+      response = await http.put(
+          Uri.parse(LoginInfo.serverIP +
+              '/api/Ferienwohnung/deactivate/' +
+              selectedWohnung.id.toString()),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          });
       print("response: \n" + response.body);
       print("statusCode: \n" + response.statusCode.toString());
     } catch (err) {
@@ -369,7 +385,16 @@ class _AdminState extends State<Admin> {
                 Container(
                     width: 300,
                     child: ElevatedButton(
-                        onPressed: () {}, child: Text("deaktivieren"))),
+                        onPressed: () {
+                          deleteFerienwohnung();
+                          setState(() {
+                            wohnungen = <Wohnung>[];
+                            selectedWohnung = wohnung1;
+                            wohnungen.add(selectedWohnung);
+                            fetchUser();
+                          });
+                        },
+                        child: Text("deaktivieren"))),
                 //
               ],
             ),

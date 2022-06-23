@@ -11061,19 +11061,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\HUAWEI\\.nuget\\packages\\": {}
+    "C:\\Users\\Basti\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\HUAWEI\\OneDrive\\Desktop\\FW sth\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "projectUniqueName": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
       "projectName": "AbInDenUrlaub",
-      "projectPath": "C:\\Users\\HUAWEI\\OneDrive\\Desktop\\FW sth\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
-      "packagesPath": "C:\\Users\\HUAWEI\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\HUAWEI\\OneDrive\\Desktop\\FW sth\\Ab-in-den-Urlaub\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
+      "projectPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\AbInDenUrlaub.csproj",
+      "packagesPath": "C:\\Users\\Basti\\.nuget\\packages\\",
+      "outputPath": "E:\\Studium\\4. Semester\\Projekt 1\\Code\\Backend\\AbInDenUrlaub\\AbInDenUrlaub\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\HUAWEI\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Basti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

@@ -21,7 +21,6 @@ namespace AbInDenUrlaub.Models
         public virtual DbSet<Nutzer> Nutzers { get; set; } = null!;
         public virtual DbSet<Rechnungshistorieeintrag> Rechnungshistorieeintrags { get; set; } = null!;
         public virtual DbSet<Token> Tokens { get; set; } = null!;
-        public virtual DbSet<Wohnungsbilder> Wohnungsbilders { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -273,25 +272,7 @@ namespace AbInDenUrlaub.Models
                 entity.Property(e => e.Tokenpreis).HasColumnName("tokenpreis");
             });
 
-            modelBuilder.Entity<Wohnungsbilder>(entity =>
-            {
-                entity.HasKey(e => e.WgbId)
-                    .HasName("wohnungsbilder_pkey");
 
-                entity.ToTable("wohnungsbilder");
-
-                entity.Property(e => e.WgbId).HasColumnName("wgb_id");
-
-
-                entity.Property(e => e.FwId).HasColumnName("fw_id");
-
-
-                entity.HasOne(d => d.Fw)
-                    .WithMany(p => p.Wohnungsbilders)
-                    .HasForeignKey(d => d.FwId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("wohnungsbilder_fw_id_fkey");
-            });
 
             OnModelCreatingPartial(modelBuilder);
         }

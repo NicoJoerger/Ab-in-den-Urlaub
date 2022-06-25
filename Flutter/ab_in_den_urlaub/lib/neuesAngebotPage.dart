@@ -451,6 +451,8 @@ class _nAngebotState extends State<nAngebot> {
   {
     bool filledOut = false;
 
+    // for testing
+    /*
     String s = '\nofferFilledOut:'+
                '\nrentalPriceController.text.isNotEmpty           >> ' + rentalPriceController.text.isNotEmpty.toString()           +
                '\n_selectedLocation != Wähle                      >> ' + (_selectedLocation != 'Wähle').toString()                  +
@@ -462,6 +464,7 @@ class _nAngebotState extends State<nAngebot> {
                ;
 
     alert(s);
+    */
 
     if
     (

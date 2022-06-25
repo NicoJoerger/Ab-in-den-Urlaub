@@ -38,6 +38,7 @@ class _nAngebotState extends State<nAngebot> {
   void initState() {
     super.initState();
     loadCookies();
+    getUserWohnungen();
   }
 
   void loadCookies() async {
@@ -128,13 +129,6 @@ class _nAngebotState extends State<nAngebot> {
     } catch (err) {
       print(err.toString());
     }
-  }
-
-  @override
-  void initState() {
-    getUserWohnungen();
-    // TODO: implement initState
-    super.initState();
   }
 
   @override

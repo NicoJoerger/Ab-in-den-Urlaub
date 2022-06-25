@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/Angebot.dart';
 import 'package:ab_in_den_urlaub/admin.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +58,10 @@ class _ProfileState extends State<Profile> {
   final vornameCon = TextEditingController();
 
   // evaluation
-  bool  vermieter   = false;
-  int   countStarts = -1;
+  bool vermieter = false;
+  int countStarts = -1;
   final countStarsController = TextEditingController();
-  final commentController    = TextEditingController();
+  final commentController = TextEditingController();
 
   String dropdownValue = 'Wähle Wohnung';
 
@@ -682,12 +683,11 @@ class _ProfileState extends State<Profile> {
                                   child: Text(
                                       json["aktuellerTokenpreis"].toString()),
                                 ),
-                                Container
-                                (
+                                Container(
                                   width: 150,
                                   child: ElevatedButton(
-                                    
-                                    onPressed: () => evaluationDialog(context, json['fwId']),
+                                    onPressed: () =>
+                                        evaluationDialog(context, json['fwId']),
                                     child: const Text('Bewerten'),
                                   ),
                                 )
@@ -751,7 +751,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-  
+
   void setUserToVermieter() async {
     // fetch user
     String get_user_url = LoginInfo.serverIP + '/api/Nutzer/';
@@ -794,102 +794,86 @@ class _ProfileState extends State<Profile> {
     return jsonDecode(responseUserIDQuery.body)['vermieter'];
   }
 
-  void evaluationDialog(context, int fwId) 
-  {
-    showDialog<String>
-    (
+  void evaluationDialog(context, int fwId) {
+    showDialog<String>(
       context: context,
-      builder: (BuildContext context) => AlertDialog
-      (
+      builder: (BuildContext context) => AlertDialog(
         title: const Center(child: Text('neue Bewertung abgeben')),
-        actions: <Widget>
-        [
-          Container
-          (
+        actions: <Widget>[
+          Container(
             //width: MediaQuery.of(context).size.width * 0.3,   // fix later oleg
             //height: MediaQuery.of(context).size.height * 0.3, // fix later oleg
 
             alignment: Alignment.center,
             child: Column(
-              children: 
-              [
+              children: [
                 const Text('Geben sie ihren Kommentar ein.:'),
                 Container(height: 5),
-                TextField
-                (
+                TextField(
                   controller: commentController,
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
                   minLines: 3,
                   maxLines: 8,
-                ),     
+                ),
                 Container(height: 10),
                 const Text('Anz Sterne (0-5) eingben:'),
                 Container(height: 5),
-                TextField
-                (
-                  controller:  countStarsController,
+                TextField(
+                  controller: countStarsController,
 
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(1),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-5]'))
                   ], // Only numbers can be e
-
                 ),
                 Container(height: 10),
-                Row
-                (
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: 
-                  [
-                    TextButton
-                    ( // 
+                  children: [
+                    TextButton(
+                      //
                       onPressed: () => addReview(fwId),
                       child: const Text('Abgeben'),
                     ),
-                    TextButton 
-                    ( // send Comment
+                    TextButton(
+                      // send Comment
                       onPressed: () => Navigator.pop(context, 'Nicht Abgeben'),
                       child: const Text('Nicht Abgeben'),
                     )
                   ],
-                )               
+                )
               ],
             ),
           )
         ],
       ),
-    );     
+    );
   }
 
-  Future<void> addReview(int fwId) async
-  {
-
+  Future<void> addReview(int fwId) async {
     Navigator.pop(context, 'Abgeben'); // close Dialog
-    
+
     //print('\nADD Review\n');           // check
 
     String url = LoginInfo.serverIP + '/api/Bewertung';
 
     // post review
-    final postOfferResponse = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-      body: buildEvaluationString(fwId)
-    );
+    final postOfferResponse = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: buildEvaluationString(fwId));
 
-    if(postOfferResponse.statusCode == 200)
-    {
+    if (postOfferResponse.statusCode == 200) {
       print('\nReview posted succesfilly\n');
     }
-
   }
 
-  String buildEvaluationString(int fwId)
-  {
+  String buildEvaluationString(int fwId) {
     String evaluationPostQuery = jsonEncode(<String, Object>{
-      "userId"   : LoginInfo.userid, // user id 
-      "fwId"     : fwId,             // id of the fw
+      "userId": LoginInfo.userid, // user id
+      "fwId": fwId, // id of the fw
       "anzsterne": int.parse(countStarsController.text),
       "kommentar": commentController.text,
     });

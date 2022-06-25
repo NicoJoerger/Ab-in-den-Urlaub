@@ -89,6 +89,13 @@ class deleteButton extends StatelessWidget {
 }
 
 class _apartmentDetailState extends State<apartmentDetail> {
+  var knopf = Visibility(
+      visible: false,
+      child: ElevatedButton(
+        child: Text("Angbeot löschen"),
+        onPressed: () {},
+      ));
+
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -301,8 +308,17 @@ class _apartmentDetailState extends State<apartmentDetail> {
     try {
       response = await http.get(Uri.parse(urlApart));
       jsonApart = jsonDecode(response.body);
-      //print("Wohnung: " + jsonApart.toString());
       setState(() {
+        if (LoginInfo.userid == jsonApart["userId"]) {
+          knopf = Visibility(
+              visible: true,
+              child: ElevatedButton(
+                child: Text("Angbeot löschen"),
+                onPressed: () {
+                  deleteAngebot();
+                },
+              ));
+        }
         strasse = jsonApart["strasse"].toString();
         plz = jsonApart["plz"].toString();
         hausnummer = jsonApart["hausnummer"].toString();
@@ -340,6 +356,29 @@ class _apartmentDetailState extends State<apartmentDetail> {
         });
       }
       jsons = [];
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  Future<void> deleteAngebot() async {
+    String urlImg = LoginInfo.serverIP +
+        '/api/Angebote/deactivate/' +
+        LoginInfo.currentAngebot;
+    try {
+      response = await http.put(Uri.parse(urlImg));
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Angebot wurde gelöscht.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     } catch (err) {
       print(err.toString());
     }
@@ -686,6 +725,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
                           ),
                           child: const Text('Bieten'),
                         ),
+                        knopf,
                         const SizedBox(
                           width: 50,
                         ),

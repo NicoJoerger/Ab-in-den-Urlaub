@@ -41,7 +41,6 @@ class _AllApartmentsState extends State<AllApartments> {
   var wohnungenById;
   Map<int, Widget> Bilder = Map();
 
-
   void loadCookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
@@ -49,16 +48,15 @@ class _AllApartmentsState extends State<AllApartments> {
   }
 
   void getWohnungByID(int id) {
-            //print("NEIN");
-            //print("lala:" + wohnungen[45].toString());
+    //print("NEIN");
+    //print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
-      
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
         //print("JAWOHL");
       }
     }
-   // print("lulul");
+    // print("lulul");
   }
 
   //wohnungenById
@@ -75,14 +73,10 @@ class _AllApartmentsState extends State<AllApartments> {
           });
         }
       }
-      
+
       for (int i = 0; i < wohnungen.length; i++) {
-        print("Wohnungen[" +
-            i.toString() +
-            "]: " +
-            wohnungen[i].toString());
+        print("Wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
       }
-      
     } catch (err) {
       print(err.toString());
     }
@@ -92,7 +86,7 @@ class _AllApartmentsState extends State<AllApartments> {
     await getWohnungen();
     for (int i = 0; i < jsonItalien.length; i++) {
       int fwID = jsonItalien[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -108,7 +102,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
     for (int i = 0; i < jsonSpanien.length; i++) {
       int fwID = jsonSpanien[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -123,7 +117,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonDeutschland.length; i++) {
       int fwID = jsonDeutschland[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -138,7 +132,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonGriechenland.length; i++) {
       int fwID = jsonGriechenland[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -265,6 +259,7 @@ class _AllApartmentsState extends State<AllApartments> {
     // TODO: implement initState
 
     super.initState();
+    loadCookies();
     setState(() {
       //fetchFerienwohnung();
       //fetchAngebot();

@@ -171,6 +171,12 @@ class _sApartmentsState extends State<sApartments> {
     }
   }
 
+  @override
+  void initState() {
+    loadCookies();
+    super.initState();
+  }
+
   void loadCookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
     LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();

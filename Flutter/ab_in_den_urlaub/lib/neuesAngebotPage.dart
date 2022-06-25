@@ -33,7 +33,6 @@ class _nAngebotState extends State<nAngebot> {
   Map<String, int> dictionaryFeriwnwohnungNameID = {};
   dynamic startOfJourney;
   dynamic endOfJourney;
-  
 
   void loadCookies() async {
     LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
@@ -123,13 +122,6 @@ class _nAngebotState extends State<nAngebot> {
     } catch (err) {
       print(err.toString());
     }
-  }
-
-  @override
-  void initState() {
-    getUserWohnungen();
-    // TODO: implement initState
-    super.initState();
   }
 
   @override
@@ -357,7 +349,9 @@ class _nAngebotState extends State<nAngebot> {
                     child: OutlinedButton(
                       child: const Text('Angebot erstellen',
                           style: TextStyle(color: Colors.black)),
-                      onPressed: () {checkAndPostOffer();},
+                      onPressed: () {
+                        checkAndPostOffer();
+                      },
                     ),
                   ),
                 ),
@@ -379,13 +373,11 @@ class _nAngebotState extends State<nAngebot> {
     String url = LoginInfo.serverIP + '/api/Angebote';
 
     // post Angebot
-    final postOfferResponse = await http.post(
-        Uri.parse(url),
+    final postOfferResponse = await http.post(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: await buildPostOfferJSON()
-    );
+        body: await buildPostOfferJSON());
 
     if (postOfferResponse.statusCode == 200) // post Offer succeded
     {
@@ -428,27 +420,24 @@ class _nAngebotState extends State<nAngebot> {
     // check if offer is in DB
   }
 
-  void checkAndPostOffer() async
-  {
-    if( offerFilledOut() ) // form 'offer' is filled out
+  void checkAndPostOffer() async {
+    if (offerFilledOut()) // form 'offer' is filled out
     {
-      if( await flatOfferALreadyExistsForGivenTimeframe() ) // offer already exists for timeframe
+      if (await flatOfferALreadyExistsForGivenTimeframe()) // offer already exists for timeframe
       {
-        alert('Mietzeitraum überschneidet sich mit einerm anderen Angebot!'); // offer is already there for timeframe
-      }
-      else // timeframe is open for offer
+        alert(
+            'Mietzeitraum überschneidet sich mit einerm anderen Angebot!'); // offer is already there for timeframe
+      } else // timeframe is open for offer
       {
         postOffer();
       }
-    }
-    else
-    {
-      alert('Formular ist nicht korrekt ausgefüllt!'); // form 'offer' is not filled out
+    } else {
+      alert(
+          'Formular ist nicht korrekt ausgefüllt!'); // form 'offer' is not filled out
     }
   }
 
-  bool offerFilledOut()
-  {
+  bool offerFilledOut() {
     bool filledOut = false;
 
     // for testing
@@ -466,39 +455,58 @@ class _nAngebotState extends State<nAngebot> {
     alert(s);
     */
 
-    if
-    (
-          rentalPriceController.text.isNotEmpty          // rentalPrice filled in
-      &&  _selectedLocation != 'Wähle'                   // location selected
-      &&  selectedRBeginn.compareTo(selectedREnde)  < 0  // selectedRBegin  < selectedREnd
-      &&  selectedABeginn.compareTo(selectedAEnde)  < 0  // selectedABeginn < selectedAEnde
-      &&  selectedABeginn.compareTo(DateTime.now()) > 0  // selectedABeginn > now
-      &&  selectedRBeginn.compareTo(DateTime.now()) > 0  // selectedRBeginn > now
-      &&  selectedRBeginn.compareTo(selectedAEnde)  > 0  // selectedRBeginn > selectedAEnde
-    )
-    {
+    if (rentalPriceController.text.isNotEmpty // rentalPrice filled in
+            &&
+            _selectedLocation != 'Wähle' // location selected
+            &&
+            selectedRBeginn.compareTo(selectedREnde) <
+                0 // selectedRBegin  < selectedREnd
+            &&
+            selectedABeginn.compareTo(selectedAEnde) <
+                0 // selectedABeginn < selectedAEnde
+            &&
+            selectedABeginn.compareTo(DateTime.now()) >
+                0 // selectedABeginn > now
+            &&
+            selectedRBeginn.compareTo(DateTime.now()) >
+                0 // selectedRBeginn > now
+            &&
+            selectedRBeginn.compareTo(selectedAEnde) >
+                0 // selectedRBeginn > selectedAEnde
+        ) {
       filledOut = true;
-      startOfJourney  = selectedRBeginn.year.toString() + '-' + selectedRBeginn.month.toString().padLeft(2, '0') + '-' + selectedRBeginn.day.toString().padLeft(2, '0');
-      endOfJourney    = selectedREnde.year.toString()   + '-' + selectedREnde.month.toString().padLeft(2, '0')   + '-' + selectedREnde.day.toString().padLeft(2, '0');
+      startOfJourney = selectedRBeginn.year.toString() +
+          '-' +
+          selectedRBeginn.month.toString().padLeft(2, '0') +
+          '-' +
+          selectedRBeginn.day.toString().padLeft(2, '0');
+      endOfJourney = selectedREnde.year.toString() +
+          '-' +
+          selectedREnde.month.toString().padLeft(2, '0') +
+          '-' +
+          selectedREnde.day.toString().padLeft(2, '0');
     }
 
     return filledOut;
   }
 
   Future<String> buildPostOfferJSON() async {
-
     // vars
-    String endOfAuction    = selectedAEnde.year.toString()   + '-' + selectedAEnde.month.toString().padLeft(2, '0')   + '-' + selectedAEnde.day.toString().padLeft(2, '0');
-    int    tokenPriceStart = 100;
+    String endOfAuction = selectedAEnde.year.toString() +
+        '-' +
+        selectedAEnde.month.toString().padLeft(2, '0') +
+        '-' +
+        selectedAEnde.day.toString().padLeft(2, '0');
+    int tokenPriceStart = 100;
 
     String offerPostQuery = jsonEncode(<String, Object>{
-      "fwId"               : dict[_selectedLocation]!  ,
-      "mietzeitraumStart"  : startOfJourney            ,
-      "mietzeitraumEnde"   : endOfJourney              ,
-      "auktionEnddatum"    : endOfAuction              ,
-      "aktuellerTokenpreis": tokenPriceStart           , 
-      "mietpreis"          : rentalPriceController.text,
-      "stornierbar"        : offerCancellable
+      "fwId": dict[_selectedLocation]!,
+      "mietzeitraumStart": startOfJourney,
+      "mietzeitraumEnde": endOfJourney,
+      "auktionEnddatum": endOfAuction,
+      "aktuellerTokenpreis": tokenPriceStart,
+      "mietpreis": rentalPriceController.text,
+      "stornierbar": offerCancellable
     });
 
     //print('\nofferPostQuery\n'+offerPostQuery+'\n');
@@ -506,54 +514,58 @@ class _nAngebotState extends State<nAngebot> {
     return offerPostQuery;
   }
 
-  Future<bool> flatOfferALreadyExistsForGivenTimeframe() async 
-  {
+  Future<bool> flatOfferALreadyExistsForGivenTimeframe() async {
     // vars
-    String              url             = LoginInfo.serverIP + '/api/Angebote/'+ dict[_selectedLocation]!.toString()+'/fw';
-    Uri                 uri             = Uri.parse(url);
-    bool                inUse           = false;
-    Map<String, String> heads           = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
-    http.Response       offers;
-    dynamic             offersDecoded;
-    dynamic             offerDecoded;
-    dynamic             startOfJourneyGiven;
-    dynamic             endofJourneyGiven;
+    String url = LoginInfo.serverIP +
+        '/api/Angebote/' +
+        dict[_selectedLocation]!.toString() +
+        '/fw';
+    Uri uri = Uri.parse(url);
+    bool inUse = false;
+    Map<String, String> heads = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8'
+    };
+    http.Response offers;
+    dynamic offersDecoded;
+    dynamic offerDecoded;
+    dynamic startOfJourneyGiven;
+    dynamic endofJourneyGiven;
 
     // get offers at json
     offers = await http.get(uri, headers: heads);
     offersDecoded = jsonDecode(offers.body);
 
     // set inUSe true if flats are rented at the same time
-    for(offerDecoded in offersDecoded)
-    {
-      startOfJourneyGiven = offerDecoded['mietzeitraumStart'].toString().substring(0, 10);
-      endofJourneyGiven   = offerDecoded['mietzeitraumEnde'].toString().substring(0, 10);
+    for (offerDecoded in offersDecoded) {
+      startOfJourneyGiven =
+          offerDecoded['mietzeitraumStart'].toString().substring(0, 10);
+      endofJourneyGiven =
+          offerDecoded['mietzeitraumEnde'].toString().substring(0, 10);
 
-      if( (startOfJourney.compareTo(startOfJourneyGiven) >= 0) && (startOfJourney.compareTo(endofJourneyGiven) <= 0) )
-      {
+      if ((startOfJourney.compareTo(startOfJourneyGiven) >= 0) &&
+          (startOfJourney.compareTo(endofJourneyGiven) <= 0)) {
         inUse = true;
       }
 
-      if( (endOfJourney.compareTo(startOfJourneyGiven) >= 0) && (endOfJourney.compareTo(endofJourneyGiven) <= 0) )
-      {
+      if ((endOfJourney.compareTo(startOfJourneyGiven) >= 0) &&
+          (endOfJourney.compareTo(endofJourneyGiven) <= 0)) {
         inUse = true;
       }
 
-      if( (startOfJourney.compareTo(startOfJourneyGiven) < 0) && (endOfJourney.compareTo(endofJourneyGiven) > 0))
-      {
+      if ((startOfJourney.compareTo(startOfJourneyGiven) < 0) &&
+          (endOfJourney.compareTo(endofJourneyGiven) > 0)) {
         inUse = true;
       }
-
     }
 
-    print('\n flatOfferALreadyExistsForGivenTimeframe() >> '+inUse.toString());
+    print(
+        '\n flatOfferALreadyExistsForGivenTimeframe() >> ' + inUse.toString());
 
-    return inUse; 
+    return inUse;
   }
 
   // Displays Dialog with Title of String message
-  void alert(String message)
-  {
+  void alert(String message) {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -564,8 +576,7 @@ class _nAngebotState extends State<nAngebot> {
             child: const Text('OK'),
           ),
         ],
-       ),
+      ),
     );
   }
-
 }

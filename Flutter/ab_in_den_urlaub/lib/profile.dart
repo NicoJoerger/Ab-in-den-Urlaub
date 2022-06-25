@@ -18,8 +18,8 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class adminButton extends StatelessWidget {
-  const adminButton({Key? key}) : super(key: key);
+class AdminButton extends StatelessWidget {
+  const AdminButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,78 @@ class adminButton extends StatelessWidget {
       return Container();
     }
   }
+}
+
+class DeleteAccountButton extends StatelessWidget {
+  const DeleteAccountButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if ( LoginInfo.userid != -1) {
+      return TextButton(
+          onPressed: () {
+            deleteUserAccount(context);
+           // Navigator.push(context, MaterialPageRoute(builder: (context) => Admin()));
+          },
+          child: const Text("Delete Account"));
+    } else {
+      return Container();
+    }
+  }
+}
+
+Future<void> deleteUserAccount(context) async
+{
+  String              url             = LoginInfo.serverIP + '/api/Nutzer/deactivate/' + LoginInfo.userid.toString();
+  Uri                 uri             = Uri.parse(url);
+  Map<String, String> heads           = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
+  http.Response       deactivateUserResponse;
+
+  deactivateUserResponse = await http.put(uri, headers: heads);
+  
+  if(deactivateUserResponse.statusCode == 200)
+  {
+    // Logout
+    window.localStorage.containsKey('userId');
+    window.localStorage.containsKey('tokenstand');
+    window.localStorage.containsKey('angebotID');
+    window.localStorage['userId'] = "-1";
+    window.localStorage['tokenstand'] = "0";
+    LoginInfo.userid = -1;
+    LoginInfo.currentAngebot = "0";
+    LoginInfo.tokens = 0;
+    Navigator.pushNamed(context, '/registrierung');
+
+    // write succes message
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Account erfolgreich gelöscht'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+       ),
+    );
+  }
+  else
+  {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Account wurde nicht gelöscht >> \n Fehlercode: '+deactivateUserResponse.statusCode.toString()+deactivateUserResponse.body),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+       ),
+    );
+  }
+
 }
 
 class _ProfileState extends State<Profile> {
@@ -551,7 +623,8 @@ class _ProfileState extends State<Profile> {
                     Text("Ich möchte Wohnungen vermieten.")
                   ],
                 ),
-                adminButton(),
+                const AdminButton(),
+                const DeleteAccountButton(),
                 TextButton(
                     onPressed: () => {
                           window.localStorage.containsKey('userId'),

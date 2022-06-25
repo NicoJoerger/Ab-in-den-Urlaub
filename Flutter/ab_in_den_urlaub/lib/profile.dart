@@ -286,20 +286,41 @@ class _ProfileState extends State<Profile> {
 
     if (passRegCon.text == passRegCon2.text) {
       try {
+        String body = """{"userId": """ +
+            userData[0]["userId"].toString() +
+            """, "username": \"""" +
+            usernameCon.text +
+            """\", "nachname": \"""" +
+            nachnameCon.text +
+            """\", "password": \"""" +
+            passRegCon.text +
+            """\", "email": \"""" +
+            emailRegCon.text +
+            """\", "vorname": \"""" +
+            vornameCon.text +
+            """\", "vermieter": null, "tokenstand": \"""" +
+            LoginInfo.tokens.toString() +
+            """\", 
+"admin": null, 
+"lastbuy": "2022-06-25T15:03:53.769806",
+"deaktiviert": false, 
+"bewertungs": [], 
+"ferienwohnungs": [], 
+"gebots": [], 
+"kreditkartendatens": [],
+"rechnungshistorieeintrags": []} """;
         userData[0]["username"] = usernameCon.text;
         userData[0]["nachname"] = nachnameCon.text;
         userData[0]["vorname"] = vornameCon.text;
         userData[0]["password"] = passRegCon.text;
         userData[0]["email"] = emailRegCon.text;
         userData[0]["tokenstand"] = LoginInfo.tokens.toString();
-        userData[0]["kartennummer"] = creditCon.text;
-        userData[0]["cvv"] = cvvCon.text;
-        print("New userData: " + userData[0].toString());
+        print("New userData: " + body);
         response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
-            body: userData[0].toString());
+            body: body);
         if (response.statusCode == 200) {
           //LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
@@ -499,7 +520,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                Container(
+                /*Container(
                   width: Textw,
                   height: Texth,
                   child: Row(
@@ -534,6 +555,15 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
+                ),*/
+                Container(
+                  width: Textw / 4,
+                  height: Texth,
+                  child: TextButton(
+                      onPressed: () {
+                        postUser();
+                      },
+                      child: Text("Speichern")),
                 ),
                 // checkbox vermieter true/false
                 const SizedBox(height: 10),

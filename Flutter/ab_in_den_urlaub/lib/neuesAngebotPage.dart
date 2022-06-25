@@ -31,8 +31,8 @@ class _nAngebotState extends State<nAngebot> {
   final rentalPriceController = TextEditingController();
   var dict = new Map();
   Map<String, int> dictionaryFeriwnwohnungNameID = {};
-  String startOfJourney = '';
-  String endOfJourney   = '';
+  dynamic startOfJourney;
+  dynamic endOfJourney;
   
 
   void loadCookies() async {
@@ -475,6 +475,8 @@ class _nAngebotState extends State<nAngebot> {
     )
     {
       filledOut = true;
+      startOfJourney  = selectedRBeginn.year.toString() + '-' + selectedRBeginn.month.toString().padLeft(2, '0') + '-' + selectedRBeginn.day.toString().padLeft(2, '0');
+      endOfJourney    = selectedREnde.year.toString()   + '-' + selectedREnde.month.toString().padLeft(2, '0')   + '-' + selectedREnde.day.toString().padLeft(2, '0');
     }
 
     return filledOut;
@@ -483,8 +485,6 @@ class _nAngebotState extends State<nAngebot> {
   Future<String> buildPostOfferJSON() async {
 
     // vars
-    startOfJourney  = selectedRBeginn.year.toString() + '-' + selectedRBeginn.month.toString().padLeft(2, '0') + '-' + selectedRBeginn.day.toString().padLeft(2, '0');
-    endOfJourney    = selectedREnde.year.toString()   + '-' + selectedREnde.month.toString().padLeft(2, '0')   + '-' + selectedREnde.day.toString().padLeft(2, '0');
     String endOfAuction    = selectedAEnde.year.toString()   + '-' + selectedAEnde.month.toString().padLeft(2, '0')   + '-' + selectedAEnde.day.toString().padLeft(2, '0');
     int    tokenPriceStart = 100;
 
@@ -505,41 +505,47 @@ class _nAngebotState extends State<nAngebot> {
 
   Future<bool> flatOfferALreadyExistsForGivenTimeframe() async 
   {
-   
-    String        url             = LoginInfo.serverIP + '/api/Angebote/'+ dict[_selectedLocation]!.toString()+'/fw';
-    bool          inUse           = false;
-    bool          b1              = false;
-    bool          b2              = false;
-    http.Response offers;
-    dynamic       offersDecoded;
-    dynamic       offerDecoded;
+    // vars
+    String              url             = LoginInfo.serverIP + '/api/Angebote/'+ dict[_selectedLocation]!.toString()+'/fw';
+    Uri                 uri             = Uri.parse(url);
+    bool                inUse           = false;
+    Map<String, String> heads           = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
+    http.Response       offers;
+    dynamic             offersDecoded;
+    dynamic             offerDecoded;
+    dynamic             startOfJourneyGiven;
+    dynamic             endofJourneyGiven;
 
-
-    offers = await http.get(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-    );
-
+    // get offers at json
+    offers = await http.get(uri, headers: heads);
     offersDecoded = jsonDecode(offers.body);
 
+    // set inUSe true if flats are rented at the same time
     for(offerDecoded in offersDecoded)
     {
+      startOfJourneyGiven = offerDecoded['mietzeitraumStart'].toString().substring(0, 10);
+      endofJourneyGiven   = offerDecoded['mietzeitraumEnde'].toString().substring(0, 10);
 
-      print('(endofJourney.compareTo(offerDecoded[mietzeitraumStart]) >= 0     >> '+((endOfJourney.compareTo(offerDecoded['mietzeitraumStart']) >= 0 && (endOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) <= 0))).toString());
-      print('(startofJourney.compareTo(offerDecoded[mietzeitraumEnd]) <= 0     >> '+(startOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) <= 0).toString());
-
-
-      /*
-      if( (endOfJourney.compareTo(offerDecoded['mietzeitraumStart']) > 0) && (endOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) < 0)  ||  ((startOfJourney.compareTo(offerDecoded['mietzeitraumEnde']) < 0  && startOfJourney.compareTo(offerDecoded['mietzeitraumStart'] >= 0)) )
+      if( (startOfJourney.compareTo(startOfJourneyGiven) >= 0) && (startOfJourney.compareTo(endofJourneyGiven) <= 0) )
       {
         inUse = true;
       }
-      */
+
+      if( (endOfJourney.compareTo(startOfJourneyGiven) >= 0) && (endOfJourney.compareTo(endofJourneyGiven) <= 0) )
+      {
+        inUse = true;
+      }
+
+      if( (startOfJourney.compareTo(startOfJourneyGiven) < 0) && (endOfJourney.compareTo(endofJourneyGiven) > 0))
+      {
+        inUse = true;
+      }
+
     }
 
     print('\n flatOfferALreadyExistsForGivenTimeframe() >> '+inUse.toString());
 
-    return inUse;
+    return inUse; 
   }
 
   // Displays Dialog with Title of String message

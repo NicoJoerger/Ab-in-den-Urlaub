@@ -53,39 +53,6 @@ class _AllApartmentsState extends State<AllApartments> {
   var wohnungenById;
   Map<int, Widget> Bilder = Map();
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Studentenprojekt'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text(
-                    'Es handelt sich bei dieser Website um ein Projekt innerhalb des Informatikstudiums.'),
-                Text(
-                  'Dies ist keine echte Platform um Ferienwohnungen zu buchen.',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text('Bitte geben Sie keine persoenlichen Daten an!'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Gelesen'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void loadCookies() async {
     try {
       LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
@@ -327,6 +294,7 @@ class _AllApartmentsState extends State<AllApartments> {
     // TODO: implement initState
 
     super.initState();
+    loadCookies();
     setState(() {
       loadCookies();
       //fetchFerienwohnung();

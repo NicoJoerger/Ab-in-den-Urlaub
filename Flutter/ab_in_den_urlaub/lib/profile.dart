@@ -1,3 +1,4 @@
+import 'package:ab_in_den_urlaub/Angebot.dart';
 import 'package:ab_in_den_urlaub/admin.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,8 @@ class Profile extends StatefulWidget {
   _ProfileState createState() => _ProfileState();
 }
 
-class adminButton extends StatelessWidget {
-  const adminButton({Key? key}) : super(key: key);
+class AdminButton extends StatelessWidget {
+  const AdminButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,78 @@ class adminButton extends StatelessWidget {
       return Container();
     }
   }
+}
+
+class DeleteAccountButton extends StatelessWidget {
+  const DeleteAccountButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if ( LoginInfo.userid != -1) {
+      return TextButton(
+          onPressed: () {
+            deleteUserAccount(context);
+           // Navigator.push(context, MaterialPageRoute(builder: (context) => Admin()));
+          },
+          child: const Text("Delete Account"));
+    } else {
+      return Container();
+    }
+  }
+}
+
+Future<void> deleteUserAccount(context) async
+{
+  String              url             = LoginInfo.serverIP + '/api/Nutzer/deactivate/' + LoginInfo.userid.toString();
+  Uri                 uri             = Uri.parse(url);
+  Map<String, String> heads           = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
+  http.Response       deactivateUserResponse;
+
+  deactivateUserResponse = await http.put(uri, headers: heads);
+  
+  if(deactivateUserResponse.statusCode == 200)
+  {
+    // Logout
+    window.localStorage.containsKey('userId');
+    window.localStorage.containsKey('tokenstand');
+    window.localStorage.containsKey('angebotID');
+    window.localStorage['userId'] = "-1";
+    window.localStorage['tokenstand'] = "0";
+    LoginInfo.userid = -1;
+    LoginInfo.currentAngebot = "0";
+    LoginInfo.tokens = 0;
+    Navigator.pushNamed(context, '/registrierung');
+
+    // write succes message
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Account erfolgreich gelöscht'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+       ),
+    );
+  }
+  else
+  {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Account wurde nicht gelöscht >> \n Fehlercode: '+deactivateUserResponse.statusCode.toString()+deactivateUserResponse.body),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+       ),
+    );
+  }
+
 }
 
 class _ProfileState extends State<Profile> {
@@ -57,10 +130,10 @@ class _ProfileState extends State<Profile> {
   final vornameCon = TextEditingController();
 
   // evaluation
-  bool  vermieter   = false;
-  int   countStarts = -1;
+  bool vermieter = false;
+  int countStarts = -1;
   final countStarsController = TextEditingController();
-  final commentController    = TextEditingController();
+  final commentController = TextEditingController();
 
   String dropdownValue = 'Wähle Wohnung';
 
@@ -285,20 +358,41 @@ class _ProfileState extends State<Profile> {
 
     if (passRegCon.text == passRegCon2.text) {
       try {
+        String body = """{"userId": """ +
+            userData[0]["userId"].toString() +
+            """, "username": \"""" +
+            usernameCon.text +
+            """\", "nachname": \"""" +
+            nachnameCon.text +
+            """\", "password": \"""" +
+            passRegCon.text +
+            """\", "email": \"""" +
+            emailRegCon.text +
+            """\", "vorname": \"""" +
+            vornameCon.text +
+            """\", "vermieter": null, "tokenstand": \"""" +
+            LoginInfo.tokens.toString() +
+            """\", 
+"admin": null, 
+"lastbuy": "2022-06-25T15:03:53.769806",
+"deaktiviert": false, 
+"bewertungs": [], 
+"ferienwohnungs": [], 
+"gebots": [], 
+"kreditkartendatens": [],
+"rechnungshistorieeintrags": []} """;
         userData[0]["username"] = usernameCon.text;
         userData[0]["nachname"] = nachnameCon.text;
         userData[0]["vorname"] = vornameCon.text;
         userData[0]["password"] = passRegCon.text;
         userData[0]["email"] = emailRegCon.text;
         userData[0]["tokenstand"] = LoginInfo.tokens.toString();
-        userData[0]["kartennummer"] = creditCon.text;
-        userData[0]["cvv"] = cvvCon.text;
-        print("New userData: " + userData[0].toString());
+        print("New userData: " + body);
         response = await http.put(Uri.parse(LoginInfo.serverIP + "/api/Nutzer"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8'
             },
-            body: userData[0].toString());
+            body: body);
         if (response.statusCode == 200) {
           //LoginInfo.tokens = startToken;
           Navigator.pushNamed(context, '/Profile');
@@ -498,7 +592,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                Container(
+                /*Container(
                   width: Textw,
                   height: Texth,
                   child: Row(
@@ -533,6 +627,15 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
+                ),*/
+                Container(
+                  width: Textw / 4,
+                  height: Texth,
+                  child: TextButton(
+                      onPressed: () {
+                        postUser();
+                      },
+                      child: Text("Speichern")),
                 ),
                 // checkbox vermieter true/false
                 const SizedBox(height: 10),
@@ -551,7 +654,8 @@ class _ProfileState extends State<Profile> {
                     Text("Ich möchte Wohnungen vermieten.")
                   ],
                 ),
-                adminButton(),
+                const AdminButton(),
+                const DeleteAccountButton(),
                 TextButton(
                     onPressed: () => {
                           window.localStorage.containsKey('userId'),
@@ -682,12 +786,11 @@ class _ProfileState extends State<Profile> {
                                   child: Text(
                                       json["aktuellerTokenpreis"].toString()),
                                 ),
-                                Container
-                                (
+                                Container(
                                   width: 150,
                                   child: ElevatedButton(
-                                    
-                                    onPressed: () => evaluationDialog(context, json['fwId']),
+                                    onPressed: () =>
+                                        evaluationDialog(context, json['fwId']),
                                     child: const Text('Bewerten'),
                                   ),
                                 )
@@ -751,7 +854,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-  
+
   void setUserToVermieter() async {
     // fetch user
     String get_user_url = LoginInfo.serverIP + '/api/Nutzer/';
@@ -794,102 +897,112 @@ class _ProfileState extends State<Profile> {
     return jsonDecode(responseUserIDQuery.body)['vermieter'];
   }
 
-  void evaluationDialog(context, int fwId) 
-  {
-    showDialog<String>
-    (
+  void evaluationDialog(context, int fwId) {
+    showDialog<String>(
       context: context,
-      builder: (BuildContext context) => AlertDialog
-      (
+      builder: (BuildContext context) => AlertDialog(
         title: const Center(child: Text('neue Bewertung abgeben')),
-        actions: <Widget>
-        [
-          Container
-          (
+        actions: <Widget>[
+          Container(
             //width: MediaQuery.of(context).size.width * 0.3,   // fix later oleg
             //height: MediaQuery.of(context).size.height * 0.3, // fix later oleg
 
             alignment: Alignment.center,
             child: Column(
-              children: 
-              [
+              children: [
                 const Text('Geben sie ihren Kommentar ein.:'),
                 Container(height: 5),
-                TextField
-                (
+                TextField(
                   controller: commentController,
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
                   minLines: 3,
                   maxLines: 8,
-                ),     
+                ),
                 Container(height: 10),
                 const Text('Anz Sterne (0-5) eingben:'),
                 Container(height: 5),
-                TextField
-                (
-                  controller:  countStarsController,
+                TextField(
+                  controller: countStarsController,
 
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(1),
                     FilteringTextInputFormatter.allow(RegExp(r'[0-5]'))
                   ], // Only numbers can be e
-
                 ),
                 Container(height: 10),
-                Row
-                (
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: 
-                  [
-                    TextButton
-                    ( // 
+                  children: [
+                    TextButton(
+                      //
                       onPressed: () => addReview(fwId),
                       child: const Text('Abgeben'),
                     ),
-                    TextButton 
-                    ( // send Comment
+                    TextButton(
+                      // send Comment
                       onPressed: () => Navigator.pop(context, 'Nicht Abgeben'),
                       child: const Text('Nicht Abgeben'),
                     )
                   ],
-                )               
+                )
               ],
             ),
           )
         ],
       ),
-    );     
+    );
   }
 
-  Future<void> addReview(int fwId) async
-  {
-
+  Future<void> addReview(int fwId) async {
     Navigator.pop(context, 'Abgeben'); // close Dialog
-    
+
     //print('\nADD Review\n');           // check
 
     String url = LoginInfo.serverIP + '/api/Bewertung';
 
     // post review
-    final postOfferResponse = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-      body: buildEvaluationString(fwId)
-    );
+    final postOfferResponse = await http.post(Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: buildEvaluationString(fwId));
 
-    if(postOfferResponse.statusCode == 200)
-    {
-      print('\nReview posted succesfilly\n');
+    if (postOfferResponse.statusCode == 200) {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Bewertung erfolgreich abgegeben'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
-
+    else
+    {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Bewertung wurde nicht abgegeben'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
-  String buildEvaluationString(int fwId)
-  {
+  String buildEvaluationString(int fwId) {
     String evaluationPostQuery = jsonEncode(<String, Object>{
-      "userId"   : LoginInfo.userid, // user id 
-      "fwId"     : fwId,             // id of the fw
+      "userId": LoginInfo.userid, // user id
+      "fwId": fwId, // id of the fw
       "anzsterne": int.parse(countStarsController.text),
       "kommentar": commentController.text,
     });

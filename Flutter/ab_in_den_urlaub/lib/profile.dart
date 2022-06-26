@@ -96,7 +96,7 @@ Future<void> deleteUserAccount(context) async
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text('Account wurde nicht gelöscht >> \n Fehlercode: '+deactivateUserResponse.statusCode.toString()+deactivateUserResponse.body),
+        title: Text('Account wurde nicht gelöscht\n'+deactivateUserResponse.body),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),

@@ -969,7 +969,33 @@ class _ProfileState extends State<Profile> {
         body: buildEvaluationString(fwId));
 
     if (postOfferResponse.statusCode == 200) {
-      print('\nReview posted succesfilly\n');
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Bewertung erfolgreich abgegeben'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+    else
+    {
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Bewertung wurde nicht abgegeben'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 

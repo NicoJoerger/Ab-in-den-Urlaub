@@ -36,6 +36,12 @@ class _RegistrierungState extends State<Registrierung> {
   RegExp regexMasterCard = RegExp(
       r'(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}');
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   void postUser() async {
     if (regexEmail.hasMatch(emailRegCon.text)) {
       if (regexVisa.hasMatch(creditCon.text) ||
@@ -284,6 +290,17 @@ class _RegistrierungState extends State<Registrierung> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                Text(
+                  'Es handelt sich bei dieser Website um ein Projekt innerhalb des Informatikstudiums.',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                    "Dies ist keine echte Platform um Ferienwohnungen zu buchen.",
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold)),
+                Text("Bitte geben Sie keine persoenlichen Daten an!",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
                 Container(
                   height: 200,
                 ),

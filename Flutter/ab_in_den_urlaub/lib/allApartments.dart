@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ab_in_den_urlaub/apartmentCard.dart';
 import 'package:ab_in_den_urlaub/globals.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +17,18 @@ class AllApartments extends StatefulWidget {
   _AllApartmentsState createState() => _AllApartmentsState();
 }
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
+}
+
 class _AllApartmentsState extends State<AllApartments> {
+  final ScrollController scrollController = ScrollController();
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -41,24 +53,78 @@ class _AllApartmentsState extends State<AllApartments> {
   var wohnungenById;
   Map<int, Widget> Bilder = Map();
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Studentenprojekt'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                    'Es handelt sich bei dieser Website um ein Projekt innerhalb des Informatikstudiums.'),
+                Text(
+                  'Dies ist keine echte Platform um Ferienwohnungen zu buchen.',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('Bitte geben Sie keine persoenlichen Daten an!'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Gelesen'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void loadCookies() async {
-    LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
-    LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
-    LoginInfo.tokens = int.parse(window.localStorage['tokenstand'].toString());
+    try {
+      LoginInfo.userid = int.parse(window.localStorage['userId'].toString());
+      LoginInfo.currentAngebot = window.localStorage['angebotID'].toString();
+      LoginInfo.tokens =
+          int.parse(window.localStorage['tokenstand'].toString());
+    } catch (e) {
+      print("\n\n\n\nNo Cookies found!!!");
+      //_showMyDialog();
+      final snackBar = SnackBar(
+        content: const Text(
+            'Es handelt sich bei dieser Website um ein Projekt innerhalb des Informatikstudiums.\nDies ist keine echte Platform um Ferienwohnungen zu buchen.\nBitte geben Sie keine persoenlichen Daten an!'),
+        action: SnackBarAction(
+          label: 'Gelesen',
+          onPressed: () {
+            // Some code to undo the change.
+          },
+        ),
+      );
+      window.localStorage.containsKey('userId');
+      window.localStorage.containsKey('tokenstand');
+      window.localStorage.containsKey('angebotID');
+
+      window.localStorage['userId'] = "-1";
+      window.localStorage['tokenstand'] = "0";
+      window.localStorage['angebotID'] = "10";
+    }
   }
 
   void getWohnungByID(int id) {
-            //print("NEIN");
-            //print("lala:" + wohnungen[45].toString());
+    //print("NEIN");
+    //print("lala:" + wohnungen[45].toString());
     for (int i = 0; i < wohnungen.length; i++) {
-      
       if (wohnungen[i]["fwId"].toString() == id.toString()) {
         wohnungenById = wohnungen[i];
         //print("JAWOHL");
       }
     }
-   // print("lulul");
+    // print("lulul");
   }
 
   //wohnungenById
@@ -75,14 +141,10 @@ class _AllApartmentsState extends State<AllApartments> {
           });
         }
       }
-      
+
       for (int i = 0; i < wohnungen.length; i++) {
-        print("Wohnungen[" +
-            i.toString() +
-            "]: " +
-            wohnungen[i].toString());
+        print("Wohnungen[" + i.toString() + "]: " + wohnungen[i].toString());
       }
-      
     } catch (err) {
       print(err.toString());
     }
@@ -92,7 +154,7 @@ class _AllApartmentsState extends State<AllApartments> {
     await getWohnungen();
     for (int i = 0; i < jsonItalien.length; i++) {
       int fwID = jsonItalien[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -108,7 +170,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
     for (int i = 0; i < jsonSpanien.length; i++) {
       int fwID = jsonSpanien[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -123,7 +185,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonDeutschland.length; i++) {
       int fwID = jsonDeutschland[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -138,7 +200,7 @@ class _AllApartmentsState extends State<AllApartments> {
     }
     for (int i = 0; i < jsonGriechenland.length; i++) {
       int fwID = jsonGriechenland[i]["fwId"];
-      
+
       getWohnungByID(fwID);
       String urls = wohnungenById["bilderLinks"].toString();
       List<String> links = [];
@@ -266,6 +328,7 @@ class _AllApartmentsState extends State<AllApartments> {
 
     super.initState();
     setState(() {
+      loadCookies();
       //fetchFerienwohnung();
       //fetchAngebot();
 
@@ -335,6 +398,7 @@ class _AllApartmentsState extends State<AllApartments> {
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
+                        controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         itemCount: jsonItalien.length,
                         itemBuilder: (context, i) {
@@ -387,6 +451,7 @@ class _AllApartmentsState extends State<AllApartments> {
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
+                        controller: scrollController,
                         scrollDirection: Axis.horizontal,
                         itemCount: jsonDeutschland.length,
                         itemBuilder: (context, i) {

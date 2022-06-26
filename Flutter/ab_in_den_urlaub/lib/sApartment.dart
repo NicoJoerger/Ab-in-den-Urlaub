@@ -171,10 +171,39 @@ class _sApartmentsState extends State<sApartments> {
     }
   }
 
+  void fetchTokenstand() async {
+    try {
+      var response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+
+      if (response.statusCode != 200) {
+      } else {
+        final jsonData = jsonDecode(response.body) as List;
+        print(jsonData);
+
+        setState(() {
+          var jsons = jsonData;
+          var length = jsons.length;
+          LoginInfo.tokens = jsons[0]['tokenstand'];
+        });
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo.userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
+        window.localStorage['angebotID'] = LoginInfo.currentAngebot.toString();
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   @override
   void initState() {
     loadCookies();
     super.initState();
+    fetchTokenstand();
   }
 
   void loadCookies() async {

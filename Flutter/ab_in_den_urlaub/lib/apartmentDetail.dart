@@ -108,6 +108,34 @@ class _apartmentDetailState extends State<apartmentDetail> {
     return base64Encode(data);
   }
 
+  void fetchTokenstand() async {
+    try {
+      var response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+
+      if (response.statusCode != 200) {
+      } else {
+        final jsonData = jsonDecode(response.body) as List;
+        print(jsonData);
+
+        setState(() {
+          var jsons = jsonData;
+          var length = jsons.length;
+          LoginInfo.tokens = jsons[0]['tokenstand'];
+        });
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo.userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
+        window.localStorage['angebotID'] = LoginInfo.currentAngebot.toString();
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   var Containerh = 40.0;
   var Containerw = 400.0;
   var ContentWFactor = 0.5;
@@ -518,6 +546,7 @@ class _apartmentDetailState extends State<apartmentDetail> {
     //cookies();
     super.initState();
     fetchGebot();
+    fetchTokenstand();
   }
 
   @override

@@ -42,11 +42,11 @@ class DeleteAccountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if ( LoginInfo.userid != -1) {
+    if (LoginInfo.userid != -1) {
       return TextButton(
           onPressed: () {
             deleteUserAccount(context);
-           // Navigator.push(context, MaterialPageRoute(builder: (context) => Admin()));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => Admin()));
           },
           child: const Text("Delete Account"));
     } else {
@@ -55,17 +55,19 @@ class DeleteAccountButton extends StatelessWidget {
   }
 }
 
-Future<void> deleteUserAccount(context) async
-{
-  String              url             = LoginInfo.serverIP + '/api/Nutzer/deactivate/' + LoginInfo.userid.toString();
-  Uri                 uri             = Uri.parse(url);
-  Map<String, String> heads           = <String, String>{'Content-Type': 'application/json; charset=UTF-8'};
-  http.Response       deactivateUserResponse;
+Future<void> deleteUserAccount(context) async {
+  String url = LoginInfo.serverIP +
+      '/api/Nutzer/deactivate/' +
+      LoginInfo.userid.toString();
+  Uri uri = Uri.parse(url);
+  Map<String, String> heads = <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8'
+  };
+  http.Response deactivateUserResponse;
 
   deactivateUserResponse = await http.put(uri, headers: heads);
-  
-  if(deactivateUserResponse.statusCode == 200)
-  {
+
+  if (deactivateUserResponse.statusCode == 200) {
     // Logout
     window.localStorage.containsKey('userId');
     window.localStorage.containsKey('tokenstand');
@@ -88,25 +90,23 @@ Future<void> deleteUserAccount(context) async
             child: const Text('OK'),
           ),
         ],
-       ),
+      ),
     );
-  }
-  else
-  {
+  } else {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: Text('Account wurde nicht gelöscht\n'+deactivateUserResponse.body),
+        title: Text(
+            'Account wurde nicht gelöscht\n' + deactivateUserResponse.body),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
             child: const Text('OK'),
           ),
         ],
-       ),
+      ),
     );
   }
-
 }
 
 class _ProfileState extends State<Profile> {
@@ -446,6 +446,34 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  void fetchTokenstand() async {
+    try {
+      var response = await http.get(Uri.parse(
+          LoginInfo.serverIP + '/api/Nutzer/' + LoginInfo.userid.toString()));
+
+      if (response.statusCode != 200) {
+      } else {
+        final jsonData = jsonDecode(response.body) as List;
+        print(jsonData);
+
+        setState(() {
+          var jsons = jsonData;
+          var length = jsons.length;
+          LoginInfo.tokens = jsons[0]['tokenstand'];
+        });
+        window.localStorage.containsKey('userId');
+        window.localStorage.containsKey('tokenstand');
+        window.localStorage.containsKey('angebotID');
+
+        window.localStorage['userId'] = LoginInfo.userid.toString();
+        window.localStorage['tokenstand'] = LoginInfo.tokens.toString();
+        window.localStorage['angebotID'] = LoginInfo.currentAngebot.toString();
+      }
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
   @override
   void initState() {
     print("initState() entered.\n");
@@ -455,6 +483,7 @@ class _ProfileState extends State<Profile> {
     fuckyouasynchron();
 
     super.initState();
+    fetchTokenstand();
     //print("initState() exited.\n");
   }
 
@@ -981,9 +1010,7 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       );
-    }
-    else
-    {
+    } else {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(

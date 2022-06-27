@@ -221,7 +221,7 @@ class _nWohnungState extends State<nWohnung> {
     'Griechenland',
     'Japan'
   ];
-  String _selected_country = '';
+  String _selected_country = 'Deutschland';
 
   @override
   void initState() {
@@ -267,7 +267,7 @@ class _nWohnungState extends State<nWohnung> {
                         Text('Adresse', style: TextStyle(fontSize: 20)),
                         DropdownButton<String>(
                           hint: Text('Please choose a location'),
-                          value: _selected_country = _address_countries_list[0],
+                          value: _selected_country,
                           onChanged: (newVal) {
                             setState(() {
                               _selected_country = newVal!;

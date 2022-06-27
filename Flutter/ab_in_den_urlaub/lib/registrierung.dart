@@ -335,7 +335,6 @@ class _RegistrierungState extends State<Registrierung> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Passwort vergessen"),
                       Container(
                         height: Containerh,
                         child: TextButton(

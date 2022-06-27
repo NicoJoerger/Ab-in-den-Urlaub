@@ -399,7 +399,8 @@ class _nWohnungState extends State<nWohnung> {
                       children: [
                         Text('Beschreibung', style: TextStyle(fontSize: 20)),
                         Text(
-                            "Hier können Sie eine Beschreibung zu Ihrer Wohnung abgeben.",),
+                          "Hier können Sie eine Beschreibung zu Ihrer Wohnung abgeben.",
+                        ),
                         TextField(
                           controller: description,
                           keyboardType: TextInputType.multiline,
@@ -694,6 +695,7 @@ class _nWohnungState extends State<nWohnung> {
       uploading = false;
     });
     for (int i = 0; i < downloadUrl.length; i++) {
+      URLs = "";
       URLs = URLs + downloadUrl[i] + ";";
     }
     postWohnung();

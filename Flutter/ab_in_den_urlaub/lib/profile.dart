@@ -109,7 +109,18 @@ Future<void> deleteUserAccount(context) async {
   }
 }
 
+class Wohnung {
+  const Wohnung(this.id, this.name);
+
+  final String name;
+  final int id;
+}
+
 class _ProfileState extends State<Profile> {
+  Wohnung dropdownselectedWohnung = Wohnung(0, "0");
+  Wohnung dropdownwohnung1 = Wohnung(0, "wählen");
+  List<Wohnung> dropdownwohnungen = <Wohnung>[];
+
   String url = LoginInfo.serverIP + '/api/Nutzer';
   var rechnungshistorie = [];
   var angebote = [];
@@ -300,44 +311,41 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  Future<void> _showWohnungInputDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Maximale Tokenkosten'),
-          content: SingleChildScrollView(
-            child: DropdownButton<String>(
-              dropdownColor: Colors.blue,
-              value: _selectedLocation,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: Colors.white, fontSize: 15),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedLocation = newValue!;
-                });
-              },
-              items: wohnungen2.map((location) {
-                return DropdownMenuItem(
-                  child: Text(location),
-                  value: location,
-                );
-              }).toList(),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Bestätigen'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void fetchWohnungen() async {
+    try {
+      response = await http.get(Uri.parse(LoginInfo.serverIP +
+          "/api/Ferienwohnung/" +
+          LoginInfo.userid.toString() +
+          "/User"));
+      final jsonData = jsonDecode(response.body) as List;
+      setState(() {
+        var jsons = jsonData;
+        for (var i = 0; i < jsons.length; i++) {
+          if (!jsons[i]["deaktiviert"]) {
+            dropdownwohnungen
+                .add(Wohnung(jsons[i]["fwId"], jsons[i]["wohnungsname"]));
+          }
+        }
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+  }
+
+  void deleteFerienwohnung() async {
+    try {
+      response = await http.put(
+          Uri.parse(LoginInfo.serverIP +
+              '/api/Ferienwohnung/deactivate/' +
+              dropdownselectedWohnung.id.toString()),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+          });
+      print("response: \n" + response.body);
+      print("statusCode: \n" + response.statusCode.toString());
+    } catch (err) {
+      print(err.toString());
+    }
   }
 
   void cookies() async {
@@ -481,9 +489,12 @@ class _ProfileState extends State<Profile> {
     fetchUser();
     // TODO: implement initState
     fuckyouasynchron();
+    dropdownselectedWohnung = dropdownwohnung1;
+    dropdownwohnungen.add(dropdownselectedWohnung);
 
     super.initState();
     fetchTokenstand();
+    fetchWohnungen();
     //print("initState() exited.\n");
   }
 
@@ -520,30 +531,46 @@ class _ProfileState extends State<Profile> {
                           child: const Text('Neue Wohnung anlegen'),
                         ),
                         Row(children: [
-                          DropdownButton<String>(
-                            dropdownColor: Colors.blue,
-                            value: _selectedLocation,
-                            icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 15),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedLocation = newValue!;
-                              });
-                            },
-                            items: wohnungen2.map((location) {
-                              return DropdownMenuItem(
-                                child: Text(location),
-                                value: location,
-                              );
-                            }).toList(),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.blue, //<-- SEE HERE
+                            ),
+                            child: DropdownButton<Wohnung>(
+                              dropdownColor: Colors.blue,
+                              value: dropdownselectedWohnung,
+                              onChanged: (Wohnung? newValue) {
+                                setState(() {
+                                  dropdownselectedWohnung = newValue!;
+                                });
+                              },
+                              items:
+                                  dropdownwohnungen.map((Wohnung tempwohnung) {
+                                return DropdownMenuItem<Wohnung>(
+                                  value: tempwohnung,
+                                  child: Text(
+                                    tempwohnung.name,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                           Container(
                             width: 10,
                           ),
                           ElevatedButton(
-                            onPressed: () => _showWohnungInputDialog,
+                            onPressed: () {
+                              deleteFerienwohnung();
+                              dropdownwohnungen = <Wohnung>[];
+                              fetchWohnungen();
+                              setState(() {
+                                dropdownselectedWohnung = dropdownwohnung1;
+                                dropdownwohnungen.add(dropdownselectedWohnung);
+                              });
+                            },
                             child: const Text('Wohnung löschen'),
                           ),
                         ]),

@@ -129,7 +129,9 @@ class _AdminState extends State<Admin> {
       setState(() {
         jsons = jsonData;
         for (var i = 0; i < jsons.length; i++) {
-          wohnungen.add(Wohnung(jsons[i]["fwId"], jsons[i]["wohnungsname"]));
+          if (!jsons[i]["deaktiviert"]) {
+            wohnungen.add(Wohnung(jsons[i]["fwId"], jsons[i]["wohnungsname"]));
+          }
         }
       });
     } catch (err) {

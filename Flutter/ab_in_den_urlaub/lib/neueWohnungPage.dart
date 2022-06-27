@@ -399,8 +399,9 @@ class _nWohnungState extends State<nWohnung> {
                       children: [
                         Text('Beschreibung', style: TextStyle(fontSize: 20)),
                         Text(
-                            "Hier können Sie eine Beschreibung zu Ihrer Wohnung abgeben."),
+                            "Hier können Sie eine Beschreibung zu Ihrer Wohnung abgeben.",),
                         TextField(
+                          controller: description,
                           keyboardType: TextInputType.multiline,
                           textInputAction: TextInputAction.newline,
                           minLines: 4,

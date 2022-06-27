@@ -124,6 +124,14 @@ class _nAngebotState extends State<nAngebot> {
     }
   }
 
+   @override
+  void initState() {
+// TODO: implement initState
+    loadCookies();
+    getUserWohnungen();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(

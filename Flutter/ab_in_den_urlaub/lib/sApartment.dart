@@ -296,7 +296,6 @@ class _sApartmentsState extends State<sApartments> {
                                 'Schweden',
                                 'Spanien',
                                 'Kanada',
-                                'Nordkorea',
                                 'Griechenland',
                                 'Japan',
                                 'Italien'

@@ -330,7 +330,7 @@ class _nAngebotState extends State<nAngebot> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("stonierbar"),
+                          const Text("stornierbar"),
                           Checkbox(
                             activeColor: Colors.orange,
                             checkColor: Colors.green,
@@ -434,7 +434,7 @@ class _nAngebotState extends State<nAngebot> {
       if (await flatOfferALreadyExistsForGivenTimeframe()) // offer already exists for timeframe
       {
         alert(
-            'Mietzeitraum überschneidet sich mit einerm anderen Angebot!'); // offer is already there for timeframe
+            'Mietzeitraum überschneidet sich mit einem anderen Angebot!'); // offer is already there for timeframe
       } else // timeframe is open for offer
       {
         postOffer();

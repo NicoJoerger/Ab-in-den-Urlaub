@@ -694,8 +694,8 @@ class _nWohnungState extends State<nWohnung> {
     setState(() {
       uploading = false;
     });
+    URLs = "";
     for (int i = 0; i < downloadUrl.length; i++) {
-      URLs = "";
       URLs = URLs + downloadUrl[i] + ";";
     }
     postWohnung();

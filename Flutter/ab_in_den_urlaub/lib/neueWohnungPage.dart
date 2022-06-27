@@ -217,7 +217,6 @@ class _nWohnungState extends State<nWohnung> {
     'Schweden',
     'Spanien',
     'Kanada',
-    'Italien',
     'Griechenland',
     'Japan',
     'Italien'

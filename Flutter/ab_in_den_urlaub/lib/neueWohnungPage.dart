@@ -219,7 +219,8 @@ class _nWohnungState extends State<nWohnung> {
     'Kanada',
     'Italien',
     'Griechenland',
-    'Japan'
+    'Japan',
+    'Italien'
   ];
   String _selected_country = 'Deutschland';
 
